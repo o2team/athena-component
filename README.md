@@ -10,20 +10,23 @@
 
 git clone https://github.com/o2team/athena-component.git
 
-cd athena-component
+cd athena-component/src
 npm install
-touch warehouse
-touch database
+mkdir warehouse
+mkdir database
 
 cd app
 npm install
 
-# 前端调试 ./app
+# ----- #
+
+# 前端调试 ./src/app -> http://localhost:8080/#!/list
 npm run dev
-# 前端编译 ./app
+# 前端编译 ./src/app -> http://localhost:8080/#!/list
 npm run build
 
-# 后端开发
+# 后端开发 ./src -> http://localhost/#!/list
+mongod --dbpath ./database
 npm run test
 
 # 自定义配置 ac-config.json

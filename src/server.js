@@ -102,10 +102,10 @@ router.post('/api/push', koaBody({
 });
 
 // 通过id拉取组件打包文件
-router.get('/api/pull/:id', function *() {
-  let id = this.params.id;
+router.get('/api/pull/:uuid', function *() {
+  let uuid = this.params.uuid;
   let zip = new AdmZip();
-  zip.addLocalFolder(path.join(conf.warehouse, id));
+  zip.addLocalFolder(path.join(conf.warehouse, uuid));
   this.body = zip.toBuffer();
 });
 
