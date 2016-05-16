@@ -1,0 +1,39 @@
+{
+  "name": "athena-component",
+  "version": "1.0.0",
+  "description": "athena新组件平台，提供组件上传、预览、拉取",
+  "main": "index.js",
+  "scripts": {
+    "test": "babel-node server.js",
+    "build": "babel server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/o2team/athena-component.git"
+  },
+  "author": "Manjiz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/o2team/athena-component/issues"
+  },
+  "homepage": "https://github.com/o2team/athena-component#readme",
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "koa": "^2.0.0",
+    "koa-body": "^1.4.0",
+    "koa-router": "^5.4.0",
+    "koa-static-server": "^0.1.8",
+    "mongoose": "^4.4.17",
+    "node-uuid": "^1.4.7",
+    "unzip": "^0.1.11"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.8.0",
+    "babel-preset-stage-0": "^6.5.0"
+  },
+  "babel": {
+    "presets": [
+      "stage-0"
+    ]
+  }
+}
