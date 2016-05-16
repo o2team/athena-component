@@ -2,60 +2,6 @@
 	<div class="page_list">
 		<ul class="witems">
 			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slidersliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">sliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slslidersliderider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slislidersliderder</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slidersliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">sliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slslidersliderider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slislidersliderder</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slidersliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">sliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slslidersliderider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slislidersliderder</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slidersliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">sliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slslidersliderider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slislidersliderder</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slidersliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">sliderslidersliderslider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slslidersliderider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
-			<li class="witems_it"><a href="#">slislidersliderder</a></li>
-			<li class="witems_it"><a href="#">slider</a></li>
 		</ul>
 	</div>
 </template>
@@ -68,7 +14,16 @@
 </style>
 
 <script>
-	export default {
-		
+console.log(111)
+export default {
+	ready () {
+		this.$http.get('api/list', function(data) {
+
+		}).error(function(data, status, request) {
+            console.log('fail' + status + "," + request);
+        });
+		return {}
 	}
+}
+// console.log(this);
 </script>

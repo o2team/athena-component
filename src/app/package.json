@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "vue": "^1.0.22",
+    "vue-resource": "^0.7.0",
     "vue-router": "^0.7.13"
   }
 }

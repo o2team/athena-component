@@ -23,7 +23,7 @@ const
 mongoose.connect(conf.mongodb.uri, conf.mongodb.options);
 
 var Schema = mongoose.Schema;
-var ComponentSchema = new Schema({
+var WidgetSchema = new Schema({
   uuid: { type: String, unique: true },
   name: String,
   description: String,
@@ -34,12 +34,25 @@ var ComponentSchema = new Schema({
   pushDate: { type: Date, default: Date.now },
   pullTimes: { type: Number, default: 0 }
 });
-var Component = mongoose.model('Component', ComponentSchema);
+var Widget = mongoose.model('Widget', WidgetSchema);
 
 app
   .use(router.routes())
   .use(router.allowedMethods())
   .use(serve({rootDir:conf.app}));
+
+/**
+ * 组件列表
+ */
+router.get('/api/list', function *() {
+  let that = this;
+  yield new Promise(resolve => {
+    Widget.find({}, function (err, docs) {
+      that.body = docs;
+      resolve();
+    });
+  });
+});
 
 /**
  * POST: appId, moduleId, platform [, description, author]
@@ -63,18 +76,17 @@ router.post('/api/push', koaBody({
   
     let wname = path.basename(widget.name, '.zip');
     let distDir = path.join(conf.warehouse, uuid);
-  
+    
     fs.mkdir(distDir, function (err) {
-  
       let readStream = fs.createReadStream( widget.path );
       let writeStream = fstream.Writer(distDir);
-  
+      
       writeStream.on('close', function() {
         let wc = require(path.join(distDir, wname+'.json'));
         let author = fields.author || wc.author || '';
         let description = fields.description || wc.description || '';
         // 存数据库
-        let c = new Component({
+        let c = new Widget({
           uuid: uuid,
           name: wname,
           description: description,
@@ -101,7 +113,9 @@ router.post('/api/push', koaBody({
   });
 });
 
-// 通过id拉取组件打包文件
+/**
+ * 通过id拉取组件打包文件
+ */
 router.get('/api/pull/:uuid', function *() {
   let uuid = this.params.uuid;
   let zip = new AdmZip();
