@@ -1,0 +1,43 @@
+{
+  "name": "athena-component",
+  "version": "1.0.0",
+  "description": "athena新组件平台，提供组件上传、预览、拉取",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node src/server.js",
+    "dev": "cross-env NODE_ENV=development babel-node src/server.js",
+    "postinstall": "node install.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/o2team/athena-component.git"
+  },
+  "author": "Manjiz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/o2team/athena-component/issues"
+  },
+  "homepage": "https://github.com/o2team/athena-component#readme",
+  "dependencies": {
+    "archiver": "file:plugins/archiver-1.0.1.tgz",
+    "babel-register": "^6.24.1",
+    "decompress": "^4.2.0",
+    "decompress-targz": "^4.1.0",
+    "fs-extra": "^0.30.0",
+    "fstream": "^1.0.10",
+    "koa": "^2.0.0",
+    "koa-multer": "^1.0.0",
+    "koa-router": "^7.0.1",
+    "koa-static": "^4.0.0",
+    "lodash": "^3.10.0",
+    "node-uuid": "^1.4.7",
+    "parse": "^1.9.2",
+    "phantom": "^2.1.21",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.5.2",
+    "cross-env": "^4.0.0"
+  }
+}

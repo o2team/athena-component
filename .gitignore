@@ -1,0 +1,7 @@
+node_modules
+.DS_Store
+warehouse
+database
+logs
+dist
+npm-debug.log
