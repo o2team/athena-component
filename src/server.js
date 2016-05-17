@@ -74,7 +74,6 @@ router.post('/api/push', koaBody({
   
     if(!widget) { this.status = 404; return; }
   
-    let wname = path.basename(widget.name, '.zip');
     let distDir = path.join(conf.warehouse, uuid);
     
     fs.mkdir(distDir, function (err) {
@@ -83,6 +82,7 @@ router.post('/api/push', koaBody({
       
       writeStream.on('close', function() {
         let wc = require(path.join(distDir, wname+'.json'));
+        let wname = wc.name;
         let author = fields.author || wc.author || '';
         let description = fields.description || wc.description || '';
         // 存数据库
@@ -116,10 +116,34 @@ router.post('/api/push', koaBody({
 /**
  * 通过id拉取组件打包文件
  */
-router.get('/api/pull/:uuid', function *() {
+router.get('/api/pull/:uuid/:rename?', function *() {
   let uuid = this.params.uuid;
+  let rename = this.params.rename;
   let zip = new AdmZip();
+
   zip.addLocalFolder(path.join(conf.warehouse, uuid));
+
+  // 压缩包内文件的处理
+  let zipEntries = zip.getEntries();
+  zipEntries.forEach(function(zipEntry) {
+    if(rename && !zipEntry.isDirectory) {
+      let name = zipEntry.entryName;
+      let extname = path.extname(name);
+      let dirname = path.dirname(name);
+      let basename = path.basename(name, extname);
+      // adm-zip竟然判定images不是文件夹
+      if(dirname==='.' && name!=='images') {
+        zipEntry.entryName = rename+extname;
+      }
+      if(extname==='.json') {
+        let c = fs.readFileSync( path.join(conf.warehouse, uuid, name) )
+        c = c.toString().replace(basename, rename);
+        zipEntry.setData(new Buffer(c))
+      }
+    }
+  });
+
+  this.set('Content-disposition','attachment;filename='+uuid+'.zip');
   this.body = zip.toBuffer();
 });
 

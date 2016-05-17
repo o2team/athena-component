@@ -1,7 +1,7 @@
 <template>
-	<div class="page_list">
+	<div class="page_list">{{someData}}
 		<ul class="witems">
-			<li class="witems_it"><a href="#">slider</a></li>
+			<li v-for="item in wlist" class="witems_it"><a href="#">{{item.name}}</a></li>
 		</ul>
 	</div>
 </template>
@@ -14,15 +14,20 @@
 </style>
 
 <script>
-console.log(111)
 export default {
 	ready () {
 		this.$http.get('api/list', function(data) {
-
+			this.$set('wlist', data)
+			console.log(data);
 		}).error(function(data, status, request) {
             console.log('fail' + status + "," + request);
         });
 		return {}
+	},
+	data () {
+		return {
+			wlist: []
+		}
 	}
 }
 // console.log(this);
