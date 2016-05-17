@@ -40,6 +40,15 @@ npm run test
 # 4. 启动后端服务，此时，如果前端文件有更新，要刷新浏览器才能看到更新
 ```
 
+*模块的修改*
+
+adm-zip糟点多多，自己动手改点点
+
+找到 `./src/node_modules/adm-zip/adm-zip.js`
+找到 addLocalFolder 方法，约 Line 219，找到下面的代码对应修改
+
+![fix-adm-zip-add-folder](fix-adm-zip-add-folder.png)
+
 ## 技术组成
 
 - 前端 vue+webpack
