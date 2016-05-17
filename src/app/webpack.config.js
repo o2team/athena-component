@@ -10,16 +10,9 @@ var path = require('path');
 //   },
 //   module: {
 //     loaders: [
-//       {
-//         test: /\.vue$/, // a regex for matching all files that end in `.vue`
-//         loader: 'vue'   // loader to use for matched files
-//       },
-//       {
-//         test: /\.js$/,
-//         loader: 'babel',
-//         exclude: /node_modules/
-//       },
-//       {test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}
+//       { test: /\.vue$/, loader: 'vue' },
+//       { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
+//       { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192' }
 //     ]
 //   },
 //   babel: {
@@ -33,26 +26,19 @@ var path = require('path');
 // 前后端联调
 module.exports = {
   entry: [
-    'webpack-dev-server/client?http://0.0.0.0:8080',
+    'webpack-dev-server/client?http://localhost:8080',
     './main.js'
   ],
   output: {
     path: './dist/',
     filename: 'bundle.js',
-    publicPath: 'http://0.0.0.0:8080/dist/'
+    publicPath: 'http://localhost:8080/dist/'
   },
   module: {
     loaders: [
-      {
-        test: /\.vue$/, // a regex for matching all files that end in `.vue`
-        loader: 'vue'   // loader to use for matched files
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel',
-        exclude: /node_modules/
-      },
-      {test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'}
+      { test: /\.vue$/, loader: 'vue' },
+      { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
+      { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192' }
     ]
   },
   babel: {

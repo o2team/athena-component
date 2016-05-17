@@ -26,3 +26,10 @@ html, body {height:100%;}
 a:hover {text-decoration:none;}
 .cf {zoom:1;overflow:hidden;}
 	.cf:after {content:'\20';display:block;clear:both;height:0;visibility:hidden;}
+
+/* 盒子布局 */
+.ly_box {display:-webkit-box;display:-webkit-flex;display:flex;}
+.ly_box.vertical {box-orient:vertical;-webkit-flex-flow:column;flex-flow:column;-webkit-box-orient:vertical;-webkit-box-direction:normal;-webkit-flex-direction:column;flex-direction:column;}
+
+/* 多行文本省略 */
+.ly_multiline {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-overflow:ellipsis;}

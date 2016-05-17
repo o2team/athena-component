@@ -7,6 +7,7 @@ Vue.use(require('vue-resource'));
 
 import App from './components/App.vue'
 import pageList from './components/pages/pageList.vue'
+import pageDetail from './components/pages/pageDetail.vue'
 
 Vue.config.debug = true;
 
@@ -14,7 +15,12 @@ var router = new VueRouter();
 
 router.map({
     '/list': {
+    	name: 'list',
         component: pageList
+    },
+    '/detail/:uuid': {
+    	name: 'detail',
+    	component: pageDetail
     }
 });
 

@@ -39,7 +39,32 @@ var Widget = mongoose.model('Widget', WidgetSchema);
 app
   .use(router.routes())
   .use(router.allowedMethods())
-  .use(serve({rootDir:conf.app}));
+  .use(serve({rootDir:conf.app}))
+  .use(function *(next) {
+    console.log(this.path)
+    if(!this.path.match(/^\/warehouse\//)) {
+      yield* next;
+    } else {
+      let stat = function(file) {
+        return function(done) {
+          fs.stat(file, done);
+        }
+      }
+      let p = path.join(__dirname, this.path);
+      let fstat = yield stat(p);
+      if(fstat.isFile()) {
+        this.type = path.extname(p);
+        this.body = fs.createReadStream(p);
+      }
+    }
+  });
+
+/**
+ * 组件详情
+ */
+router.get('/api/detail/:uuid', function *() {
+  let uuid = this.params.uuid;
+});
 
 /**
  * 组件列表
@@ -131,7 +156,7 @@ router.get('/api/pull/:uuid/:rename?', function *() {
       let extname = path.extname(name);
       let dirname = path.dirname(name);
       let basename = path.basename(name, extname);
-      // adm-zip竟然判定images不是文件夹
+      // adm-zip竟然判定images不是文件夹   
       if(dirname==='.' && name!=='images') {
         zipEntry.entryName = rename+extname;
       }
