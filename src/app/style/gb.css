@@ -15,7 +15,7 @@ ins { text-decoration: underline; }
 del { text-decoration: line-through; }
 mark { background: none; }
 input::-ms-clear { display: none !important; }
-body { font: 12px/1.5 \5FAE\8F6F\96C5\9ED1, \5B8B\4F53, "Hiragino Sans GB", STHeiti, "WenQuanYi Micro Hei", "Droid Sans Fallback", SimSun, sans-serif; background: #fff; }
+body { font:14px/1.5 tahoma,arial,'Lantinghei SC',"Microsoft YaHei",'Hiragino Sans GB',sans-serif;background:#fff; }
 a { text-decoration: none; color: #333; }
 a:hover { text-decoration: underline; }
 /*===================

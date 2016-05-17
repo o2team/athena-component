@@ -41,7 +41,6 @@ app
   .use(router.allowedMethods())
   .use(serve({rootDir:conf.app}))
   .use(function *(next) {
-    console.log(this.path)
     if(!this.path.match(/^\/warehouse\//)) {
       yield* next;
     } else {
@@ -63,7 +62,23 @@ app
  * 组件详情
  */
 router.get('/api/detail/:uuid', function *() {
-  let uuid = this.params.uuid;
+  yield new Promise(resolve => {
+    let that = this;
+    let uuid = this.params.uuid;
+    Widget.findOne({uuid:uuid}, function (err, w) {
+      if(!err) {
+        let contHtml = fs.readFileSync( path.join(conf.warehouse, uuid, w.name+'.html') ).toString();
+        let contCss = fs.readFileSync( path.join(conf.warehouse, uuid, w.name+'.css') ).toString();
+        let contJs = fs.readFileSync( path.join(conf.warehouse, uuid, w.name+'.js') ).toString();
+        that.body = {
+          contHtml: contHtml,
+          contCss: contCss,
+          contJs: contJs
+        }
+        resolve();
+      }
+    });
+  });
 });
 
 /**

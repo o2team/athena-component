@@ -27,6 +27,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "brace": "^0.8.0",
     "vue": "^1.0.22",
     "vue-resource": "^0.7.0",
     "vue-router": "^0.7.13"

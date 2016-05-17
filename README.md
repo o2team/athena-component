@@ -37,7 +37,7 @@ npm run test
 # 1. 找到 ./src/app/webpack.config.js，将【单前端调试】部分注释，将【前后端联调】部分取消注释
 # 2. 找到 ./src/app/index.html，修改打包文件的地址：dist/bundle.js改为http://localhost:8080/dist/bundle.js
 # 3. 目录 ./src/app，执行npm run test启动前端热更新服务
-# 4. 启动后端服务，此时，如果前端文件有更新，要刷新浏览器才能看到更新
+# 4. 启动后端服务，此时，如果前端文件有更新，浏览器会自动刷新
 ```
 
 *模块的修改*
