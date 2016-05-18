@@ -194,6 +194,9 @@ router.get('/api/pull/:uuid/:rename?', function *() {
 
   this.set('Content-disposition','attachment;filename='+uuid+'.zip');
   this.body = zip.toBuffer();
+  Widget.update({uuid:uuid}, {$inc:{pullTimes:1}}, function(err, results) {
+    if(err) throw err;
+  });
 });
 
 router.get('/api/test', function *(){
