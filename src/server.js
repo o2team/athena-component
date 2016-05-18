@@ -66,7 +66,7 @@ router.get('/api/detail/:uuid', function *() {
     let that = this;
     let uuid = this.params.uuid;
     Widget.findOne({uuid:uuid}, function (err, w) {
-      if(!err) {
+      if(!err && w) {
         let contHtml = fs.readFileSync( path.join(conf.warehouse, uuid, w.name+'.html') ).toString();
         let contCss = fs.readFileSync( path.join(conf.warehouse, uuid, w.name+'.css') ).toString();
         let contJs = fs.readFileSync( path.join(conf.warehouse, uuid, w.name+'.js') ).toString();
@@ -113,7 +113,8 @@ router.post('/api/push', koaBody({
     let widget = this.request.body.files.widget;
   
     if(!widget) { this.status = 404; return; }
-  
+    
+    let wname = path.basename(widget.name, '.zip');
     let distDir = path.join(conf.warehouse, uuid);
     
     fs.mkdir(distDir, function (err) {
@@ -121,28 +122,36 @@ router.post('/api/push', koaBody({
       let writeStream = fstream.Writer(distDir);
       
       writeStream.on('close', function() {
-        let wc = require(path.join(distDir, wname+'.json'));
-        let wname = wc.name;
-        let author = fields.author || wc.author || '';
-        let description = fields.description || wc.description || '';
-        // 存数据库
-        let c = new Widget({
-          uuid: uuid,
-          name: wname,
-          description: description,
-          appId: fields.appId,
-          moduleId: fields.moduleId,
-          author: author,
-          platform: fields.platform
-        });
-        c.save(function(err) {
+        // let wc = require(path.join(distDir, wname+'.json'));
+        fs.readFile( path.join(distDir, wname+'.json'), function(err, data) {
           if(err) {
             console.log(err);
-            that.status = 500;
+            that.body = '没找到配置文件';
+            resolve();
           } else {
-            that.status = 200;
+            let wc = JSON.parse(data.toString());
+            let author = fields.author || wc.author || '';
+            let description = fields.description || wc.description || '';
+            // 存数据库
+            let c = new Widget({
+              uuid: uuid,
+              name: wname,
+              description: description,
+              appId: fields.appId,
+              moduleId: fields.moduleId,
+              author: author,
+              platform: fields.platform
+            });
+            c.save(function(err) {
+              if(err) {
+                console.log(err);
+                that.status = 500;
+              } else {
+                that.status = 200;
+              }
+              resolve();  //Resolve
+            });
           }
-          resolve();  //Resolve
         });
       });
   

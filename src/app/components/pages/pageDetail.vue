@@ -25,8 +25,8 @@
 		.detail_mobile {width:416px;}
 			.detail_mobile_screen {position:relative;width:416px;height:848px;background:url(../../img/iphone.jpg);}
 				.detail_mobile_screen iframe {position:absolute;top:76px;left:50%;margin:0 0 0 -187px;border:1px solid #ddd;background:url(../../img/transparent.png);}
-		.detail_code {-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1;}
-			.detail_code_tit {margin:10px;font-size:20px;font-weight:normal;}
+		.detail_code {padding:0 15px;-webkit-box-flex:1;-webkit-flex:1;-ms-flex:1;flex:1;}
+			.detail_code_tit {margin:20px 0 10px;font-size:20px;font-weight:normal;}
 </style>
 
 <script>
