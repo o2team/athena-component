@@ -47,12 +47,14 @@ export default {
 
 		let cssEditor = ace.edit('cssEditor');
 		cssEditor.getSession().setMode('ace/mode/css');
+		cssEditor.getSession().setUseWrapMode(true);
 		cssEditor.setAutoScrollEditorIntoView(true);
 		cssEditor.setOption('maxLines', Infinity);
 		cssEditor.setTheme('ace/theme/athenac');
 
 		let jsEditor = ace.edit('jsEditor');
 		jsEditor.getSession().setMode('ace/mode/javascript');
+		jsEditor.getSession().setUseWrapMode(true);
 		jsEditor.setAutoScrollEditorIntoView(true);
 		jsEditor.setOption('maxLines', Infinity);
 		jsEditor.setTheme('ace/theme/athenac');
