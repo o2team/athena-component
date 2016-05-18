@@ -36,31 +36,31 @@ export default {
 		require('brace/mode/html');
 		require('brace/mode/css');
 		require('brace/mode/javascript');
-		require('brace/theme/github');
+		require('brace/theme/athenac');
 
 		let htmlEditor = ace.edit('htmlEditor');
 		htmlEditor.getSession().setMode('ace/mode/html');
+		htmlEditor.getSession().setUseWrapMode(true);
 		htmlEditor.setAutoScrollEditorIntoView(true);
-		// htmlEditor.setAutoWrap(true);
 		htmlEditor.setOption('maxLines', Infinity);
-		htmlEditor.setTheme('ace/theme/github');
+		htmlEditor.setTheme('ace/theme/athenac');
 
 		let cssEditor = ace.edit('cssEditor');
 		cssEditor.getSession().setMode('ace/mode/css');
 		cssEditor.setAutoScrollEditorIntoView(true);
 		cssEditor.setOption('maxLines', Infinity);
-		cssEditor.setTheme('ace/theme/github');
+		cssEditor.setTheme('ace/theme/athenac');
 
 		let jsEditor = ace.edit('jsEditor');
 		jsEditor.getSession().setMode('ace/mode/javascript');
 		jsEditor.setAutoScrollEditorIntoView(true);
 		jsEditor.setOption('maxLines', Infinity);
-		jsEditor.setTheme('ace/theme/github');
+		jsEditor.setTheme('ace/theme/athenac');
 
 		this.$http.get('api/detail/'+this.$route.params.uuid, function(data) {
-			htmlEditor.setValue(data.contHtml);
-			cssEditor.setValue(data.contCss);
-			jsEditor.setValue(data.contJs);
+			htmlEditor.setValue(data.contHtml, 1);
+			cssEditor.setValue(data.contCss, 1);
+			jsEditor.setValue(data.contJs, 1);
 			console.log(data);
 		}).error(function(data, status, request) {
             console.log('fail' + status + "," + request);
