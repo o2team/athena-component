@@ -44,6 +44,7 @@ export default {
 		htmlEditor.setAutoScrollEditorIntoView(true);
 		htmlEditor.setOption('maxLines', Infinity);
 		htmlEditor.setTheme('ace/theme/athenac');
+		htmlEditor.setReadOnly(true);
 
 		let cssEditor = ace.edit('cssEditor');
 		cssEditor.getSession().setMode('ace/mode/css');
@@ -51,6 +52,7 @@ export default {
 		cssEditor.setAutoScrollEditorIntoView(true);
 		cssEditor.setOption('maxLines', Infinity);
 		cssEditor.setTheme('ace/theme/athenac');
+		cssEditor.setReadOnly(true);
 
 		let jsEditor = ace.edit('jsEditor');
 		jsEditor.getSession().setMode('ace/mode/javascript');
@@ -58,6 +60,7 @@ export default {
 		jsEditor.setAutoScrollEditorIntoView(true);
 		jsEditor.setOption('maxLines', Infinity);
 		jsEditor.setTheme('ace/theme/athenac');
+		jsEditor.setReadOnly(true);
 
 		this.$http.get('api/detail/'+this.$route.params.uuid, function(data) {
 			htmlEditor.setValue(data.contHtml, 1);
