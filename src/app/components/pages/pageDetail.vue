@@ -3,7 +3,7 @@
 	<div class="detail ly_box">
 		<div class="detail_mobile">
 			<div class="detail_mobile_screen">
-				<iframe :src="'warehouse/'+$route.params.uuid+'/centroidnav.html'" frameborder="0" width="375px" height="667px"></iframe>
+				<iframe :src="previewurl" frameborder="0" width="375px" height="667px"></iframe>
 			</div>
 		</div>
 		<div class="detail_code">
@@ -31,7 +31,14 @@
 
 <script>
 export default {
+	data () {
+		return {
+			previewurl: ''
+		}
+	},
 	ready () {
+		let that = this;
+
 		let ace = require('brace');
 		require('brace/mode/html');
 		require('brace/mode/css');
@@ -66,6 +73,7 @@ export default {
 			htmlEditor.setValue(data.contHtml, 1);
 			cssEditor.setValue(data.contCss, 1);
 			jsEditor.setValue(data.contJs, 1);
+			that.$data.previewurl = `warehouse/_build/${this.$route.params.uuid}/index.html`;
 			console.log(data);
 		}).error(function(data, status, request) {
             console.log('fail' + status + "," + request);

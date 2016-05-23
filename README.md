@@ -12,8 +12,7 @@ git clone https://github.com/o2team/athena-component.git
 
 cd athena-component/src
 npm install
-mkdir warehouse
-mkdir database
+node install
 
 cd app
 npm install

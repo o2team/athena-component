@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "babel-node server.js",
-    "build": "babel server.js"
+    "build": "babel server.js",
+    "postinstall": "node install.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "koa-body": "^1.4.0",
     "koa-router": "^5.4.0",
     "koa-static-server": "^0.1.8",
+    "lodash": "^3.10.0",
     "mongoose": "^4.4.17",
     "node-uuid": "^1.4.7",
     "unzip": "^0.1.11"

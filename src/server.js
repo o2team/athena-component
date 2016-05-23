@@ -16,6 +16,7 @@ const
   UUID = require('node-uuid'),
   fstream = require('fstream'),
   mongoose = require('mongoose'),
+  lodash = require('lodash'),
 
   conf = require('./ac-config.js');
 
@@ -70,6 +71,33 @@ router.get('/api/detail/:uuid', function *() {
         let contHtml = fs.readFileSync( path.join(conf.warehouse, uuid, w.name+'.html') ).toString();
         let contCss = fs.readFileSync( path.join(conf.warehouse, uuid, w.name+'.css') ).toString();
         let contJs = fs.readFileSync( path.join(conf.warehouse, uuid, w.name+'.js') ).toString();
+        let buildPath = path.join(conf.warehouse, '_build', uuid);
+        try {
+          fs.accessSync( buildPath );
+        } catch(e) {
+          let iframe = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+  ${contCss}
+</style>
+</head>
+<body>
+  ${contHtml}
+<script>
+  ${contJs}
+</script>
+</body>
+</html>`;
+          iframe = iframe.replace('<% widget.scriptStart() %>', '').replace('<% widget.scriptEnd() %>', '');
+          iframe = lodash.template( iframe )({
+            current: 1,
+          });
+          fs.mkdirSync( buildPath );
+          fs.writeFileSync( path.join( buildPath, 'index.html'), iframe);
+        }
         that.body = {
           contHtml: contHtml,
           contCss: contCss,
