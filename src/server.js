@@ -92,9 +92,12 @@ router.get('/api/detail/:uuid', function *() {
 </body>
 </html>`;
           iframe = iframe.replace('<% widget.scriptStart() %>', '').replace('<% widget.scriptEnd() %>', '');
-          iframe = lodash.template( iframe )({
-            current: 1,
-          });
+          // iframe = lodash.template( iframe )({
+          //   current: 1,
+          // });
+          iframe = lodash.template( iframe )(
+            JSON.parse(fs.readFileSync(path.join(conf.warehouse, uuid, w.name+'.json'))).data
+          );
           fs.mkdirSync( buildPath );
           fs.writeFileSync( path.join( buildPath, 'index.html'), iframe);
         }
