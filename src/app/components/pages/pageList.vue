@@ -18,12 +18,14 @@
 <script>
 export default {
 	ready () {
-		this.$http.get('api/list', function(data) {
+   		this.$http.get('api/list').then(function(res) {
+   			let data = res.data;
 			this.$set('wlist', data)
 			console.log(data);
-		}).error(function(data, status, request) {
+		}, function(data, status, request) {
             console.log('fail' + status + "," + request);
         });
+
 		return {}
 	},
 	data () {

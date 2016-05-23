@@ -79,14 +79,15 @@ export default {
 		jsEditor.setTheme('ace/theme/athenac');
 		jsEditor.setReadOnly(true);
 
-		this.$http.get('api/detail/'+this.$route.params.uuid, function(data) {
+  		this.$http.get('api/detail/'+this.$route.params.uuid).then(function(res) {
+  			let data = res.data;
 			htmlEditor.setValue(data.contHtml, 1);
 			cssEditor.setValue(data.contCss, 1);
 			jsEditor.setValue(data.contJs, 1);
 			that.$data.previewurl = `warehouse/_build/${this.$route.params.uuid}/index.html`;
 			that.$data.widget = data.widget;
 			console.log(data);
-		}).error(function(data, status, request) {
+		}, function(data, status, request) {
             console.log('fail' + status + "," + request);
         });
 	}

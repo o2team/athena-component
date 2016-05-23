@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 
 Vue.use(VueRouter);
-Vue.use(require('vue-resource'));
+Vue.use(VueResource);
 
 import App from './components/App.vue'
 import pageList from './components/pages/pageList.vue'
