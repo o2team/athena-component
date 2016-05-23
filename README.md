@@ -69,3 +69,21 @@ jsEditor.setTheme('ace/theme/athenac');
 
 - 前端 vue+webpack
 - 后端 koa
+
+## API
+
+- POST `/api/push` {appId, moduleId, platform [, description, author], zipfile}
+
+    上传组件，file是ZIP文件（特别注意，打包时不包括组件最外层的那个文件夹）
+
+- GET `/api/pull/:uuid/:rename?`
+
+    通过组件uuid拉取组件，返回一个ZIP文件，如果有提供rename，组件将被重命名（目前是简单地重命名文件）
+
+- GET `/api/detail/:uuid`
+    
+    获取组件详情，返回组件的代码，组件的相关信息
+
+- GET `/api/list`
+    
+    获取组件列表

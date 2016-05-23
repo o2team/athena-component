@@ -38,15 +38,16 @@ app
     }
   });
 
-// 组件详情
-router.get('/api/detail/:uuid', api.detail);
-// 组件列表
-router.get('/api/list', api.list);
+//--------------------API--------------------
 // POST: appId, moduleId, platform [, description, author]
 // 上传组件数据
 router.post('/api/push', koaBody( {multipart: true, formidable:{uploadDir: os.tmpdir()}} ), api.push);
 // 通过id拉取组件打包文件
 router.get('/api/pull/:uuid/:rename?', api.pull);
+// 组件详情
+router.get('/api/detail/:uuid', api.detail);
+// 组件列表
+router.get('/api/list', api.list);
 
 router.get('/api/test', function *(){
   setTimeout(() => {
