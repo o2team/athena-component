@@ -76,6 +76,8 @@ jsEditor.setTheme('ace/theme/athenac');
 
     上传组件，file是ZIP文件（特别注意，打包时不包括组件最外层的那个文件夹）
 
+    **注意：禁止上传有组件依赖的组件**
+
 - GET `/api/pull/:uuid/:rename?`
 
     通过组件uuid拉取组件，返回一个ZIP文件，如果有提供rename，组件将被重命名（目前是简单地重命名文件）
