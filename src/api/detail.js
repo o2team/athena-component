@@ -45,9 +45,13 @@ module.exports = function *() {
 </body>
 </html>`;
           iframe = iframe.replace('<% widget.scriptStart() %>', '').replace('<% widget.scriptEnd() %>', '');
-          iframe = lodash.template( iframe )(
-            JSON.parse(fs.readFileSync(path.join(wp, w.name+'.json'))).data
-          );
+          try {
+            iframe = lodash.template( iframe )(
+              JSON.parse(fs.readFileSync(path.join(wp, w.name+'.json'))).data
+            );
+          } catch (e) {
+            console.log(e);
+          }
           // 创建编译目录
           fs.mkdirSync( buildPath );
           // HTML
