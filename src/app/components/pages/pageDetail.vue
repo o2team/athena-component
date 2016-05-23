@@ -1,11 +1,18 @@
 <template>
 <div class="page_detail">
+	
+	<div v-if="widget.platform==='pc'" class="detail_pc">
+		<iframe :src="previewurl" frameborder="0" width="375px" height="667px"></iframe>
+	</div>
+
 	<div class="detail ly_box">
-		<div class="detail_mobile">
+
+		<div v-if="widget.platform==='h5'" class="detail_mobile">
 			<div class="detail_mobile_screen">
 				<iframe :src="previewurl" frameborder="0" width="375px" height="667px"></iframe>
 			</div>
 		</div>
+
 		<div class="detail_code">
 			<h2 class="detail_code_tit">HTML结构</h2>
 			<div id="htmlEditor"></div>
@@ -21,6 +28,8 @@
 
 <style>
 .page_detail {overflow:hidden;}
+	.detail_pc {padding:10px 20px;border:1px solid #ddd;}
+		.detail_pc iframe {width:100%;height:auto;}
 	.detail {}
 		.detail_mobile {width:416px;}
 			.detail_mobile_screen {position:relative;width:416px;height:848px;background:url(../../img/iphone.jpg);}
@@ -33,7 +42,8 @@
 export default {
 	data () {
 		return {
-			previewurl: ''
+			previewurl: '',
+			widget: {}
 		}
 	},
 	ready () {
@@ -74,6 +84,7 @@ export default {
 			cssEditor.setValue(data.contCss, 1);
 			jsEditor.setValue(data.contJs, 1);
 			that.$data.previewurl = `warehouse/_build/${this.$route.params.uuid}/index.html`;
+			that.$data.widget = data.widget;
 			console.log(data);
 		}).error(function(data, status, request) {
             console.log('fail' + status + "," + request);

@@ -101,7 +101,8 @@ router.get('/api/detail/:uuid', function *() {
         that.body = {
           contHtml: contHtml,
           contCss: contCss,
-          contJs: contJs
+          contJs: contJs,
+          widget: w
         }
         resolve();
       }
@@ -160,6 +161,8 @@ router.post('/api/push', koaBody({
             let wc = JSON.parse(data.toString());
             let author = fields.author || wc.author || '';
             let description = fields.description || wc.description || '';
+            // 默认是h5，固定h5/pc两个
+            let platform = (fields.platform==='h5' || fields.platform==='pc') ? fields.platform : 'h5';
             // 存数据库
             let c = new Widget({
               uuid: uuid,
@@ -168,7 +171,7 @@ router.post('/api/push', koaBody({
               appId: fields.appId,
               moduleId: fields.moduleId,
               author: author,
-              platform: fields.platform
+              platform: platform
             });
             c.save(function(err) {
               if(err) {
