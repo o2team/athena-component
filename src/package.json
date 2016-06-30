@@ -20,6 +20,7 @@
   "homepage": "https://github.com/o2team/athena-component#readme",
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "fstream": "^1.0.10",
     "koa": "^2.0.0",
     "koa-body": "^1.4.0",
     "koa-router": "^5.4.0",

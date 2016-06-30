@@ -19,7 +19,7 @@ import modHeader from './modHeader.vue'
 import modFooter from './modFooter.vue'
 
 export default {
-	replace: false,
+	replace: true,
   	components: {
   	  	modHeader,
   	  	modFooter

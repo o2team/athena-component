@@ -72,11 +72,23 @@ jsEditor.setTheme('ace/theme/athenac');
 
 ## API
 
-- POST `/api/push` {appId, moduleId, platform [, description, author], zipfile}
+- POST `/api/push`
 
-    上传组件，file是ZIP文件（特别注意，打包时不包括组件最外层的那个文件夹）
+	``` javascript
+	{
+		appId, 
+		moduleId, 
+		platform,	// pc | h5
+		widget,	// file
+		[description, author]
+	}
+	```
+
+    上传组件，widget是ZIP文件（特别注意，打包时不包括组件最外层的那个文件夹）
 
     **注意：禁止上传有组件依赖的组件**
+
+    ![test-push](test-push.png)
 
 - GET `/api/pull/:uuid/:rename?`
 
