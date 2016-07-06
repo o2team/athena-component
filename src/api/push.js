@@ -15,7 +15,7 @@ module.exports = function *() {
 		let uuid = UUID.v1();
 		let fields = this.request.body.fields;
 		let widget = this.request.body.files.widget;
-		
+
 		if(!widget) { this.status = 404; return; }
 		
 		let wname = path.basename(widget.name, '.zip');
@@ -54,6 +54,12 @@ module.exports = function *() {
 			  	  	  	  	  	that.status = 500;
 			  	  	  	  	} else {
 			  	  	  	  	  	that.status = 200;
+													that.body = JSON.stringify({
+														no: 0,
+														data: {
+															id: uuid
+														}
+													});
 			  	  	  	  	}
 			  	  	  	  	resolve();  //Resolve
 			  	  	  	});

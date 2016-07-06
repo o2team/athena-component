@@ -3,3 +3,4 @@ node_modules
 warehouse
 database
 dist
+npm-debug.log
