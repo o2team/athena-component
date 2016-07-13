@@ -3,12 +3,9 @@
 const
 	db = require('../db.js');
 
-module.exports = function *() {
-  	let that = this;
-  	yield new Promise(resolve => {
-  	  	db.Widget.find({}, function (err, docs) {
-  	  	  	that.body = docs;
-  	  	  	resolve();
-  	  	});
-  	});
+module.exports = async (ctx, next) => {
+	let that = ctx;
+	await db.Widget.find({}, function (err, docs) {
+	  that.body = docs;
+	});
 }

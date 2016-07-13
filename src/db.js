@@ -14,7 +14,14 @@ var Widget = mongoose.model('Widget', new Schema({
   author: String,
   platform: String,
   pushDate: { type: Date, default: Date.now },
-  pullTimes: { type: Number, default: 0 }
+  pullTimes: { type: Number, default: 0 },
+
+  tag: [{ type:Schema.Types.ObjectId, ref:'Tag' }]
+}));
+
+var Tag = mongoose.model('Tag', new Schema({
+  name: { type: String, required: true, unique: true },
 }));
 
 exports.Widget = Widget;
+exports.Tag = Tag;

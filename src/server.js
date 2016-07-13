@@ -9,7 +9,9 @@ const
   app = new Koa(),
   router = require('koa-router')(),
   serve = require('koa-static-server'),
-  koaBody = require('koa-body'),
+
+  multer = require('koa-multer'),
+  upload = multer({ dest: os.tmpdir() }),
 
   conf = require('./ac-config.js'),
   db = require('./db.js'),
@@ -41,18 +43,22 @@ app
 //--------------------API--------------------
 // POST: appId, moduleId, platform [, description, author]
 // 上传组件数据
-router.post('/api/push', koaBody( {multipart: true, formidable:{uploadDir: os.tmpdir()}} ), api.push);
+router.post('/api/push', upload.single('widget'), api.push);
 // 通过id拉取组件打包文件
 router.get('/api/pull/:uuid/:rename?', api.pull);
 // 组件详情
 router.get('/api/detail/:uuid', api.detail);
 // 组件列表
 router.get('/api/list', api.list);
+// 给组件增加Tag
+router.get('/api/addtag/:wid/:tagname', api.addTag);
 
-router.get('/api/test', function *(){
-  setTimeout(() => {
-      this.body = 'wwww';
-  }, 1000);
+router.post('/api/test',  upload.single('widget'), async (ctx, next) => {
+  console.log(ctx.req, this)
+  let fields = ctx.req.body.fields;
+  let widget = ctx.req.body.files.widget;
+  console.log(fields, widget)
+
 });
 
 app.listen(conf.port);
