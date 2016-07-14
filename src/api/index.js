@@ -5,5 +5,6 @@ module.exports = {
 	pull: require('./pull'),
 	list: require('./list'),
 	detail: require('./detail'),
-	addTag: require('./addTag')
+	addTag: require('./addTag'),
+	removeTag: require('./removeTag')
 }

@@ -51,6 +51,8 @@ router.get('/api/detail', api.detail);
 router.get('/api/list', api.list);
 // 给组件增加Tag
 router.post('/api/addtag', multer().single(), api.addTag);
+// 移除组件的Tag
+router.post('/api/removetag', multer().single(), api.removeTag);
 
 router.post('/api/test',  upload.single('widget'), async (ctx, next) => {
   console.log(ctx.req, this)

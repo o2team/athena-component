@@ -114,3 +114,13 @@ jsEditor.setTheme('ace/theme/athenac');
 
 	给组件添加标签
 
+- POST `/api/removetag`
+
+	``` javascript
+	{
+		wid,	// 是mongodb里的_id，不是uuid
+		tagid
+	}
+	```
+	
+	移除组件的标签
