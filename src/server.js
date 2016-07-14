@@ -44,9 +44,9 @@ app
 // POST: appId, moduleId, platform [, description, author]
 // 上传组件数据
 router.post('/api/push', upload.single('widget'), api.push);
-// 通过id拉取组件打包文件
-router.get('/api/pull/:uuid/:rename?', api.pull);
-// 组件详情 ?uuid=
+// 通过id拉取组件打包文件 ?uuid=xx&rename=xx
+router.get('/api/pull', api.pull);
+// 组件详情 ?uuid=xx
 router.get('/api/detail', api.detail);
 // 组件列表
 router.get('/api/list', api.list);

@@ -91,7 +91,7 @@ jsEditor.setTheme('ace/theme/athenac');
 
     ![test-push](test-push.png)
 
-- GET `/api/pull/:uuid/:rename?`
+- GET `/api/pull?uuid=xxx&rename=xxx`
 
     通过组件uuid拉取组件，返回一个ZIP文件，如果有提供rename，组件将被重命名（目前是简单地重命名文件）
 
