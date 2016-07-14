@@ -41,17 +41,16 @@ app
   });
 
 //--------------------API--------------------
-// POST: appId, moduleId, platform [, description, author]
-// 上传组件数据
+// 上传组件数据  POST: appId, moduleId, platform [, description, author]
 router.post('/api/push', upload.single('widget'), api.push);
-// 通过id拉取组件打包文件 ?uuid=xx&rename=xx
-router.get('/api/pull', api.pull);
+// 通过id拉取组件打包文件
+router.get('/api/pull/:uuid/:rename', api.pull);
 // 组件详情 ?uuid=xx
 router.get('/api/detail', api.detail);
 // 组件列表
 router.get('/api/list', api.list);
 // 给组件增加Tag
-router.get('/api/addtag/:wid/:tagname', api.addTag);
+router.post('/api/addtag', multer().single(), api.addTag);
 
 router.post('/api/test',  upload.single('widget'), async (ctx, next) => {
   console.log(ctx.req, this)

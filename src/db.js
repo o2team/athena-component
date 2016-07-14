@@ -16,7 +16,7 @@ var Widget = mongoose.model('Widget', new Schema({
   pushDate: { type: Date, default: Date.now },
   pullTimes: { type: Number, default: 0 },
 
-  tag: [{ type:Schema.Types.ObjectId, ref:'Tag' }]
+  tags: [{ type:Schema.Types.ObjectId, ref:'Tag' }]
 }));
 
 var Tag = mongoose.model('Tag', new Schema({

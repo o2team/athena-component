@@ -91,7 +91,7 @@ jsEditor.setTheme('ace/theme/athenac');
 
     ![test-push](test-push.png)
 
-- GET `/api/pull?uuid=xxx&rename=xxx`
+- GET `/api/pull/:uuid/:rename`
 
     通过组件uuid拉取组件，返回一个ZIP文件，如果有提供rename，组件将被重命名（目前是简单地重命名文件）
 
@@ -102,3 +102,15 @@ jsEditor.setTheme('ace/theme/athenac');
 - GET `/api/list`
     
     获取组件列表
+
+- POST `/api/addtag`
+
+	``` javascript
+	{
+		wid,	// 是mongodb里的_id，不是uuid
+		tagname
+	}
+	```
+
+	给组件添加标签
+
