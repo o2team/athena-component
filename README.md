@@ -41,16 +41,17 @@ npm run test
 
 ### 模块的修改
 
-adm-zip糟点多多，自己动手改点点
+adm-zip糟点多
 
-找到 `./src/node_modules/adm-zip/adm-zip.js`
-找到 addLocalFolder 方法，约 Line 219，找到下面的代码对应修改
+`/归档/adm-zip.js` 替换 `./src/node_modules/adm-zip/adm-zip.js`
+
+（addLocalFolder 方法，约 Line 219）
 
 ![fix-adm-zip-add-folder](fix-adm-zip-add-folder.png)
 
 ### 代码主题
 
-把 `./归档/athenac.js` 复制到 `./src/app/node_modules/brace/theme` 下面，可自行修改主题文件里的样式。
+复制 `./归档/athenac.js` 到 `./src/app/node_modules/brace/theme` 下，可自行修改主题样式。
 
 **主题切换：** 找到 `./src/app/components/pages/pageDetail.vue` 作如下修改（把 `athenac` 替换为已有主题的名字）：
 
@@ -94,7 +95,7 @@ jsEditor.setTheme('ace/theme/athenac');
 
     通过组件uuid拉取组件，返回一个ZIP文件，如果有提供rename，组件将被重命名（目前是简单地重命名文件）
 
-- GET `/api/detail/:uuid`
+- GET `/api/detail?uuid=xxx`
     
     获取组件详情，返回组件的代码，组件的相关信息
 

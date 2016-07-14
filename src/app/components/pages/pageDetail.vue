@@ -82,7 +82,7 @@ export default {
 		jsEditor.setReadOnly(true);
 		jsEditor.$blockScrolling = Infinity;
 
-  		this.$http.get('api/detail/'+this.$route.params.uuid).then(function(res) {
+  		this.$http.get('api/detail?uuid='+this.$route.params.uuid).then(function(res) {
   			let data = res.data;
 			htmlEditor.setValue(data.contHtml, 1);
 			cssEditor.setValue(data.contCss, 1);

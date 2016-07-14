@@ -60,7 +60,7 @@ module.exports = async (ctx, next) => {
 				});
 			});
 
-			// RETURN
+			// Response
 			ctx.status = 200;
 			ctx.body = JSON.stringify({
 				no: 0,

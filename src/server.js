@@ -46,8 +46,8 @@ app
 router.post('/api/push', upload.single('widget'), api.push);
 // 通过id拉取组件打包文件
 router.get('/api/pull/:uuid/:rename?', api.pull);
-// 组件详情
-router.get('/api/detail/:uuid', api.detail);
+// 组件详情 ?uuid=
+router.get('/api/detail', api.detail);
 // 组件列表
 router.get('/api/list', api.list);
 // 给组件增加Tag
