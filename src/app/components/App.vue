@@ -1,12 +1,12 @@
 <template>
-	<div class="mod_psepage">
-		<mod-header></mod-header>
-		<div class="mod_container">
-			<router-view></router-view>
-		</div>
+<div class="mod_psepage">
+	<mod-header></mod-header>
+	<div class="mod_container">
+		<router-view></router-view>
 	</div>
-	
-	<mod-footer></mod-footer>
+</div>
+
+<mod-footer></mod-footer>
 </template>
 
 <style>

@@ -1,13 +1,13 @@
 <template>
-	<div class="mod_footer">
-		<div class="mod_footer_inner cf">
-			<div class="mod_footer_inner_l">
-				<p>© 2016 凹凸实验室</p>
-				<p>Building Component Library.</p>
-			</div>
-			<div class="mod_footer_inner_r"></div>
+<div class="mod_footer">
+	<div class="mod_footer_inner cf">
+		<div class="mod_footer_inner_l">
+			<p>© 2016 凹凸实验室</p>
+			<p>Building Component Library.</p>
 		</div>
+		<div class="mod_footer_inner_r"></div>
 	</div>
+</div>
 </template>
 
 <style>

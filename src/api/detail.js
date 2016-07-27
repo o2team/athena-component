@@ -1,31 +1,45 @@
 'use strict';
 
-const
-	fs = require('fs'),
-	path = require('path'),
-	fstream = require('fstream'),
-  lodash = require('lodash'),
-	conf = require('../ac-config.js'),
-	db = require('../db.js');
+const fs = require('fs');
+const path = require('path');
+const fstream = require('fstream');
+const lodash = require('lodash');
+const AV = require('leancloud-storage');
+const conf = require('../ac-config.js');
+const db = require('../db.js');
+
+const APP_ID = conf.leancloud.APP_ID;
+const APP_KEY = conf.leancloud.APP_KEY;
+AV.init({
+  appId: APP_ID,
+  appKey: APP_KEY
+});
 
 module.exports = async (ctx, next) => {
-  let uuid = ctx.request.query.uuid;
+  let widget;
+  let id = ctx.request.query.id;
   
-  if(!uuid) { ctx.status = 404; }
+  if(!id) { ctx.status = 404; return; }
 
-  let widgetPath = path.join(conf.warehouse, uuid);
+  await new Promise(function(resolve, reject) {
+    let query = new AV.Query('Widget');
+    query.get(id).then(function (data) {
+      widget = data;
+      resolve();
+    }, function (err) {
+      console.error(err);
+    });
+  });
+
+  let widgetPath = path.join(conf.warehouse, widget.get('folder'));
   let widgetImgPath = path.join(widgetPath, 'images');
-  let widgetBuildPath = path.join(conf.warehouse, '_build', uuid);
+  let widgetBuildPath = path.join(conf.warehouse, '_build', widget.get('folder'));
   let widgetBuildImgPath = path.join(widgetBuildPath, 'images');
 
-  // 查找数据库，如无返回null
-  let widget = await db.Widget.findOne({uuid:uuid});
-  if(!widget) { ctx.status = 404; }
-
   // 读取组件 HTML, CSS, JS
-  let contHtml = fs.readFileSync( path.join(widgetPath, widget.name+'.html') ).toString();
-  let contCss = fs.readFileSync( path.join(widgetPath, widget.name+'.css') ).toString();
-  let contJs = fs.readFileSync( path.join(widgetPath, widget.name+'.js') ).toString();
+  let contHtml = fs.readFileSync( path.join(widgetPath, widget.get('name')+'.html') ).toString();
+  let contCss = fs.readFileSync( path.join(widgetPath, widget.get('name')+'.css') ).toString();
+  let contJs = fs.readFileSync( path.join(widgetPath, widget.get('name')+'.js') ).toString();
 
   // 编译任务，遵循AOTU代码规范
   try {
@@ -54,10 +68,10 @@ module.exports = async (ctx, next) => {
     try {
       // 根据配置里的虚拟变量进行基本编译
       iframe = lodash.template( iframe )(
-        JSON.parse(fs.readFileSync(path.join(widgetPath, widget.name+'.json'))).data
+        JSON.parse(fs.readFileSync(path.join(widgetPath, widget.get('name')+'.json'))).data
       );
     } catch(err) {
-      console.log(err);
+      console.error(err);
     }
 
     // 创建编译目录

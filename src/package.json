@@ -25,6 +25,7 @@
     "koa-multer": "^1.0.0",
     "koa-router": "^7.0.1",
     "koa-static-server": "^0.1.8",
+    "leancloud-storage": "^1.3.2",
     "lodash": "^3.10.0",
     "mongoose": "^4.4.17",
     "node-uuid": "^1.4.7",

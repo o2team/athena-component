@@ -1,25 +1,33 @@
 'use strict';
 
-const
-	fs = require('fs'),
-	path = require('path'),
-	UUID = require('node-uuid'),
-	fstream = require('fstream'),
-	unzip = require('unzip'),
-	conf = require('../ac-config.js'),
-	db = require('../db.js');
+const fs = require('fs');
+const path = require('path');
+const UUID = require('node-uuid');
+const fstream = require('fstream');
+const unzip = require('unzip');
+const AV = require('leancloud-storage');
+const conf = require('../ac-config.js');
+const db = require('../db.js');
 
-// POST: appId, moduleId, platform [, description, author]
+const APP_ID = conf.leancloud.APP_ID;
+const APP_KEY = conf.leancloud.APP_KEY;
+AV.init({
+	appId: APP_ID,
+	appKey: APP_KEY
+});
+
+// POST: appId, moduleId, platform [, desc, author]
 module.exports = async (ctx, next) => {
 	let body = ctx.req.body;
 	let appId = body.appId;
 	let moduleId = body.moduleId;
 	let platform = body.platform;
-	let description = body.description;
+	let desc = body.desc;
 	let author = body.author;
 	let widget = ctx.req.file;
 
 	if(appId && moduleId && platform && widget) {
+		let wid;
 		let uuid = UUID.v1();
 		let wname = path.basename(widget.originalname, '.zip');
 		let distDir = path.join(conf.warehouse, uuid);
@@ -46,17 +54,22 @@ module.exports = async (ctx, next) => {
 			// 存数据库
 			await new Promise(function(resolve, reject) {
 				let wc = JSON.parse( jsonFile.toString() );
-				let c = new db.Widget({
-				  	uuid: uuid,
-				  	name: wname,
-				  	description: description || wc.description || '',
-				  	appId: appId,
+				var Widget = AV.Object.extend('Widget');
+				var widget = new Widget();
+				widget.save({
+					name: wname,
+					desc: desc || wc.desc || '',
+					appId: appId,
 				  	moduleId: moduleId,
 				  	author: author || wc.author || '',
-				  	platform: (platform==='h5' || platform==='pc') ? platform : 'h5' // h5 | pc, default h5
-				});
-				c.save(function(err) {
+				  	platform: (platform==='h5' || platform==='pc') ? platform : 'h5', // h5 | pc, default h5
+				  	// 新增，改为作存储文件的目录名，而不是组件ID
+				  	folder: uuid
+				}).then(function(w) {
+					wid = w.id;
 				  	resolve();
+				}).catch(function(err) {
+					console.error(err);
 				});
 			});
 
@@ -65,7 +78,7 @@ module.exports = async (ctx, next) => {
 			ctx.body = JSON.stringify({
 				no: 0,
 				data: {
-					id: uuid
+					id: wid
 				}
 			});
 		} catch(err) {

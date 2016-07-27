@@ -1,16 +1,16 @@
 <template>
-	<div class="mod_header">
-		<div class="mod_header_inner cf">
-			<div class="mod_header_inner_l">
-				<a class="mod_header_logo" v-link="{name:'list'}"><i>运营组件中心</i></a>
-				<a class="mod_header_tit" v-link="{name:'list'}">
-					运营构建组件库<br>
-					<i>Building Component Library</i>
-				</a>
-			</div>
-			<div class="mod_header_inner_r"></div>
+<div class="mod_header">
+	<div class="mod_header_inner cf">
+		<div class="mod_header_inner_l">
+			<a class="mod_header_logo" v-link="{name:'list'}"><i>运营组件中心</i></a>
+			<a class="mod_header_tit" v-link="{name:'list'}">
+				运营构建组件库<br>
+				<i>Building Component Library</i>
+			</a>
 		</div>
+		<div class="mod_header_inner_r"></div>
 	</div>
+</div>
 </template>
 
 <style>

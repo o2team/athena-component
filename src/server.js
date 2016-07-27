@@ -14,7 +14,7 @@ const
   upload = multer({ dest: os.tmpdir() }),
 
   conf = require('./ac-config.js'),
-  db = require('./db.js'),
+  // db = require('./db.js'),
   api = require('./api');
 
 // Middleware
@@ -44,22 +44,21 @@ app
 // 上传组件数据  POST: appId, moduleId, platform [, description, author]
 router.post('/api/push', upload.single('widget'), api.push);
 // 通过id拉取组件打包文件
-router.get('/api/pull/:uuid/:rename', api.pull);
+router.get('/api/pull/:id/:rename?', api.pull);
 // 组件详情 ?uuid=xx
 router.get('/api/detail', api.detail);
 // 组件列表
-router.get('/api/list', api.list);
+// router.get('/api/list', api.list);
 // 给组件增加Tag
-router.post('/api/addtag', multer().single(), api.addTag);
+// router.post('/api/addtag', multer().single(), api.addTag);
 // 移除组件的Tag
-router.post('/api/removetag', multer().single(), api.removeTag);
+// router.post('/api/removetag', multer().single(), api.removeTag);
 
 router.post('/api/test',  upload.single('widget'), async (ctx, next) => {
   console.log(ctx.req, this)
   let fields = ctx.req.body.fields;
   let widget = ctx.req.body.files.widget;
   console.log(fields, widget)
-
 });
 
 app.listen(conf.port);

@@ -73,35 +73,42 @@ jsEditor.setTheme('ace/theme/athenac');
 
 ## API
 
-- POST `/api/push`
+``` javascript
+/**
+ * HTTP POST /api/push
+ * @description 上传组件
+ *
+ * @param appId <String> 应用ID
+ * @param moduleId <String> 模块ID
+ * @param platform <String> 平台 pc | h5
+ * @param widget <String> zip组件打包文件，不包括外层文件夹，不要上传有组件依赖的组件
+ * @param desc [String] 描述，默认从组件配置文件中读取
+ * @param author [String] 作者
+ * 
+ * @response 200 { no:0, data: { id: widgetId } }
+ */
 
-	``` javascript
-	{
-		appId, 
-		moduleId, 
-		platform,	// pc | h5
-		widget,	// file
-		[description, author]
-	}
-	```
+/**
+ * HTTP GET /api/pull/:id/:rename?
+ * @description 拉取组件
+ * 
+ * @param id <String> 组件ID
+ * @param rename [String] 重命名名称
+ */
 
-    上传组件，widget是ZIP文件（特别注意，打包时不包括组件最外层的那个文件夹）
+/**
+ * HTTP GET /api/detail?id=xxx
+ * @description 组件详情，返回代码及组件信息
+ * 
+ * @param id <String> 组件ID
+ *
+ * @response { contHtml, contCss, contJs, widget }
+ */
 
-    **注意：禁止上传有组件依赖的组件**
+// 组件列表查询API不再在后台提供，详查Leancloud相关代码
+```
 
-    ![test-push](test-push.png)
-
-- GET `/api/pull/:uuid/:rename`
-
-    通过组件uuid拉取组件，返回一个ZIP文件，如果有提供rename，组件将被重命名（目前是简单地重命名文件）
-
-- GET `/api/detail?uuid=xxx`
-    
-    获取组件详情，返回组件的代码，组件的相关信息
-
-- GET `/api/list`
-    
-    获取组件列表
+** 下面两个API尚未健全及未转移到Leancloud **
 
 - POST `/api/addtag`
 

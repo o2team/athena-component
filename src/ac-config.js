@@ -15,6 +15,11 @@ module.exports = {
 		options: {}
 	},
 
+	leancloud: {
+		APP_ID: 'FzixJuDzAVtFSG2FP705KgEo-gzGzoHsz',
+		APP_KEY: 'dx4IHFu1FbFBB88Pn61GLGGP'
+	},
+
 	// 前端目录
 	app: Path.join(__dirname, 'app'),
 

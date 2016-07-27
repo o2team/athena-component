@@ -1,8 +1,8 @@
 <template>
-<div class="page_list">{{someData}}
+<div class="page_list">
 	<ul class="witems">
 		<li v-for="item in wlist" class="witems_it">
-			<a v-link="{ name:'detail', params:{uuid:item.uuid} }">{{item.name}}</a>
+			<a v-link="{ name:'detail', params:{id:item.id} }">{{item.attributes.name}}</a>
 		</li>
 	</ul>
 </div>
@@ -18,13 +18,15 @@
 <script>
 export default {
 	ready () {
-   		this.$http.get('api/list').then(function(res) {
-   			let data = res.data;
-			this.$set('wlist', data)
-			console.log(data);
-		}, function(data, status, request) {
-            console.log('fail' + status + "," + request);
-        });
+  		var that = this;
+
+  		// 请求组件列表
+		var query = new AV.Query('Widget');
+		query.find().then(function (results) {
+  			that.$set('wlist', results);
+		}, function (error) {
+
+		});
 
 		return {}
 	},

@@ -26,7 +26,7 @@ var path = require('path');
 // 前后端联调
 module.exports = {
   entry: [
-    'webpack-dev-server/client?http://localhost:8080',
+    // 'webpack-dev-server/client?http://localhost:8080',
     './main.js'
   ],
   output: {
