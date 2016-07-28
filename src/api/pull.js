@@ -5,7 +5,7 @@ const path = require('path');
 const AdmZip = require('adm-zip');
 const AV = require('leancloud-storage');
 const conf = require('../ac-config.js');
-const db = require('../db.js');
+// const db = require('../db.js');
 
 const APP_ID = conf.leancloud.APP_ID;
 const APP_KEY = conf.leancloud.APP_KEY;

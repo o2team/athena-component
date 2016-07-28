@@ -1,9 +1,8 @@
 'use strict';
 
-const
-	conf = require('../ac-config.js'),
-	mongoose = require('mongoose'),
-	db = require('../db.js');
+const conf = require('../ac-config.js');
+const mongoose = require('mongoose');
+	// db = require('../db.js');
 
 module.exports = async ctx => {
   let widgetId = mongoose.Types.ObjectId( ctx.req.body.wid );

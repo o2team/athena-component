@@ -1,8 +1,7 @@
 'use strict';
 
-const
-	conf = require('../ac-config.js'),
-	db = require('../db.js');
+const conf = require('../ac-config.js');
+// const db = require('../db.js');
 
 module.exports = async ctx => {
   let widgetId = ctx.req.body.wid;

@@ -19,52 +19,35 @@ npm install
 
 # ----- #
 
+# 前端配置
+修改main.js里的数据配置项
+# 代码主题
+cp ./bak/athenac.js ./src/app/node_modules/brace/theme
+# 主题切换
+vi ./src/app/components/pages/pageDetail.vue 替换里面 "athenac"
 # 前端调试 ./src/app -> http://localhost:8080/#!/list
 npm run dev
 # 前端编译 ./src/app -> http://localhost:8080/#!/list
 npm run build
 
+# 后端配置
+ac-config.js
+# hack修改，详见 模块的修改 部分
+cp ./bak/adm-zip.js ./src/node_modules/adm-zip/adm-zip.js
 # 后端开发 ./src -> http://localhost/#!/list
-mongod --dbpath ./database
 npm run test
-
-# 自定义配置 ac-config.json
 
 # ----- #
 
-# 前后端“双服务器热替换模式”联调指引
-# 1. 找到 ./src/app/webpack.config.js，将【单前端调试】部分注释，将【前后端联调】部分取消注释
-# 2. 找到 ./src/app/index.html，修改打包文件的地址：dist/bundle.js改为http://localhost:8080/dist/bundle.js
-# 3. 启动前端热更新服务
-# 4. 启动后端服务，此时，如果前端文件有更新，浏览器会自动刷新
+# 前后端双服务联调指引
+# （待更新）
 ```
 
 ### 模块的修改
 
-adm-zip糟点多
-
-`/归档/adm-zip.js` 替换 `./src/node_modules/adm-zip/adm-zip.js`
-
 （addLocalFolder 方法，约 Line 219）
 
 ![fix-adm-zip-add-folder](fix-adm-zip-add-folder.png)
-
-### 代码主题
-
-复制 `./归档/athenac.js` 到 `./src/app/node_modules/brace/theme` 下，可自行修改主题样式。
-
-**主题切换：** 找到 `./src/app/components/pages/pageDetail.vue` 作如下修改（把 `athenac` 替换为已有主题的名字）：
-
-``` javascript
-...
-require('brace/theme/athenac');
-...
-htmlEditor.setTheme('ace/theme/athenac');
-...
-cssEditor.setTheme('ace/theme/athenac');
-...
-jsEditor.setTheme('ace/theme/athenac');
-```
 
 ## 技术组成
 
