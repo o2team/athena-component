@@ -16,13 +16,13 @@ AV.init({
 	appKey: APP_KEY
 });
 
-// POST: appId, moduleId, platform [, desc, author]
+// POST: appId, moduleId, platform [, description, author]
 module.exports = async (ctx, next) => {
 	let body = ctx.req.body;
 	let appId = body.appId;
 	let moduleId = body.moduleId;
 	let platform = body.platform;
-	let desc = body.desc;
+	let desc = body.description;
 	let author = body.author;
 	let widget = ctx.req.file;
 
