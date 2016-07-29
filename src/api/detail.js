@@ -71,7 +71,7 @@ module.exports = async (ctx, next) => {
         JSON.parse(fs.readFileSync(path.join(widgetPath, widget.get('name')+'.json'))).data
       );
     } catch(err) {
-      console.error(err);
+      console.error('模板渲染错误：' + err);
     }
 
     // 创建编译目录

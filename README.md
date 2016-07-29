@@ -59,8 +59,8 @@ npm run test
  * @param moduleId <String> 模块ID
  * @param platform <String> 平台 pc | h5
  * @param widget <String> zip组件打包文件，不包括外层文件夹，不要上传有组件依赖的组件
+ * @param author <String> 作者，白名单校验
  * @param description [String] 描述，默认从组件配置文件中读取
- * @param author [String] 作者
  * 
  * @response 200 { no:0, data: { id: widgetId } }
  */

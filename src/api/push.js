@@ -16,17 +16,41 @@ AV.init({
 	appKey: APP_KEY
 });
 
-// POST: appId, moduleId, platform [, description, author]
+// POST: appId, moduleId, platform, author [, description]
 module.exports = async (ctx, next) => {
 	let body = ctx.req.body;
 	let appId = body.appId;
 	let moduleId = body.moduleId;
 	let platform = body.platform;
-	let desc = body.description;
 	let author = body.author;
+	let desc = body.description;
 	let widget = ctx.req.file;
 
-	if(appId && moduleId && platform && widget) {
+	if(appId && moduleId && platform && author && widget) {
+
+		// 检验白名单
+		let accountACK = false;
+		await new Promise(function(resolve, reject) {
+			var query = new AV.Query('Account');
+			query.equalTo('name', author);  
+			query.find().then(function (results) {
+  				if(results.length>0) {
+  					accountACK = true;
+  				}
+  				resolve();
+			}, function (err) {
+				reject(err);
+			});
+		}).catch(function(err) {
+			console.error(err);
+		});
+
+		// 权限
+		if(!accountACK) {
+			ctx.status = 401;
+			return;
+		}
+
 		let wid;
 		let uuid = UUID.v1();
 		let wname = path.basename(widget.originalname, '.zip');
