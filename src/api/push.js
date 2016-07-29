@@ -50,7 +50,7 @@ module.exports = async (ctx, next) => {
 			ctx.status = 401;
 			return;
 		}
-
+		
 		let wid;
 		let uuid = UUID.v1();
 		let wname = path.basename(widget.originalname, '.zip');

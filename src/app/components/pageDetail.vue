@@ -1,25 +1,31 @@
 <template>
 <div class="page_detail">
 	
-	<div v-if="widget.platform==='pc'" class="detail_pc">
+	<div v-if="widget.platform==='pc' && contHtml" class="detail_pc">
 		<iframe :src="previewurl" frameborder="0" width="375px" height="667px"></iframe>
 	</div>
 
 	<div class="detail ly_box">
 
-		<div v-if="widget.platform==='h5'" class="detail_mobile">
+		<div v-if="widget.platform==='h5' && contHtml" class="detail_mobile">
 			<div class="detail_mobile_screen">
 				<iframe :src="previewurl" frameborder="0" width="375px" height="667px"></iframe>
 			</div>
 		</div>
 
 		<div class="detail_code">
-			<h2 class="detail_code_tit">HTML结构</h2>
-			<div id="htmlEditor"></div>
-			<h2 class="detail_code_tit">CSS样式</h2>
-			<div id="cssEditor"></div>
-			<h2 class="detail_code_tit">脚本</h2>
-			<div id="jsEditor"></div>
+			<div v-show="contHtml">
+				<h2 class="detail_code_tit">HTML结构</h2>
+				<div id="htmlEditor"></div>
+			</div>
+			<div v-show="contCss">
+				<h2 class="detail_code_tit">CSS样式</h2>
+				<div id="cssEditor"></div>
+			</div>
+			<div v-show="contJs">
+				<h2 class="detail_code_tit">脚本</h2>
+				<div id="jsEditor"></div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -42,6 +48,9 @@
 export default {
 	data () {
 		return {
+			contHtml: undefined,
+			contCss: undefined,
+			contJs: undefined,
 			previewurl: '',
 			widget: {}
 		}
@@ -84,10 +93,19 @@ export default {
 
   		this.$http.get('api/detail?id='+this.$route.params.id).then(function(res) {
   			let data = res.data;
-			htmlEditor.setValue(data.contHtml, 1);
-			cssEditor.setValue(data.contCss, 1);
-			jsEditor.setValue(data.contJs, 1);
-			that.$data.previewurl = `warehouse/_build/${ data.widget.folder }/index.html`;
+			if(data.contHtml) { 
+				htmlEditor.setValue(data.contHtml, 1); 
+				that.$data.previewurl = `warehouse/_build/${ data.widget.folder }/index.html`;
+				that.$data.contHtml = data.contHtml;
+			}
+			if(data.contCss) { 
+				cssEditor.setValue(data.contCss, 1); 
+				that.$data.contCss = data.contCss;
+			}
+			if(data.contJs) { 
+				jsEditor.setValue(data.contJs, 1); 
+				that.$data.contJs = data.contJs;
+			}
 			that.$data.widget = data.widget;
 			console.log(data);
 		}, function(data, status, request) {

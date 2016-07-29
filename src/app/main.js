@@ -8,6 +8,7 @@ Vue.use(VueResource);
 import App from './components/App.vue'
 import pageList from './components/pageList.vue'
 import pageDetail from './components/pageDetail.vue'
+import pageWhite from './components/pageWhite.vue'
 
 Vue.config.debug = true;
 
@@ -31,6 +32,10 @@ router.map({
     '/detail/:id': {
     	name: 'detail',
     	component: pageDetail
+    },
+    '/white': {
+        name: 'white',
+        component: pageWhite
     }
 });
 
