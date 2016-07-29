@@ -32,7 +32,7 @@ npm run build
 
 # 后端配置
 ac-config.js
-# hack修改，详见 模块的修改 部分
+# hack修改
 cp ./bak/adm-zip.js ./src/node_modules/adm-zip/adm-zip.js
 # 后端开发 ./src -> http://localhost/#!/list
 npm run test
@@ -42,12 +42,6 @@ npm run test
 # 前后端双服务联调指引
 # （待更新）
 ```
-
-### 模块的修改
-
-（addLocalFolder 方法，约 Line 219）
-
-![fix-adm-zip-add-folder](fix-adm-zip-add-folder.png)
 
 ## 技术组成
 

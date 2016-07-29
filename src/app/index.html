@@ -13,6 +13,59 @@
 <App></App>
 
 <script src="https://cdn1.lncld.net/static/js/av-min-1.2.1.js"></script>
-<script src="dist/bundle.js"></script>
+<script src="localdata.js"></script>
+<script>
+var forceRefreshTimestamp = new Date(localData.get('forceRefreshTimestamp'));
+// 强制更新Localstorage时间戳
+var whenToForceRefresh = new Date('2015-07-29 9:55');
+if(forceRefreshTimestamp=='Invalid Date' || whenToForceRefresh.getTime() !== forceRefreshTimestamp.getTime()) {
+	localData.remove('bundle.js');
+	localData.remove('timestamp');
+	localData.remove('forceRefreshTimestamp');
+	// console.log('refresh');
+}
+
+function loadXMLDoc(url) {
+  var xmlhttp = null;
+
+  if (window.XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest();
+  } else if (window.ActiveXObject) {
+    xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+  }
+
+  if (xmlhttp) {
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+        fillScript(xmlhttp.responseText);
+        localData.set('bundle.js', xmlhttp.responseText);
+        // 缓存10天
+        localData.set('timestamp', new Date().getTime()+864000000);
+        localData.set('forceRefreshTimestamp', whenToForceRefresh);
+      }
+    };
+
+    xmlhttp.open('GET', url, true);
+    xmlhttp.send(null);
+  } else {
+    
+  }
+}
+
+function fillScript(bundle) {
+	var script = document.createElement('script');
+	script.appendChild(document.createTextNode(bundle));
+	document.head.appendChild(script);
+}
+
+var acpbundle = localData.get('bundle.js');
+var acptimestamp = new Date(parseInt(localData.get('timestamp')));
+if(acptimestamp!='Invalid Date' && acptimestamp>new Date() && acpbundle) {
+	fillScript(acpbundle);
+} else {
+	loadXMLDoc('/dist/bundle.js');
+}
+</script>
+<!-- <script src="dist/bundle.js"></script> -->
 </body>
 </html>
