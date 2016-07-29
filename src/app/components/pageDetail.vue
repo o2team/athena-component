@@ -54,7 +54,7 @@ export default {
 		require('brace/mode/css');
 		require('brace/mode/javascript');
 		require('brace/theme/athenac');
-
+		
 		let htmlEditor = ace.edit('htmlEditor');
 		htmlEditor.getSession().setMode('ace/mode/html');
 		htmlEditor.getSession().setUseWrapMode(true);

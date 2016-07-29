@@ -82,6 +82,7 @@ module.exports = async (ctx, next) => {
 				}
 			});
 		} catch(err) {
+			console.error(err);
 			ctx.status = 500;
 		}
 	} else {
