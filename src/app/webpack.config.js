@@ -12,6 +12,7 @@ module.exports = {
     loaders: [
       { test: /\.vue$/, loader: 'vue' },
       { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
+      { test: /\.scss$/, loader: 'style!css!sass' },
       { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192' }
     ]
   },
@@ -26,7 +27,6 @@ module.exports = {
 // 前后端联调
 /*module.exports = {
   entry: [
-    // 'webpack-dev-server/client?http://localhost:8080',
     './main.js'
   ],
   output: {

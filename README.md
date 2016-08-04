@@ -6,7 +6,7 @@
 
 ``` bash
 # 安装 NodeJS（建议版本>=6.0.0）
-# 安装 MongoDB
+# 注册 Leancloud
 
 git clone https://github.com/o2team/athena-component.git
 
@@ -108,3 +108,13 @@ npm run test
 	```
 	
 	移除组件的标签
+
+
+## Leancloud
+
+Class: Widget, Account
+
+Widget: desc, <folder>, <name>, <author>, <appId>, <platform>, <moduleId>, pullTimes(default 0), tags
+
+Account: <name>
+
