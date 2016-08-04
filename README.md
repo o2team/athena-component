@@ -2,6 +2,12 @@
 
 集合组件上传、组件拉取、和组件预览功能。
 
+## 技术组成
+
+- 前端 vue+webpack
+- 后端 koa
+- 数据存储 Leancloud
+
 ## 部署指引
 
 ``` bash
@@ -25,28 +31,27 @@ npm install
 cp ./bak/athenac.js ./src/app/node_modules/brace/theme
 # 主题切换
 vi ./src/app/components/pages/pageDetail.vue 替换里面 "athenac"
-# 前端调试 ./src/app -> http://localhost:8080/#!/list
+# 前端调试 ./src/app -> 运行后访问：http://localhost:8080
 npm run dev
-# 前端编译 ./src/app -> http://localhost:8080/#!/list
+# 前端编译 ./src/app
 npm run build
 
 # 后端配置
 ac-config.js
 # hack修改
 cp ./bak/adm-zip.js ./src/node_modules/adm-zip/adm-zip.js
-# 后端开发 ./src -> http://localhost/#!/list
+# 后端开发 ./src -> 运行后访问：http://localhost
 npm run test
 
 # ----- #
 
-# 前后端双服务联调指引
-# （待更新）
+# 前后端双服务联调指引 .src/app/index.html
+当然，先把index.html里那大段Localstorage存储的代码注释掉，换成直接引用脚本的形式
+dist/bundle.js -> http://localhost:8080/dist/bundle.js
+开启前端调试模式
+启动后端服务器
+访问：http://localhost
 ```
-
-## 技术组成
-
-- 前端 vue+webpack
-- 后端 koa
 
 ## API
 
@@ -64,7 +69,9 @@ npm run test
  * 
  * @response 200 { no:0, data: { id: widgetId } }
  */
+```
 
+``` javascript
 /**
  * HTTP GET /api/pull/:id/:rename?
  * @description 拉取组件
@@ -72,7 +79,9 @@ npm run test
  * @param id <String> 组件ID
  * @param rename [String] 重命名名称
  */
+```
 
+``` javascript
 /**
  * HTTP GET /api/detail?id=xxx
  * @description 组件详情，返回代码及组件信息
@@ -81,40 +90,19 @@ npm run test
  *
  * @response { contHtml, contCss, contJs, widget }
  */
-
-// 组件列表查询API不再在后台提供，详查Leancloud相关代码
 ```
 
-** 下面两个API尚未健全及未转移到Leancloud **
+**Leancloud已提供相关接口，以下API不在后台提供：**
 
-- POST `/api/addtag`
+- 组件列表查询
+- 白名单列表查询
+- 白名单 增/删
+- 组件标签 增/删
 
-	``` javascript
-	{
-		wid,	// 是mongodb里的_id，不是uuid
-		tagname
-	}
-	```
-
-	给组件添加标签
-
-- POST `/api/removetag`
-
-	``` javascript
-	{
-		wid,	// 是mongodb里的_id，不是uuid
-		tagid
-	}
-	```
-	
-	移除组件的标签
-
-
-## Leancloud
+## Leancloud 初始化指引
 
 Class: Widget, Account
 
-Widget: desc, <folder>, <name>, <author>, <appId>, <platform>, <moduleId>, pullTimes(default 0), tags
-
-Account: <name>
+- Widget: desc, <folder>, <name>, <author>, <appId>, <platform>(default h5), <moduleId>, <pullTimes>(default 0), tags(Array)
+- Account: <name>
 

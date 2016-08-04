@@ -14,7 +14,7 @@
 		</div>
 		<div class="mod_header_inner_r ly_valign">
 			<div class="ly_valign_wrap">
-				<a class="mod_header_login" href="javascript:;">登录</a>
+				<a class="mod_header_login" href="javascript:;" style="display:none">登录</a>
 			</div>
 			<!--[if lt IE 8]><span class="ly_valign_after"></span><![endif]-->
 		</div>

@@ -57,3 +57,54 @@ var localData = {
         }
     }
 }
+
+var forceRefreshId = localData.get('forceRefreshId');
+if(whenToForceRefresh !== forceRefreshId) {
+    localData.remove('bundle.js');
+    localData.remove('timestamp');
+    localData.remove('forceRefreshId');
+    console.log('Force to refresh the Localstorage because the ID has been changed...');
+}
+
+function loadXMLDoc(url) {
+  var xmlhttp = null;
+
+  if (window.XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest();
+  } else if (window.ActiveXObject) {
+    xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+  }
+
+  if (xmlhttp) {
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+        fillScript(xmlhttp.responseText);
+        localData.set('bundle.js', xmlhttp.responseText);
+        // 缓存10天
+        localData.set('timestamp', new Date().getTime()+864000000);
+        localData.set('forceRefreshId', whenToForceRefresh);
+        console.log('Okay, we have saved the bundle.js into Localstorage for 10 days...');
+      }
+    };
+
+    xmlhttp.open('GET', url, true);
+    xmlhttp.send(null);
+  } else {
+    
+  }
+}
+
+function fillScript(bundle) {
+    var script = document.createElement('script');
+    script.appendChild(document.createTextNode(bundle));
+    document.head.appendChild(script);
+}
+
+var acpbundle = localData.get('bundle.js');
+var acptimestamp = new Date(parseInt(localData.get('timestamp')));
+if(acptimestamp!='Invalid Date' && acptimestamp>new Date() && acpbundle) {
+    fillScript(acpbundle);
+    console.log('We just read bundle.js from Localstorage...');
+} else {
+    loadXMLDoc('/dist/bundle.js');
+}

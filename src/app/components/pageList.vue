@@ -1,5 +1,5 @@
 <template>
-<div class="page_list">
+<div class="mod_wrap">
 	<ul class="wlist">
 		<li v-for="item in wlist" class="wlist_item">
 			<div class="wlist_item_wrap">
@@ -8,7 +8,7 @@
 					<ul class="wlist_item_tags_ul">
 						<li v-for="y in item.attributes.tags" class="wlist_item_tags_item">
 							<span>{{ y }}</span>
-							<i class="close" @click="removeTag(item, y, $index)"></i>
+							<i class="close" @click="removeTag(item, y, $index)">&#xe606;</i>
 						</li>
 						<li class="wlist_item_tags_add">
 							<div class="wlist_item_tags_add_button add">&#xe60b;</div>
@@ -21,6 +21,7 @@
 			</div>
 		</li>
 	</ul>
+	<a class="more" href="javascript:;" @click="loadMore()">加载更多</a>
 </div>
 </template>
 
@@ -65,7 +66,11 @@
 			margin-left: 5px;
 			width: 11px; height: 15px;
 			cursor: pointer;
-			&:before, &:after {
+
+			font-family: 'iconfont';
+			font-size: 14px;
+			color: #666;
+			/*&:before, &:after {
 				content:'';
 				position: absolute;
 				top: 7px; left: 2px;
@@ -76,7 +81,7 @@
 			&:before { transform: rotate(45deg); }
 			&:after { transform: rotate(-45deg); }
 			&:hover:before { transform: rotate(135deg); }
-			&:hover:after { transform: rotate(45deg); }
+			&:hover:after { transform: rotate(45deg); }*/
 		}
 		span {
 			display: inline-block;
@@ -139,6 +144,13 @@
 		}
 	}
 }
+.more {
+	display: block;
+	margin-top: 20px;
+	width: 100%; height: 30px; line-height: 30px;
+	border: 1px solid #6190e8;
+	text-align: center;
+}
 </style>
 
 <script>
@@ -146,8 +158,8 @@ export default {
 	ready () {
   		var that = this;
 
-  		// 请求组件列表
 		var query = new AV.Query('Widget');
+		query.limit(50);
 		query.find().then(function (results) {
   			that.$set('wlist', results);
 		}, function (error) {
@@ -194,6 +206,23 @@ export default {
   				_POP_.toast('删除成功');
 			}, function (error) {
   				_POP_.toast('删除失败');
+			});
+		},
+		loadMore: function() {
+			var that = this;
+			var nowLen = this.wlist.length;
+
+			var query = new AV.Query('Widget');
+			query.limit(50);
+			query.skip(nowLen);
+			query.find().then(function (results) {
+				if(results.length>0) {
+					that.wlist = that.wlist.concat(results);
+				} else {
+					_POP_.toast('没有更多的数据了');
+				}
+			}, function (error) {
+				
 			});
 		}
 	}

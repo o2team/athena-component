@@ -38,3 +38,8 @@ a:hover {text-decoration:none;}
 .ly_valign {font-size:0;}
 	.ly_valign:after, .ly_valign_after {content:'';display:inline-block;*display:inline;*zoom:1;width:0;height:100%;vertical-align:middle;}
 	.ly_valign_wrap {display:inline-block;*display:inline;*zoom:1;vertical-align:middle;font-size:14px;}
+
+/*===================
+	自定样式
+ ===================*/
+.mod_wrap {margin: 0 auto; max-width: 1400px;}

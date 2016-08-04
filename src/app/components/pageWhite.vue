@@ -1,5 +1,5 @@
 <template>
-<div class="white">
+<div class="mod_wrap">
 	<table class="white_table">
 		<thead>
 			<tr>
@@ -32,10 +32,6 @@
 </template>
 
 <style lang="sass">
-.white {
-	margin: 0 auto;
-	max-width: 1200px;
-}
 .white_table {
 	width: 100%; table-layout: fixed;
 	thead {
