@@ -157,7 +157,7 @@
 export default {
 	ready () {
   		var that = this;
-
+  		
 		var query = new AV.Query('Widget');
 		query.limit(50);
 		query.find().then(function (results) {

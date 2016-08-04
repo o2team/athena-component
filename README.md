@@ -45,12 +45,8 @@ npm run test
 
 # ----- #
 
-# 前后端双服务联调指引 .src/app/index.html
-当然，先把index.html里那大段Localstorage存储的代码注释掉，换成直接引用脚本的形式
-dist/bundle.js -> http://localhost:8080/dist/bundle.js
-开启前端调试模式
-启动后端服务器
-访问：http://localhost
+# 前后端双服务联调指引
+（待更新）
 ```
 
 ## API
@@ -103,6 +99,6 @@ dist/bundle.js -> http://localhost:8080/dist/bundle.js
 
 Class: Widget, Account
 
-- Widget: desc, <folder>, <name>, <author>, <appId>, <platform>(default h5), <moduleId>, <pullTimes>(default 0), tags(Array)
-- Account: <name>
+- Widget: desc, **folder**, **name**, **author**, **appId**, **platform**(default h5), **moduleId**, **pullTimes**(default 0), tags(Array)
+- Account（指定用户admin才可增删）: **name**
 

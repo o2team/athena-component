@@ -68,8 +68,25 @@ router.map({
     },
     '/white': {
         name: 'white',
-        component: pageWhite
+        component: pageWhite,
+        auth: true
     }
 });
+
+router.beforeEach(function (transition) {
+  var auth = transition.to.auth;
+  if (!auth) {
+    transition.next();
+  } else {
+    var currentUser = AV.User.current();
+    if (currentUser) {
+        router.app.$broadcast('hasLogin', true);
+        transition.next();
+    } else {
+        transition.abort();
+        router.app.$broadcast('hasLogin', false);
+    }
+  }
+})
 
 router.start(App, 'App');
