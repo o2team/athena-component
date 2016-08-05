@@ -1,7 +1,7 @@
 <template>
 <div class="mod_wrap">
 	<div class="searchtag">
-		<input class="searchtag_input" type="text" placeholder="搜索标签，输入后按下回车键" @keyup.enter="searchtag(searchTagName)" @change="recoverFromSearch(searchTagName)" v-model="searchTagName">
+		<input class="searchtag_input" type="text" placeholder="搜索标签，输入后按下回车键" @keyup.enter="searchtag(searchTagName)" v-model="searchTagName">
 	</div>
 	<ul class="wlist">
 		<li v-for="item in wlist" class="wlist_item">
@@ -24,7 +24,7 @@
 			</div>
 		</li>
 	</ul>
-	<a class="more" href="javascript:;" @click="loadMore()">加载更多</a>
+	<a class="more" href="javascript:;" @click="loadMore()" v-show="!search.isSearching">加载更多</a>
 </div>
 </template>
 
@@ -168,7 +168,6 @@
 	border: 1px solid #6190e8;
 	text-align: center;
 }
-
 </style>
 
 <script>
@@ -194,25 +193,32 @@ export default {
 	data () {
 		return {
 			wlist: [],
-			prewlist: [],
+			search: {
+				isSearching: false,
+				prewlist: null
+			},
 			searchTagName: ''
 		}
 	},
 	methods: {
 		searchtag: function(searchTagName) {
-			if(!searchTagName) { return; }
 			var that = this;
-			var tagFilter = searchTagName;
-			var query = new AV.Query('Widget');
-			query.equalTo('tags', tagFilter);
-			query.find().then(function(results) {
-				that.prewlist = that.wlist;
-				that.wlist = results;
-			});
-		},
-		recoverFromSearch: function(searchTagName) {
-			if(!searchTagName) {
-				this.wlist = this.prewlist;
+
+			if(searchTagName) {
+				var tagFilter = searchTagName;
+				var query = new AV.Query('Widget');
+				query.equalTo('tags', tagFilter);
+				query.find().then(function(results) {
+					// 如果之前的状态不也是搜索状态
+					if(!that.search.isSearching) {
+						that.search.prewlist = that.wlist;
+					}
+					that.wlist = results;
+					that.search.isSearching = !!searchTagName;
+				});
+			} else {
+				this.wlist = this.search.prewlist;
+				that.search.isSearching = !!searchTagName;
 			}
 		},
 		addTag: function(item, newTagName) {
