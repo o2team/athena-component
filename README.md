@@ -18,6 +18,7 @@ git clone https://github.com/o2team/athena-component.git
 
 cd athena-component/src
 npm install
+npm install babel-cli -g
 node install
 
 cd app

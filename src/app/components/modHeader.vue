@@ -49,7 +49,8 @@
 		.mod_header_inner_r {float:right; height: 100%;}
 			.mod_header_login {}
 .loginpop {
-	position: fixed; top: 50%; left: 50%; width :300px; height: 200px; margin: -100px 0 0 -150px;
+	z-index: 3;
+	position: fixed; top: 200px; left: 50%; width :300px; height: 200px; margin-left: -150px;
 	padding: 30px;
 	background: #fdfdfd; border: 1px solid #ccc;
 }

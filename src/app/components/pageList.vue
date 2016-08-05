@@ -1,5 +1,8 @@
 <template>
 <div class="mod_wrap">
+	<div class="searchtag">
+		<input class="searchtag_input" type="text" placeholder="搜索标签，输入后按下回车键" @keyup.enter="searchtag(searchTagName)" @change="recoverFromSearch(searchTagName)" v-model="searchTagName">
+	</div>
 	<ul class="wlist">
 		<li v-for="item in wlist" class="wlist_item">
 			<div class="wlist_item_wrap">
@@ -26,6 +29,20 @@
 </template>
 
 <style lang="sass">
+.searchtag {
+	margin-bottom: 50px;
+	.searchtag_input {
+		display: block; 
+		padding: 10px;
+		width: 100%;
+		border: 1px solid #6190e8;
+		background: #f8f8f8;
+		text-align: center;
+		&:focus {
+			background: #fff;
+		}
+	}
+}
 .wlist {
 	overflow: hidden;
 }
@@ -146,11 +163,12 @@
 }
 .more {
 	display: block;
-	margin-top: 20px;
+	margin-top: 50px;
 	width: 100%; height: 30px; line-height: 30px;
 	border: 1px solid #6190e8;
 	text-align: center;
 }
+
 </style>
 
 <script>
@@ -175,10 +193,28 @@ export default {
 	},
 	data () {
 		return {
-			wlist: []
+			wlist: [],
+			prewlist: [],
+			searchTagName: ''
 		}
 	},
 	methods: {
+		searchtag: function(searchTagName) {
+			if(!searchTagName) { return; }
+			var that = this;
+			var tagFilter = searchTagName;
+			var query = new AV.Query('Widget');
+			query.equalTo('tags', tagFilter);
+			query.find().then(function(results) {
+				that.prewlist = that.wlist;
+				that.wlist = results;
+			});
+		},
+		recoverFromSearch: function(searchTagName) {
+			if(!searchTagName) {
+				this.wlist = this.prewlist;
+			}
+		},
 		addTag: function(item, newTagName) {
 			if(!newTagName) {
 				_POP_.toast('标签为空');
