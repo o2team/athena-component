@@ -75,16 +75,16 @@ router.map({
 
 router.beforeEach(function (transition) {
   var auth = transition.to.auth;
+  var currentUser = AV.User.current();
+  router.app.$broadcast('Auth', currentUser);
+  
   if (!auth) {
     transition.next();
   } else {
-    var currentUser = AV.User.current();
     if (currentUser) {
-        router.app.$broadcast('hasLogin', true);
         transition.next();
     } else {
         transition.abort();
-        router.app.$broadcast('hasLogin', false);
     }
   }
 })

@@ -157,13 +157,14 @@
 export default {
 	ready () {
   		var that = this;
-  		
-		var query = new AV.Query('Widget');
-		query.limit(50);
-		query.find().then(function (results) {
-  			that.$set('wlist', results);
-		}, function (error) {
 
+  		var query = new AV.Query('Widget');
+		query.descending('createdAt');
+		query.limit(5);
+		query.find().then(function (results) {
+  			that.wlist = results;
+		}, function (error) {
+			
 		});
 
 		$('.wlist').on('click', '.wlist_item_tags_add_button.add, .wlist_item_tags_add_button.cancel', function() {
@@ -171,8 +172,6 @@ export default {
 		}).on('click', '.wlist_item_tags_add_button.confirm', function() {
 			$(this).parent().removeClass('active');
 		});
-
-		return {}
 	},
 	data () {
 		return {
@@ -213,7 +212,8 @@ export default {
 			var nowLen = this.wlist.length;
 
 			var query = new AV.Query('Widget');
-			query.limit(50);
+			query.descending('createdAt');
+			query.limit(5);
 			query.skip(nowLen);
 			query.find().then(function (results) {
 				if(results.length>0) {

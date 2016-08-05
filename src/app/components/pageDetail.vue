@@ -12,19 +12,22 @@
 				<iframe :src="previewurl" frameborder="0" width="375px" height="667px"></iframe>
 			</div>
 		</div>
-
+		
 		<div class="detail_code">
 			<div v-show="contHtml">
 				<h2 class="detail_code_tit">HTML结构</h2>
-				<div id="htmlEditor"></div>
+				<!-- <div id="htmlEditor"></div> -->
+				<pre class="brush: xml;">{{ contHtml }}</pre>
 			</div>
 			<div v-show="contCss">
 				<h2 class="detail_code_tit">CSS样式</h2>
-				<div id="cssEditor"></div>
+				<!-- <div id="cssEditor"></div> -->
+				<pre class="brush: css;">{{ contCss }}</pre>
 			</div>
 			<div v-show="contJs">
 				<h2 class="detail_code_tit">脚本</h2>
-				<div id="jsEditor"></div>
+				<!-- <div id="jsEditor"></div> -->
+				<pre class="brush: js;">{{ contJs }}</pre>
 			</div>
 		</div>
 	</div>
@@ -58,56 +61,25 @@ export default {
 	ready () {
 		let that = this;
 
-		let ace = require('brace');
-		require('brace/mode/html');
-		require('brace/mode/css');
-		require('brace/mode/javascript');
-		require('brace/theme/athenac');
-		
-		let htmlEditor = ace.edit('htmlEditor');
-		htmlEditor.getSession().setMode('ace/mode/html');
-		htmlEditor.getSession().setUseWrapMode(true);
-		htmlEditor.setAutoScrollEditorIntoView(true);
-		htmlEditor.setOption('maxLines', Infinity);
-		htmlEditor.setTheme('ace/theme/athenac');
-		htmlEditor.setReadOnly(true);
-		htmlEditor.$blockScrolling = Infinity;
-
-		let cssEditor = ace.edit('cssEditor');
-		cssEditor.getSession().setMode('ace/mode/css');
-		cssEditor.getSession().setUseWrapMode(true);
-		cssEditor.setAutoScrollEditorIntoView(true);
-		cssEditor.setOption('maxLines', Infinity);
-		cssEditor.setTheme('ace/theme/athenac');
-		cssEditor.setReadOnly(true);
-		cssEditor.$blockScrolling = Infinity;
-
-		let jsEditor = ace.edit('jsEditor');
-		jsEditor.getSession().setMode('ace/mode/javascript');
-		jsEditor.getSession().setUseWrapMode(true);
-		jsEditor.setAutoScrollEditorIntoView(true);
-		jsEditor.setOption('maxLines', Infinity);
-		jsEditor.setTheme('ace/theme/athenac');
-		jsEditor.setReadOnly(true);
-		jsEditor.$blockScrolling = Infinity;
-
   		this.$http.get('api/detail?id='+this.$route.params.id).then(function(res) {
   			let data = res.data;
 			if(data.contHtml) { 
-				htmlEditor.setValue(data.contHtml, 1); 
 				that.$data.previewurl = `warehouse/_build/${ data.widget.folder }/index.html`;
 				that.$data.contHtml = data.contHtml;
 			}
 			if(data.contCss) { 
-				cssEditor.setValue(data.contCss, 1); 
 				that.$data.contCss = data.contCss;
 			}
 			if(data.contJs) { 
-				jsEditor.setValue(data.contJs, 1); 
 				that.$data.contJs = data.contJs;
 			}
+
+			// 等待页面更新
+			setTimeout(function() {
+				SyntaxHighlighter.highlight();
+			}, 0);
+
 			that.$data.widget = data.widget;
-			console.log(data);
 		}, function(data, status, request) {
             console.log('fail' + status + "," + request);
         });

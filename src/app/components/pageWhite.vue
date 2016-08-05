@@ -82,7 +82,6 @@ export default {
   		// 请求白名单列表
 		var query = new AV.Query('Account');
 		query.find().then(function (results) {
-			console.log(results)
   			that.wlist = results;
 		}, function (error) {
 

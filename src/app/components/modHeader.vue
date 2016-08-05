@@ -7,15 +7,18 @@
 				<a class="mod_header_tit" v-link="{name:'list'}">运营构建组件库<br><i>Building Component Library</i></a>
 				<ul class="mod_header_nav cf">
 					<li class="mod_header_nav_item"><a v-link="{path: '/list', name:'list'}">组件</a></li>
-					<li class="mod_header_nav_item"><a v-link="{path: '/white', name:'white'}" v-show="hasLogin">白名单</a></li>
+					<li class="mod_header_nav_item"><a v-link="{path: '/white', name:'white'}" v-show="user.hasLogin">白名单</a></li>
 				</ul>
 			</div>
 			<!--[if lt IE 8]><span class="ly_valign_after"></span><![endif]-->
 		</div>
 		<div class="mod_header_inner_r ly_valign">
 			<div class="ly_valign_wrap">
-				<a class="mod_header_login" href="javascript:;"  @click="isShowLoginPop = true" v-show="!hasLogin">登录</a>
-				<a class="mod_header_login" href="javascript:;"  @click="logout" v-show="hasLogin">退出</a>
+				<a class="mod_header_login" href="javascript:;"  @click="isShowLoginPop = true" v-show="!user.hasLogin">登录</a>
+				<div v-show="user.hasLogin">
+					<span style="margin-right: 30px;">欢迎您，{{ user.username }}</span>
+					<a class="mod_header_login" href="javascript:;"  @click="logout">退出</a>
+				</div>
 			</div>
 			<!--[if lt IE 8]><span class="ly_valign_after"></span><![endif]-->
 		</div>
@@ -83,9 +86,8 @@
 <script>
 export default {
 	events: {
-		hasLogin : function(bool) { 
-			console.log(bool)
-			this.hasLogin = !!bool;
+		Auth : function(currentUser) {
+			this.user.init(currentUser);
 		},
 	},
 	ready () {
@@ -94,7 +96,6 @@ export default {
   		// 请求白名单列表
 		var query = new AV.Query('Account');
 		query.find().then(function (results) {
-			console.log(results)
   			that.wlist = results;
 		}, function (error) {
 
@@ -107,7 +108,20 @@ export default {
 			isShowLoginPop: false,
 			loginUsername: '',
 			loginPassword: '',
-			hasLogin: false
+			user: {
+				init: function(currentUser) {
+					this.hasLogin = !!currentUser;
+					if(currentUser) {
+						this.username = currentUser.attributes.username;
+					}
+				},
+				destory: function() {
+					this.hasLogin = false;
+					this.username = '';
+				},
+				hasLogin: false,
+				username: ''
+			}
 		}
 	},
 	methods: {
@@ -117,17 +131,19 @@ export default {
 			var that = this;
 
 			AV.User.logIn(uname, pass).then(function (loginedUser) {
-				console.log(loginedUser);
 				_POP_.toast('登录成功');
 				that.isShowLoginPop = false;
-				that.hasLogin = true;
+
+				that.user.init(loginedUser);
+
 			}, function (error) {
 				_POP_.toast('登录失败');
 			});
 		},
 		logout: function() {
 			AV.User.logOut();
-			this.hasLogin = false;
+			this.user.destory();
+			_POP_.toast('用户登出');
 		}
 	}
 }

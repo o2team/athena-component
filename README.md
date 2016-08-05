@@ -99,6 +99,6 @@ npm run test
 
 Class: Widget, Account
 
-- Widget: desc, **folder**, **name**, **author**, **appId**, **platform**(default h5), **moduleId**, **pullTimes**(default 0), tags(Array)
-- Account（指定用户admin才可增删）: **name**
+- Widget: desc, **folder**, **name**, **author**, **appId**, **platform**(default h5), **moduleId**, **pullTimes**(default 0), tags(Array default [])
+- Account（指定用户admin才可 cdu(create delete update)）: **name**
 
