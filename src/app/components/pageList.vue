@@ -1,37 +1,126 @@
 <template>
-<div class="mod_wrap">
-	<div class="searchtag">
-		<input class="searchtag_input" type="text" placeholder="搜索标签，输入后按下回车键" @keyup.enter="searchtag(searchTagName)" v-model="searchTagName">
+<aside class="mod_aside">
+	<div class="mod_aside_header">
+		<h2>业务导航</h2>
 	</div>
-	<ul class="wlist">
-		<li v-for="item in wlist" class="wlist_item">
-			<div class="wlist_item_wrap">
-				<a class="wlist_item_anchor" v-link="{ name:'detail', params:{id:item.id} }">{{item.attributes.name}}</a>
-				<div class="wlist_item_tags">{{isItemTagsAddActive}}
-					<ul class="wlist_item_tags_ul">
-						<li v-for="y in item.attributes.tags" class="wlist_item_tags_item">
-							<span>{{ y }}</span>
-							<i class="close" @click="removeTag(item, y, $index)">&#xe606;</i>
-						</li>
-						<li class="wlist_item_tags_add">
-							<div class="wlist_item_tags_add_button add">&#xe60b;</div>
-							<div class="wlist_item_tags_add_button cancel">&#xe606;</div>
-							<input class="wlist_item_tags_add_input" type="text" v-model="item.newTagName">
-							<div class="wlist_item_tags_add_button confirm" @click="addTag(item, item.newTagName)">&#xe605;</div>
-						</li>
-					</ul>
+	<div class="mod_aside_list">
+		<h3></h3>
+		<ul>
+			<li class="mod_aside_list_item" 
+				v-bind:class="{'active': !state.business}"
+				@click="state.business = null">
+				<span class="mod_aside_list_item_name">全部</span>
+				<span class="mod_aside_list_item_count">{{ allWidgetCount }}</span>
+			</li>
+			<li class="mod_aside_list_item" 
+				v-for="item in blist" 
+				v-bind:class="{'active': state.business == item.id}"
+				@click="state.business = item.id">
+				<span class="mod_aside_list_item_name">{{ item.attributes.name }}</span>
+				<span class="mod_aside_list_item_count">{{ item.count || 0 }}</span>
+			</li>
+		</ul>
+	</div>
+</aside>
+
+<div class="plist">
+	<div class="plist_wrap">
+		<!-- <div class="searchtag">
+			<input class="searchtag_input" type="text" placeholder="搜索标签，输入后按下回车键" @keyup.enter="searchtag(searchTagName)" v-model="searchTagName">
+		</div> -->
+		<div class="plist_header">
+			<ul>
+				<li 
+					v-bind:class="{'active': !state.classify}"
+					@click="state.classify = null">
+					<a href="javascript:;">不限</a>
+				</li>
+				<li 
+					v-for="item in classify" 
+					v-bind:class="{'active': state.classify == item.id}" 
+					@click="state.classify = item.id">
+					<a href="javascript:;">{{ item.attributes.name }}</a>
+				</li>
+			</ul>
+		</div>
+		<ul class="wlist">
+			<li v-for="item in wlist" class="wlist_item">
+				<div class="wlist_item_wrap">
+					<a class="wlist_item_anchor" v-link="{ name:'detail', params:{id:item.id} }">{{item.attributes.name}}</a>
+					<div class="wlist_item_tags">{{isItemTagsAddActive}}
+						<ul class="wlist_item_tags_ul">
+							<li v-for="y in item.attributes.tags" class="wlist_item_tags_item">
+								<span>{{ y }}</span>
+								<i class="close" @click="removeTag(item, y, $index)">&#xe606;</i>
+							</li>
+							<li class="wlist_item_tags_add">
+								<div class="wlist_item_tags_add_button add">&#xe60b;</div>
+								<div class="wlist_item_tags_add_button cancel">&#xe606;</div>
+								<input class="wlist_item_tags_add_input" type="text" v-model="item.newTagName">
+								<div class="wlist_item_tags_add_button confirm" @click="addTag(item, item.newTagName)">&#xe605;</div>
+							</li>
+						</ul>
+					</div>
 				</div>
-			</div>
-		</li>
-	</ul>
-	<a class="more" href="javascript:;" @click="loadMore()" v-show="!search.isSearching">加载更多</a>
+			</li>
+		</ul>
+		<!-- <a class="more" href="javascript:;" @click="loadMore()" v-show="!search.isSearching">加载更多...</a> -->
+	</div>
 </div>
 </template>
 
 <style lang="sass">
+/*.mod_footer {display: none !important;}*/
+
+.plist {
+	margin-left: 233px;
+	.plist_wrap {
+		margin: 0 auto;
+		width: 1590px;
+		@media screen and (max-width: 1822px) {
+	    	width: 1272px;
+		}
+		@media screen and (max-width: 1504px) {
+    		width: 954px;
+		}
+		@media screen and (max-width: 1186px) {
+    		width: 636px;
+		}
+		@media screen and (max-width: 868px) {
+    		width: 318px;
+    	}
+	}
+	.plist_header {
+		position: fixed; top: 71px; left: 233px; right: 0;
+		padding: 10px 20px;
+		height: 40px;
+		border-bottom: 1px solid #e8e8e8;
+		background: rgba(253, 253, 253, .9);
+		li {
+			display: inline-block;
+			margin-left: 10px;
+			line-height: 40px;
+		}
+		a {
+			padding: 3px 10px;
+			border: 1px solid #6190E8;
+			border-radius: 2px;
+			background: rgba(97, 144, 232, .9);
+			color: #fff;
+		}
+		li.active {
+			a {
+				background: transparent;
+				color: #333;
+			}		
+		}
+	}
+}
+
 .searchtag {
 	margin-bottom: 50px;
 	.searchtag_input {
+		box-sizing: border-box;
 		display: block; 
 		padding: 10px;
 		width: 100%;
@@ -44,6 +133,7 @@
 	}
 }
 .wlist {
+	padding-top: 81px;
 	overflow: hidden;
 }
 .wlist_item {
@@ -162,26 +252,121 @@
 	}
 }
 .more {
+	box-sizing: border-box;
 	display: block;
 	margin-top: 50px;
-	width: 100%; height: 30px; line-height: 30px;
+	width: 100%; height: 40px; line-height: 40px;
+	font-size: 16px;
 	border: 1px solid #6190e8;
 	text-align: center;
+}
+
+
+
+.mod_aside {
+	position: absolute;
+    top: 71px; bottom: 120px; left: 0;
+	/*margin-bottom: -9999px; */
+	/*padding-bottom: 9999px; */
+    width: 232px;
+    background-color: #fff;
+    border-right: 1px solid #e8e8e8;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+        background-color: #F5F5F5;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background-color: #555;
+        background-color: rgba(0,0,0,.5);
+    }
+    &::-webkit-scrollbar-track {
+        border-radius: 5px;
+        background-color: #f1f1f1;
+    }
+    .mod_aside_header {
+    	padding: 10px 25px;
+    	border-bottom: 1px solid #e8e8e8;
+    	h2 {height: 40px; line-height: 40px; font-size: 20px;}
+    }
+    .mod_aside_list {
+    	ul {}
+    	.mod_aside_list_item {
+    		padding: 10px 25px;
+    		height: 28px;
+    		border-top: 1px solid transparent;
+    		border-bottom: 1px solid transparent;
+    		cursor: pointer;
+            &.active {
+                background-color: #fff5ee;
+                border-color: #f8d4bc;
+                .mod_aside_list_item_name {
+                    color: #f60;
+                }
+                .mod_aside_list_item_count {
+                    background-color: #ffb17e;
+                    border-color: #ffb17e;
+                    color: #fff;
+                }
+            }
+    	}
+    	.mod_aside_list_item_name {
+    		float: left;
+    		line-height: 28px; font-size: 14px; color: #727272;
+    	}
+    	.mod_aside_list_item_count {
+    		float: right;
+    		height: 20px; margin-top: 3px; padding: 0 8px; line-height: 20px; font-size: 12px; border: 1px solid #e8e8e8; border-radius: 12px; cursor: default;
+    	}
+    }
 }
 </style>
 
 <script>
 export default {
+	data () {
+		return {
+			// 用于按类别筛选组件列表
+			state: {
+				business: null,
+				classify: null
+			},
+			
+			wlist: [], // 用于渲染组件列表
+			rawAllWidgets: [], // 记录全部组件不变
+
+			blist: [], allWidgetCount: 0,
+			classify: [],
+
+			search: {
+				isSearching: false,
+				prewlist: null
+			},
+			searchTagName: ''
+		}
+	},
 	ready () {
   		var that = this;
 
-  		var query = new AV.Query('Widget');
-		query.descending('createdAt');
-		query.limit(5);
-		query.find().then(function (results) {
-  			that.wlist = results;
-		}, function (error) {
+  		this.getWidgets();
+  		this.getAllWidgetsCount();
+
+		new AV.Query('Business').find().then(function(results) {
+			that.blist = results;
 			
+			// 计数，有点蛋疼，里层异步赋值不刷新视图？
+			that.blist.forEach(function(e, i) {
+				var query = new AV.Query('Widget');
+				query.equalTo('business', e);
+				query.count().then(function (count) {
+					that.blist.$set(i, Object.assign({}, e, {count:count}));
+				});
+			});
+		});
+		new AV.Query('Classify').find().then(function(results) {
+			that.classify = results;
 		});
 
 		$('.wlist').on('click', '.wlist_item_tags_add_button.add, .wlist_item_tags_add_button.cancel', function() {
@@ -190,17 +375,60 @@ export default {
 			$(this).parent().removeClass('active');
 		});
 	},
-	data () {
-		return {
-			wlist: [],
-			search: {
-				isSearching: false,
-				prewlist: null
-			},
-			searchTagName: ''
-		}
-	},
 	methods: {
+		getWidgets: function() {
+			var that = this;
+
+			if(this.rawAllWidgets.length==0) {
+				var query = new AV.Query('Widget');
+				query.descending('createdAt');
+				
+				if(this.state.business) {
+					var bus = AV.Object.createWithoutData('Business', this.state.business);
+					query.equalTo('business', bus);
+				}
+				if(this.state.classify) {
+					var cls = AV.Object.createWithoutData('Classify', this.state.classify);
+					query.equalTo('business', cls);
+				}
+				
+				query.find().then(function (results) {
+  					that.wlist = results;
+  					that.rawAllWidgets = [].concat(results);
+				});
+			} else {
+				// 手动筛选，不用再重复请求数据了
+				// 能不能像Angular一样使用filter呀
+
+				var newArr = [];
+				var stateBusiness = this.state.business;
+				var stateClassify = this.state.classify;
+				for( var i=0; i<this.rawAllWidgets.length; i++ ) {
+					// 意思是如果不指定业务或类别，默认就通过了
+					var bpass = !stateBusiness;
+					var cpass = !stateClassify;
+
+					if( stateBusiness ) {
+						bpass = this.rawAllWidgets[i].attributes.business && this.rawAllWidgets[i].attributes.business.id === stateBusiness;
+					}
+					if( stateClassify ) {
+						cpass = this.rawAllWidgets[i].attributes.classify && this.rawAllWidgets[i].attributes.classify.id === stateClassify;
+					}
+
+					if(bpass && cpass) {
+						newArr.push( this.rawAllWidgets[i] );
+					}
+				}
+				
+				this.wlist = newArr;
+			}
+		},
+		getAllWidgetsCount: function() {
+			var that = this;
+			new AV.Query('Widget').count().then(function(count) {
+				that.allWidgetCount = count;
+			});
+		},
 		searchtag: function(searchTagName) {
 			var that = this;
 
@@ -266,6 +494,14 @@ export default {
 			}, function (error) {
 				
 			});
+		}
+	},
+	watch: {
+		'state': {
+			handler: function(value, oldValue) {
+				this.getWidgets();
+			},
+			deep: true
 		}
 	}
 }

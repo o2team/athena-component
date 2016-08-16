@@ -3,5 +3,7 @@
 module.exports = {
 	push: require('./push'),
 	pull: require('./pull'),
-	detail: require('./detail')
+	detail: require('./detail'),
+
+	business: require('./business')
 }

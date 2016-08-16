@@ -48,11 +48,21 @@ router.get('/api/pull/:id/:rename?', api.pull);
 // 组件详情 ?uuid=xx
 router.get('/api/detail', api.detail);
 
-router.post('/api/test',  upload.single('widget'), async (ctx, next) => {
-  console.log(ctx.req, this)
-  let fields = ctx.req.body.fields;
-  let widget = ctx.req.body.files.widget;
-  console.log(fields, widget)
+router.get('/api/test', async (ctx, next) => {
+  const AV = require('leancloud-storage');
+  const APP_ID = conf.leancloud.APP_ID;
+const APP_KEY = conf.leancloud.APP_KEY;
+AV.init({
+  appId: APP_ID,
+  appKey: APP_KEY
+});
+
+  var query = new AV.Query('Business');
+      query.get('57ac2c19c4c9710054613d5e2').then(function (data) {
+        console.log(data)
+      }, function (error) {
+        console.log(error)
+      });
 });
 
 app.listen(conf.port);

@@ -50,6 +50,18 @@ Vue.filter('fmtDateNormal', function(text) {
         return Math.floor(septime/1000)+'秒前';
     }
 });
+Vue.filter('ngLikeFilter', function(arr, property, equalTo) {
+    if(!property || !equalTo) {
+        return arr;
+    }
+    var newArr = [];
+    for(var i=0; i<arr.length;i++) {
+        if(arr[i][property] && arr[i][property] == equalTo) {
+            newArr.push(arr[i]);
+        }
+    }
+    return newArr;
+});
 
 // ROUTER
 router.map({

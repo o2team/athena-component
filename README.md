@@ -52,17 +52,25 @@ npm run test
 
 ## API
 
+总览：
+
+- HTTP POST /api/push
+- HTTP GET  /api/pull/:id/:rename?
+- HTTP GET  /api/detail?id=xxx
+
 ``` javascript
 /**
  * HTTP POST /api/push
  * @description 上传组件
  *
- * @param appId <String> 应用ID
- * @param moduleId <String> 模块ID
- * @param platform <String> 平台 pc | h5
- * @param widget <String> zip组件打包文件，不包括外层文件夹，不要上传有组件依赖的组件
- * @param author <String> 作者，白名单校验
- * @param description [String] 描述，默认从组件配置文件中读取
+ * @param {appId} <String> 应用ID
+ * @param {moduleId} <String> 模块ID
+ * @param {platform} <String> 平台 pc | h5
+ * @param {widget} <String> zip组件打包文件，不包括外层文件夹，不要上传有组件依赖的组件
+ * @param {author} <String> 作者，白名单校验
+ * @param {description} [String] 描述，默认从组件配置文件中读取
+ * @param {business} [String] 所属业务ID
+ * @param {classify} [String] 所属分类ID
  * 
  * @response 200 { no:0, data: { id: widgetId } }
  */
@@ -73,8 +81,8 @@ npm run test
  * HTTP GET /api/pull/:id/:rename?
  * @description 拉取组件
  * 
- * @param id <String> 组件ID
- * @param rename [String] 重命名名称
+ * @param {id} <String> 组件ID
+ * @param {rename} [String] 重命名名称
  */
 ```
 
@@ -83,7 +91,7 @@ npm run test
  * HTTP GET /api/detail?id=xxx
  * @description 组件详情，返回代码及组件信息
  * 
- * @param id <String> 组件ID
+ * @param {id} <String> 组件ID
  *
  * @response { contHtml, contCss, contJs, widget }
  */
@@ -96,10 +104,32 @@ npm run test
 - 白名单 增/删
 - 组件标签 增/删
 
+为什么有些接口不直接用Leancloud提供的？保证Athena不用另外再配置Leancloud，也方便以后数据迁移。
+
+总感觉 `Leancloud` 比不上 `Mongodb`，呃hou
+
 ## Leancloud 初始化指引
 
 Class: Widget, Account
 
-- Widget: desc, **folder**, **name**, **author**, **appId**, **platform**(default h5), **moduleId**, **pullTimes**(default 0), tags(Array default [])
-- Account（指定用户admin才可 cdu(create delete update)）: **name**
-
+- _User
+	- username
+	- password
+- Business
+	- !name
+- Classify，固定 = 标题+标签+选项卡+坑位+商品列表+flaoting+优惠券+时间轴+(其他)
+	- !name
+- Widget
+	- !folder
+	- !name
+	- !author
+	- !appId
+	- !platform (default h5)
+	- !moduleId
+	- !pullTimes (default 0)
+	- desc
+	- tags (Array default [])
+	- business (Pointer -> Business)
+	- classify (Pointer -> Classify)
+- **Account** 仅 admin 可 create, delete, update
+	- !name

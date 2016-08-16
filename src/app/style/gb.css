@@ -15,13 +15,13 @@ ins { text-decoration: underline; }
 del { text-decoration: line-through; }
 mark { background: none; }
 input::-ms-clear { display: none !important; }
-body { font:14px/1.5 tahoma,arial,'Lantinghei SC',"Microsoft YaHei",'Hiragino Sans GB',sans-serif;background:#fff; }
+body { font:14px/1.5 tahoma,arial,'Lantinghei SC',"Microsoft YaHei",'Hiragino Sans GB',sans-serif;background:#fcfcfc; }
 a { text-decoration: none; color: #333; }
 a:hover { text-decoration: underline; }
 /*===================
 	公共样式
  ===================*/
-* {box-sizing:border-box;}
+/** {box-sizing:border-box;}*/
 html, body {height:100%;}
 a:hover {text-decoration:none;}
 .cf {zoom:1;overflow:hidden;}
@@ -42,4 +42,3 @@ a:hover {text-decoration:none;}
 /*===================
 	自定样式
  ===================*/
-.mod_wrap {margin: 0 auto; max-width: 1400px;}
