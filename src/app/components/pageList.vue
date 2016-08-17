@@ -91,6 +91,7 @@
     	}
 	}
 	.plist_header {
+		z-index: 1;
 		position: fixed; top: 71px; left: 233px; right: 0;
 		padding: 10px 20px;
 		height: 40px;

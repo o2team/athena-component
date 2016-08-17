@@ -2,10 +2,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const AdmZip = require('adm-zip');
+const archiver = require('archiver');
 const AV = require('leancloud-storage');
 const conf = require('../ac-config.js');
-// const db = require('../db.js');
 
 const APP_ID = conf.leancloud.APP_ID;
 const APP_KEY = conf.leancloud.APP_KEY;
@@ -18,7 +17,6 @@ module.exports = async (ctx, next) => {
   let folder;
   let id = ctx.params.id;
   let rename = ctx.params.rename;
-  let zip = new AdmZip();
 
   if(!id) { ctx.status = 404; return; }
 
@@ -32,37 +30,50 @@ module.exports = async (ctx, next) => {
     });
   });
   
-  zip.addLocalFolder( path.join(conf.warehouse, folder) );
+  try {
+    let archive = archiver('zip');
 
-  // 压缩包内文件的处理
-  let zipEntries = zip.getEntries();
-  zipEntries.forEach(function(zipEntry) {
-    if(rename && !zipEntry.isDirectory) {
-      let name = zipEntry.entryName;
-      let extname = path.extname(name);
-      let dirname = path.dirname(name);
-      let basename = path.basename(name, extname);
-      // adm-zip竟然判定images不是文件夹   
-      if(dirname==='.' && name!=='images') {
-        zipEntry.entryName = rename+extname;
-      }
-      if(extname==='.json') {
-        let c = fs.readFileSync( path.join(conf.warehouse, folder, name) );
-        // 这步有一定危险性
-        c = c.toString().replace(`"${basename}"`, `"${rename}"`);
-        zipEntry.setData(new Buffer(c))
-      }
+    archive.on('error', function(err) {
+      throw err;
+    });
+    archive.on('entry', function(file) {
+      // console.log(file)
+    });
+
+    if(rename) {
+      archive.onBeforeAppend = function(filePath, data) {
+        let stats = fs.statSync(filePath);
+        if(stats.isFile()) {
+          let pathRelative = path.relative( path.join(conf.warehouse, folder), filePath);
+          let name = data.name;
+          let dirname = path.dirname(pathRelative);
+          let extname = path.extname(name);
+          let basename = path.basename(name, extname);
+          // 即不包括images目录
+          if(dirname==='.') {
+            data.name = rename + extname;
+          }
+        }
+      } 
     }
-  });
 
-  ctx.set('Content-disposition','attachment;filename='+id+'.zip');
+    archive
+      .bulk([{
+        expand: true,
+        cwd: path.join(conf.warehouse, folder),
+        src: ['**']
+      }])
+      .finalize();
 
-  ctx.body = zip.toBuffer();
+    ctx.set('Content-disposition','attachment;filename='+id+'.zip');
+    
+    ctx.body = archive;
 
-  // 更新计数器
-  let widget = AV.Object.createWithoutData('Widget', id);
-  widget.increment('pullTimes', 1);
-  // widget.fetchWhenSave(true);
-  widget.save();
-
+    // 更新计数器
+    let widget = AV.Object.createWithoutData('Widget', id);
+    widget.increment('pullTimes', 1);
+    widget.save();
+  } catch(err) {
+    ctx.status = 500;
+  }
 }

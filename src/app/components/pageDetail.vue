@@ -1,6 +1,14 @@
 <template>
-<div class="page_detail">
-	
+<div class="pdetail">
+	<div class="pdetail_info">
+		<div class="pdetail_info_name">{{ widget.name }}</div>
+	</div>
+	<div class="pdetail_tags">
+		<ul>
+			<li class="pdetail_tags_item" v-for="item in widget.tags"><a href="javascript:;">{{ item }}</a></li>
+		</ul>
+	</div>
+
 	<div v-if="widget.platform==='pc' && contHtml" class="detail_pc">
 		<iframe :src="previewurl" frameborder="0" width="375px" height="667px"></iframe>
 	</div>
@@ -16,17 +24,14 @@
 		<div class="detail_code">
 			<div v-show="contHtml">
 				<h2 class="detail_code_tit">HTML结构</h2>
-				<!-- <div id="htmlEditor"></div> -->
 				<pre class="brush: xml;">{{ contHtml }}</pre>
 			</div>
 			<div v-show="contCss">
 				<h2 class="detail_code_tit">CSS样式</h2>
-				<!-- <div id="cssEditor"></div> -->
 				<pre class="brush: css;">{{ contCss }}</pre>
 			</div>
 			<div v-show="contJs">
 				<h2 class="detail_code_tit">脚本</h2>
-				<!-- <div id="jsEditor"></div> -->
 				<pre class="brush: js;">{{ contJs }}</pre>
 			</div>
 		</div>
@@ -35,8 +40,26 @@
 	<!-- {{$route.params.id}} -->
 </template>
 
-<style>
-.page_detail {overflow:hidden;}
+<style lang="sass">
+.pdetail {margin: 0 auto; max-width: 1400px;overflow:hidden;}
+	.pdetail_info {margin: 30px 0 0;}
+		.pdetail_info_name {padding: 10px 0; font-size: 24px; border-bottom: 1px solid #e4e4e4; text-align: center;}
+.pdetail_tags {
+	padding: 10px 0;
+	.pdetail_tags_item {
+		display: inline-block; margin-right: 5px;
+		a {
+			display: inline-block;
+			padding: 0 5px; height: 20px; line-height: 20px; font-size: 12px;
+			color: rgb(97, 144, 232);
+			background: rgba(97, 144, 232, .2);
+			&:hover {
+				background: rgb(97, 144, 232);
+				color: #fff;
+			}
+		}
+	}
+}
 	.detail_pc {padding:10px 20px;border:1px solid #ddd;}
 		.detail_pc iframe {width:100%;height:auto;}
 	.detail {}

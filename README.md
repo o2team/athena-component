@@ -8,14 +8,20 @@
 - 后端 koa
 - 数据存储 Leancloud
 
+## 前端页面展示
+
+![site-capture](site-capture.png)
+
 ## 部署指引
 
+- 安装 NodeJS（建议版本>=6.0.0）
+- 注册 Leancloud
+
 ``` bash
-# 安装 NodeJS（建议版本>=6.0.0）
-# 注册 Leancloud
-
 git clone https://github.com/o2team/athena-component.git
+```
 
+``` bash
 cd athena-component/src
 npm install
 npm install babel-cli -g
@@ -23,32 +29,67 @@ node install
 
 cd app
 npm install
-
-# ----- #
-
-# 前端配置
-修改main.js里的数据配置项
-# 代码主题
-cp ./bak/athenac.js ./src/app/node_modules/brace/theme
-# 主题切换
-vi ./src/app/components/pages/pageDetail.vue 替换里面 "athenac"
-# 前端调试 ./src/app -> 运行后访问：http://localhost:8080
-npm run dev
-# 前端编译 ./src/app
-npm run build
-
-# 后端配置
-ac-config.js
-# hack修改
-cp ./bak/adm-zip.js ./src/node_modules/adm-zip/adm-zip.js
-# 后端开发 ./src -> 运行后访问：http://localhost
-npm run test
-
-# ----- #
-
-# 前后端双服务联调指引
-（待更新）
 ```
+
+### 前端配置
+
+修改main.js里的数据配置项
+
+### 前端调试 ./src/app -> 运行后访问：http://localhost:8080
+
+``` bash
+npm run dev
+```
+
+### 前端编译 ./src/app
+
+``` bash
+npm run build
+```
+
+### 后端配置
+
+ac-config.js
+
+### hack修改
+
+背景：archiver 的 on('entry') 触发前时的状态已经是 finalize:true，即已经添加到压缩文件里了，但我们需要在文件添加到队列前重命名文件
+
+**修改：**
+	
+`.src/node_modules/archiver/lib/core.js`
+
+搜索 `Archiver.prototype._append = function(filepath, data)`
+
+在它里面的第一行添加 `this.onBeforeAppend && this.onBeforeAppend(filepath, data);`，如下
+
+``` javascript
+Archiver.prototype._append = function(filepath, data) {
+	this.onBeforeAppend && this.onBeforeAppend(filepath, data);
+	/* ... */
+};
+```
+
+如此，就可以在自己代码中自定义：
+
+``` javascript
+archive.onBeforeAppend = function(filePath, data) {
+	// Do something. 这里是重命名
+	data.name = new Date().getTime().toString();
+}
+```
+
+后续：其实做到像 `on('beforeAppend', function() {})` 这样写，但还没摸透它，就酱
+
+### 后端开发 ./src -> 运行后访问：http://localhost
+
+``` bash
+npm run test
+```
+
+### 前后端双服务联调指引
+
+（待更新）
 
 ## API
 
@@ -117,7 +158,7 @@ Class: Widget, Account
 	- password
 - Business
 	- !name
-- Classify，固定 = 标题+标签+选项卡+坑位+商品列表+flaoting+优惠券+时间轴+(其他)
+- Classify，固定 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴+(其他)
 	- !name
 - Widget
 	- !folder
@@ -133,3 +174,6 @@ Class: Widget, Account
 	- classify (Pointer -> Classify)
 - **Account** 仅 admin 可 create, delete, update
 	- !name
+
+
+## 组件规范

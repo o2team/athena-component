@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/o2team/athena-component#readme",
   "dependencies": {
-    "adm-zip": "^0.4.7",
+    "archiver": "^1.0.1",
     "fstream": "^1.0.10",
     "koa": "^2.0.0",
     "koa-multer": "^1.0.0",

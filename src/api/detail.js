@@ -59,7 +59,7 @@ module.exports = async (ctx, next) => {
     try {
       fs.accessSync( widgetBuildPath );
     } catch(err) {
-      let commonstyle = conf.tpl[`css${widget.platform}`] || '';
+      let commonstyle = conf.tpl[`css${widget.get('platform')}`] || '';
       let iframe = `
 <!DOCTYPE html>
 <html lang="en">

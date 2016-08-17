@@ -38,7 +38,7 @@
 <style lang="sass">
 $headerHeight: 70px;
 .mod_header {
-	z-index: 3;
+	z-index: 2;
 	position: fixed; top: 0; right: 0; left: 0;
 	height: $headerHeight; background-color: rgba(255,255,255,.92); border-bottom: 1px solid #e8e8e8;
 	.mod_header_main {
