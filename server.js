@@ -14,7 +14,6 @@ const
   upload = multer({ dest: os.tmpdir() }),
 
   conf = require('./ac-config.js'),
-  // db = require('./db.js'),
   api = require('./api');
 
 // Middleware

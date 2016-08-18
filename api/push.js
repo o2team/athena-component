@@ -3,11 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 const UUID = require('node-uuid');
-const fstream = require('fstream');
 const unzip = require('unzip');
 const AV = require('leancloud-storage');
 const conf = require('../ac-config.js');
-// const db = require('../db.js');
 const business = require('./business');
 
 const APP_ID = conf.leancloud.APP_ID;
@@ -37,9 +35,8 @@ module.exports = async (ctx, next) => {
 	
 	let uuid = UUID.v1();
 	let wname = path.basename(widget.originalname, '.zip');
-	let distDir = path.join(conf.warehouse, uuid);
-	let jsonFile;
-
+	let distFile = path.join(conf.warehouse, uuid);
+	
 	await Promise.resolve().then(function() {
 		// 检验白名单
 		// 被坑了，Leancloud的单元操作并非真正的Promise，体现为异常的传递不一致
@@ -56,16 +53,12 @@ module.exports = async (ctx, next) => {
 			});
 		});
 	}).then(function() {
-		// 创建组件文件夹
-		fs.mkdirSync(distDir);
 		// 拷贝文件到新文件夹
 		return new Promise(function(resolve, reject) {
 			let readStream = fs.createReadStream( widget.path );
-			let writeStream = fstream.Writer(distDir);
-			readStream
-				.pipe(unzip.Parse())
-				.pipe(writeStream);
-			writeStream.on('close', function() {
+			let writeStream = fs.createWriteStream( distFile );
+			readStream.pipe( writeStream );
+			writeStream.on('finish', function() {
 				resolve();
 			});
 		});
@@ -94,10 +87,7 @@ module.exports = async (ctx, next) => {
 			});
 		}
 	}).then(function() {
-		// 读取配置文件
-		jsonFile = fs.readFileSync( path.join(distDir, wname+'.json') );
 		// 存数据库
-		let wc = JSON.parse( jsonFile.toString() );
 		var widget = new AV.Object('Widget');
 
 		// https://leancloud.cn/docs/relation_guide-js.html#使用_Pointers_实现一对多关系
@@ -112,10 +102,10 @@ module.exports = async (ctx, next) => {
 
 		return widget.save({
 			name: wname,
-			desc: desc || wc.desc || '',
+			desc: desc,
 			appId: appId,
 		  	moduleId: moduleId,
-		  	author: author || wc.author || '',
+		  	author: author,
 		  	platform: (platform==='h5' || platform==='pc') ? platform : 'h5', // h5 | pc, default h5
 		  	folder: uuid
 		});

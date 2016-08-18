@@ -10,7 +10,7 @@
 
 ## 前端页面展示
 
-![site-capture](site-capture.png)
+![site-capture](_capture/site-capture.png)
 
 ## 部署指引
 
@@ -20,7 +20,7 @@
 ``` bash
 git clone https://github.com/o2team/athena-component.git
 
-cd athena-component/src
+cd athena-component
 npm install
 npm install babel-cli -g
 node install
@@ -33,13 +33,13 @@ npm install
 
 修改main.js里的数据配置项
 
-- **前端调试 ./src/app -> 运行后访问：http://localhost:8080**
+- **前端调试 ./app -> 运行后访问：http://localhost:8080**
 
 ``` bash
 npm run dev
 ```
 
-- **前端编译 ./src/app**
+- **前端编译 ./app**
 
 ``` bash
 npm run build
@@ -51,35 +51,27 @@ ac-config.js
 
 - **hack修改**
 
-背景：archiver 的 on('entry') 触发前时的状态已经是 finalize:true，即已经添加到压缩文件里了，但我们需要在文件添加到队列前重命名文件
-
-**修改：**
+	archiver 的 on('entry') 触发前时的状态已经是 `finalize:true`，即已经添加到压缩文件里了，但我们需要在文件添加到队列前重命名文件，因此在 `./node_modules/archiver/lib/core.js` 搜索 `Archiver.prototype._append = function(filepath, data)`，在它里面第一行添加 `this.onBeforeAppend && this.onBeforeAppend(filepath, data);`，如下：
 	
-`.src/node_modules/archiver/lib/core.js`
+	``` javascript
+	Archiver.prototype._append = function(filepath, data) {
+		this.onBeforeAppend && this.onBeforeAppend(filepath, data);
+		/* ... */
+	};
+	```
+	
+	如此，就可以在自己代码中自定义：
+	
+	``` javascript
+	archive.onBeforeAppend = function(filePath, data) {
+		// Do something. 这里是重命名
+		data.name = new Date().getTime().toString();
+	}
+	```
+	
+	后续：其实做到像 `on('beforeAppend', function() {})` 这样写，但还没摸透它，就酱
 
-搜索 `Archiver.prototype._append = function(filepath, data)`
-
-在它里面的第一行添加 `this.onBeforeAppend && this.onBeforeAppend(filepath, data);`，如下
-
-``` javascript
-Archiver.prototype._append = function(filepath, data) {
-	this.onBeforeAppend && this.onBeforeAppend(filepath, data);
-	/* ... */
-};
-```
-
-如此，就可以在自己代码中自定义：
-
-``` javascript
-archive.onBeforeAppend = function(filePath, data) {
-	// Do something. 这里是重命名
-	data.name = new Date().getTime().toString();
-}
-```
-
-后续：其实做到像 `on('beforeAppend', function() {})` 这样写，但还没摸透它，就酱
-
-- **后端开发 ./src -> 运行后访问：http://localhost**
+- **后端开发 ./ -> 运行后访问：http://localhost**
 
 ``` bash
 npm run test
@@ -161,7 +153,8 @@ npm run test
 
 Class: Widget, Account
 
-- _User
+- _Role = admin
+- _User 添加一用户 名admin 并关联至_Role admin
 	- username
 	- password
 - Business
@@ -180,9 +173,8 @@ Class: Widget, Account
 	- tags (Array default [])
 	- business (Pointer -> Business)
 	- classify (Pointer -> Classify)
-- **Account** 仅 admin 可 create, delete, update
+- **Account** 设 _Role admin 增删查改，开放 `find` 和 `get`
 	- !name
-
 
 ## 上传组件规范
 

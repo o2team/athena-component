@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const unzip = require('unzip');
 const fstream = require('fstream');
 const lodash = require('lodash');
 const AV = require('leancloud-storage');
@@ -34,7 +35,25 @@ module.exports = async (ctx, next) => {
   });
 
   // 组件路径
-  let widgetPath = path.join(conf.warehouse, widget.get('folder'));
+  let widgetPath = path.join(conf.warehouse, '_temp', widget.get('folder'));
+  try {
+    fs.accessSync( widgetPath );
+  } catch(err) {
+    // 创建
+    fs.mkdirSync( widgetPath );
+    // 解压缩组件
+    await new Promise(function(resolve, reject) {
+      let readStream = fs.createReadStream( path.join( conf.warehouse, widget.get('folder') ) );
+      let writeStream = fstream.Writer( widgetPath );
+      readStream
+        .pipe(unzip.Parse())
+        .pipe(writeStream);
+      writeStream.on('close', function() {
+        resolve();
+      });
+    });
+  }
+
   // 组件图片路径
   let widgetImgPath = path.join(widgetPath, 'images');
   // 组件编译路径

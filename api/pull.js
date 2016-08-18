@@ -32,14 +32,14 @@ module.exports = async (ctx, next) => {
   
   try {
     let archive = archiver('zip');
-
+    
     archive.on('error', function(err) {
       throw err;
     });
     archive.on('entry', function(file) {
       // console.log(file)
     });
-
+    
     // 重命名工程
     if(rename) {
       archive.onBeforeAppend = function(filePath, data) {
