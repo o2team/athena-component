@@ -45,8 +45,10 @@ app
 router.post('/api/push', upload.single('widget'), api.push);
 // 通过id拉取组件打包文件
 router.get('/api/pull/:id/:rename?', api.pull);
-// 组件详情 ?uuid=xx
+// 组件详情 ?id=xx
 router.get('/api/detail', api.detail);
+// 组件详情，不包含代码 ?id=xx
+router.get('/api/detail-info', api.detailInfo);
 
 router.get('/api/test', async (ctx, next) => {
   const AV = require('leancloud-storage');

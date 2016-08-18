@@ -66,12 +66,13 @@ module.exports = async (ctx, next) => {
       .finalize();
 
     ctx.set('Content-disposition','attachment;filename='+id+'.zip');
-    
+
     ctx.body = archive;
 
     // 更新计数器
     let widget = AV.Object.createWithoutData('Widget', id);
     widget.increment('pullTimes', 1);
+    // widget.fetchWhenSave(true);
     widget.save();
   } catch(err) {
     ctx.status = 500;

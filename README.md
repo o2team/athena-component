@@ -19,9 +19,7 @@
 
 ``` bash
 git clone https://github.com/o2team/athena-component.git
-```
 
-``` bash
 cd athena-component/src
 npm install
 npm install babel-cli -g
@@ -31,27 +29,27 @@ cd app
 npm install
 ```
 
-### 前端配置
+#### 前端配置
 
 修改main.js里的数据配置项
 
-### 前端调试 ./src/app -> 运行后访问：http://localhost:8080
+#### 前端调试 ./src/app -> 运行后访问：http://localhost:8080
 
 ``` bash
 npm run dev
 ```
 
-### 前端编译 ./src/app
+#### 前端编译 ./src/app
 
 ``` bash
 npm run build
 ```
 
-### 后端配置
+#### 后端配置
 
 ac-config.js
 
-### hack修改
+#### hack修改
 
 背景：archiver 的 on('entry') 触发前时的状态已经是 finalize:true，即已经添加到压缩文件里了，但我们需要在文件添加到队列前重命名文件
 
@@ -81,13 +79,13 @@ archive.onBeforeAppend = function(filePath, data) {
 
 后续：其实做到像 `on('beforeAppend', function() {})` 这样写，但还没摸透它，就酱
 
-### 后端开发 ./src -> 运行后访问：http://localhost
+#### 后端开发 ./src -> 运行后访问：http://localhost
 
 ``` bash
 npm run test
 ```
 
-### 前后端双服务联调指引
+#### 前后端双服务联调指引
 
 （待更新）
 
@@ -98,6 +96,7 @@ npm run test
 - HTTP POST /api/push
 - HTTP GET  /api/pull/:id/:rename?
 - HTTP GET  /api/detail?id=xxx
+- HTTP GET /api/detail-info?id=xxx
 
 ``` javascript
 /**
@@ -107,7 +106,7 @@ npm run test
  * @param {appId} <String> 应用ID
  * @param {moduleId} <String> 模块ID
  * @param {platform} <String> 平台 pc | h5
- * @param {widget} <String> zip组件打包文件，不包括外层文件夹，不要上传有组件依赖的组件
+ * @param {widget} <String> zip组件打包文件
  * @param {author} <String> 作者，白名单校验
  * @param {description} [String] 描述，默认从组件配置文件中读取
  * @param {business} [String] 所属业务ID
@@ -135,6 +134,17 @@ npm run test
  * @param {id} <String> 组件ID
  *
  * @response { contHtml, contCss, contJs, widget }
+ */
+```
+
+``` javascript
+/**
+ * HTTP GET /api/detail-info?id=xxx
+ * @description 组件详情，返回组件信息，不包含代码
+ * 
+ * @param {id} <String> 组件ID
+ *
+ * @response widget
  */
 ```
 
@@ -167,7 +177,7 @@ Class: Widget, Account
 	- !appId
 	- !platform (default h5)
 	- !moduleId
-	- !pullTimes (default 0)
+	- !pullTimes (Number default 0)
 	- desc
 	- tags (Array default [])
 	- business (Pointer -> Business)
@@ -176,4 +186,14 @@ Class: Widget, Account
 	- !name
 
 
-## 组件规范
+## 上传组件规范
+
+（待确认）
+
+- 全部或部分：
+	- 1个 images 文件夹 + N个图片文件
+	- 1个 HTML 文件
+	- 1个 CSS / SCSS 文件，如同时存在，SCSS 优先，CSS 被忽略
+	- 1个 Javascript 文件
+	- 1个 JSON 配置文件（必需）
+- 不包含外层文件夹，无组件依赖
