@@ -120,7 +120,7 @@ export default {
   		this.$http.get('api/detail?id='+this.$route.params.id).then(function(res) {
   			let data = res.data;
 			if(data.contHtml) { 
-				that.$data.previewurl = `warehouse/_build/${ data.widget.folder }/index.html`;
+				that.$data.previewurl = `warehouse/_build/${ data.widget.objectId }/index.html`;
 				that.$data.contHtml = data.contHtml;
 			}
 			if(data.contScss) { 

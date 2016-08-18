@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const UUID = require('node-uuid');
 const unzip = require('unzip');
 const AV = require('leancloud-storage');
 const conf = require('../ac-config.js');
@@ -33,10 +32,8 @@ module.exports = async (ctx, next) => {
 		return;
 	}
 	
-	let uuid = UUID.v1();
 	let wname = path.basename(widget.originalname, '.zip');
-	let distFile = path.join(conf.warehouse, uuid);
-	
+		
 	await Promise.resolve().then(function() {
 		// 检验白名单
 		// 被坑了，Leancloud的单元操作并非真正的Promise，体现为异常的传递不一致
@@ -52,16 +49,7 @@ module.exports = async (ctx, next) => {
 				}
 			});
 		});
-	}).then(function() {
-		// 拷贝文件到新文件夹
-		return new Promise(function(resolve, reject) {
-			let readStream = fs.createReadStream( widget.path );
-			let writeStream = fs.createWriteStream( distFile );
-			readStream.pipe( writeStream );
-			writeStream.on('finish', function() {
-				resolve();
-			});
-		});
+	
 	}).then(function() {
 		// 指定的business是否存在
 		if(business) {
@@ -100,14 +88,30 @@ module.exports = async (ctx, next) => {
 			widget.set('classify', cls);
 		}
 
-		return widget.save({
-			name: wname,
-			desc: desc,
-			appId: appId,
-		  	moduleId: moduleId,
-		  	author: author,
-		  	platform: (platform==='h5' || platform==='pc') ? platform : 'h5', // h5 | pc, default h5
-		  	folder: uuid
+		return new Promise(function(resolve, reject) {
+			widget.save({
+				name: wname,
+				desc: desc,
+				appId: appId,
+			  	moduleId: moduleId,
+			  	author: author,
+			  	platform: (platform==='h5' || platform==='pc') ? platform : 'h5' // h5 | pc, default h5
+			}).then(function(w) {
+				resolve(w);
+			}).catch(function(err) {
+				reject(err);
+			});
+		})
+			
+	}).then(function(w) {
+		// 拷贝文件到新文件夹
+		return new Promise(function(resolve, reject) {
+			let readStream = fs.createReadStream( widget.path );
+			let writeStream = fs.createWriteStream( path.join(conf.warehouse, w.id) );
+			readStream.pipe( writeStream );
+			writeStream.on('finish', function() {
+				resolve(w.id);
+			});
 		});
 	}).then(function(wid) {
 		// Response

@@ -31,23 +31,23 @@ npm install
 
 - **前端配置**
 
-修改main.js里的数据配置项
+	修改main.js里的数据配置项
 
 - **前端调试 ./app -> 运行后访问：http://localhost:8080**
 
-``` bash
-npm run dev
-```
+	``` bash
+	npm run dev
+	```
 
 - **前端编译 ./app**
 
-``` bash
-npm run build
-```
+	``` bash
+	npm run build
+	```
 
 - **后端配置**
 
-ac-config.js
+	ac-config.js
 
 - **hack修改**
 
@@ -73,13 +73,13 @@ ac-config.js
 
 - **后端开发 ./ -> 运行后访问：http://localhost**
 
-``` bash
-npm run test
-```
+	``` bash
+	npm run test
+	```
 
 - **前后端双服务联调指引**
 
-（待更新）
+	（待更新）
 
 ## API
 
@@ -162,7 +162,6 @@ Class: Widget, Account
 - Classify，固定 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴+(其他)
 	- !name
 - Widget
-	- !folder
 	- !name
 	- !author
 	- !appId

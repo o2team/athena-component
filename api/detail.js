@@ -7,7 +7,6 @@ const fstream = require('fstream');
 const lodash = require('lodash');
 const AV = require('leancloud-storage');
 const conf = require('../ac-config.js');
-// const db = require('../db.js');
 
 const APP_ID = conf.leancloud.APP_ID;
 const APP_KEY = conf.leancloud.APP_KEY;
@@ -18,7 +17,7 @@ AV.init({
 
 module.exports = async (ctx, next) => {
   let widget, contHtml, contScss, contCss, contJs, contJson;
-
+  
   let id = ctx.request.query.id;
   
   if(!id) { ctx.status = 404; return; }
@@ -35,7 +34,7 @@ module.exports = async (ctx, next) => {
   });
 
   // 组件路径
-  let widgetPath = path.join(conf.warehouse, '_temp', widget.get('folder'));
+  let widgetPath = path.join(conf.warehouse, '_temp', widget.id);
   try {
     fs.accessSync( widgetPath );
   } catch(err) {
@@ -43,7 +42,7 @@ module.exports = async (ctx, next) => {
     fs.mkdirSync( widgetPath );
     // 解压缩组件
     await new Promise(function(resolve, reject) {
-      let readStream = fs.createReadStream( path.join( conf.warehouse, widget.get('folder') ) );
+      let readStream = fs.createReadStream( path.join( conf.warehouse, widget.id ) );
       let writeStream = fstream.Writer( widgetPath );
       readStream
         .pipe(unzip.Parse())
@@ -57,7 +56,7 @@ module.exports = async (ctx, next) => {
   // 组件图片路径
   let widgetImgPath = path.join(widgetPath, 'images');
   // 组件编译路径
-  let widgetBuildPath = path.join(conf.warehouse, '_build', widget.get('folder'));
+  let widgetBuildPath = path.join(conf.warehouse, '_build', widget.id);
   // 组件编译图片路径
   let widgetBuildImgPath = path.join(widgetBuildPath, 'images');
   // 组件HTML路径

@@ -14,21 +14,10 @@ AV.init({
 });
 
 module.exports = async (ctx, next) => {
-  let folder;
   let id = ctx.params.id;
   let rename = ctx.params.rename;
 
   if(!id) { ctx.status = 404; return; }
-
-  await new Promise(function(resolve, reject) {
-    let query = new AV.Query('Widget');
-    query.get(id).then(function (data) {
-      folder = data.get('folder');
-      resolve();
-    }, function (err) {
-      console.error(err);
-    });
-  });
   
   try {
     let archive = archiver('zip');
@@ -45,7 +34,7 @@ module.exports = async (ctx, next) => {
       archive.onBeforeAppend = function(filePath, data) {
         let stats = fs.statSync(filePath);
         if(stats.isFile()) {
-          let pathRelative = path.relative( path.join(conf.warehouse, folder), filePath);
+          let pathRelative = path.relative( path.join(conf.warehouse, '_temp', id), filePath);
           let name = data.name;
           let dirname = path.dirname(pathRelative);
           let extname = path.extname(name);
@@ -63,7 +52,7 @@ module.exports = async (ctx, next) => {
     archive
       .bulk([{
         expand: true,
-        cwd: path.join(conf.warehouse, folder),
+        cwd: path.join(conf.warehouse, '_temp', id),
         src: ['**']
       }])
       .finalize();
