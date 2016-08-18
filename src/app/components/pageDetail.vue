@@ -36,30 +36,53 @@
 			</div>
 		</div>
 	</div>
+
+	<a class="pdetail_download" href="api/pull/{{ widget.objectId }}">一键下载组件</a>
 </div>
-	<!-- {{$route.params.id}} -->
 </template>
 
 <style lang="sass">
-.pdetail {margin: 0 auto; max-width: 1400px;overflow:hidden;}
-	.pdetail_info {margin: 30px 0 0;}
+.pdetail {
+	margin: 0 auto; max-width: 1400px;overflow:hidden;
+	.pdetail_info {
+		margin: 30px 0 0;
 		.pdetail_info_name {padding: 10px 0; font-size: 24px; border-bottom: 1px solid #e4e4e4; text-align: center;}
-.pdetail_tags {
-	padding: 10px 0;
-	.pdetail_tags_item {
-		display: inline-block; margin-right: 5px;
-		a {
-			display: inline-block;
-			padding: 0 5px; height: 20px; line-height: 20px; font-size: 12px;
-			color: rgb(97, 144, 232);
-			background: rgba(97, 144, 232, .2);
-			&:hover {
-				background: rgb(97, 144, 232);
-				color: #fff;
+	}
+	.pdetail_tags {
+		padding: 10px 0;
+		.pdetail_tags_item {
+			display: inline-block; margin-right: 5px;
+			a {
+				display: inline-block;
+				padding: 0 5px; height: 20px; line-height: 20px; font-size: 12px;
+				color: rgb(97, 144, 232);
+				background: rgba(97, 144, 232, .2);
+				&:hover {
+					background: rgb(97, 144, 232);
+					color: #fff;
+				}
 			}
 		}
 	}
+
+	.pdetail_download {
+		position: fixed;
+		bottom: 30px; right: 50px;
+		display: block;
+		padding: 0 20px;
+		height: 28px; line-height: 28px;
+		border: 1px solid #6190e8;
+		background: #6190e8;
+		color: #fff;
+		cursor: pointer;
+		transition: .2s ease; will-change: background, color;
+		&:hover {
+			background: #fff;
+			color: #333;
+		}
+	}
 }
+
 	.detail_pc {padding:10px 20px;border:1px solid #ddd;}
 		.detail_pc iframe {width:100%;height:auto;}
 	.detail {}

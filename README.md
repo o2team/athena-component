@@ -29,27 +29,27 @@ cd app
 npm install
 ```
 
-#### 前端配置
+- **前端配置**
 
 修改main.js里的数据配置项
 
-#### 前端调试 ./src/app -> 运行后访问：http://localhost:8080
+- **前端调试 ./src/app -> 运行后访问：http://localhost:8080**
 
 ``` bash
 npm run dev
 ```
 
-#### 前端编译 ./src/app
+- **前端编译 ./src/app**
 
 ``` bash
 npm run build
 ```
 
-#### 后端配置
+- **后端配置**
 
 ac-config.js
 
-#### hack修改
+- **hack修改**
 
 背景：archiver 的 on('entry') 触发前时的状态已经是 finalize:true，即已经添加到压缩文件里了，但我们需要在文件添加到队列前重命名文件
 
@@ -79,13 +79,13 @@ archive.onBeforeAppend = function(filePath, data) {
 
 后续：其实做到像 `on('beforeAppend', function() {})` 这样写，但还没摸透它，就酱
 
-#### 后端开发 ./src -> 运行后访问：http://localhost
+- **后端开发 ./src -> 运行后访问：http://localhost**
 
 ``` bash
 npm run test
 ```
 
-#### 前后端双服务联调指引
+- **前后端双服务联调指引**
 
 （待更新）
 
