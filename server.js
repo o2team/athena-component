@@ -48,6 +48,8 @@ router.get('/api/pull/:id/:rename?', api.pull);
 router.get('/api/detail', api.detail);
 // 组件详情，不包含代码 ?id=xx
 router.get('/api/detail-info', api.detailInfo);
+// 业务列表
+router.get('/api/business/list', api.business.list);
 
 router.get('/api/test', async (ctx, next) => {
   const AV = require('leancloud-storage');

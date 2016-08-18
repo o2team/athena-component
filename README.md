@@ -111,7 +111,7 @@ npm install
 ``` javascript
 /**
  * HTTP GET /api/pull/:id/:rename?
- * @description 拉取组件
+ * @description 拉取组件。更直接地 —— /warehouse/id 可直接获取到组件
  * 
  * @param {id} <String> 组件ID
  * @param {rename} [String] 重命名名称

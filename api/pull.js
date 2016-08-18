@@ -16,9 +16,9 @@ AV.init({
 module.exports = async (ctx, next) => {
   let id = ctx.params.id;
   let rename = ctx.params.rename;
-
+  
   if(!id) { ctx.status = 404; return; }
-
+  
   if(!rename) {
     ctx.set('Content-disposition','attachment;filename='+id+'.zip');
     ctx.body = fs.readFileSync( path.join(conf.warehouse, id) );
@@ -36,24 +36,22 @@ module.exports = async (ctx, next) => {
     });
     
     // 重命名工程
-    if(rename) {
-      archive.onBeforeAppend = function(filePath, data) {
-        let stats = fs.statSync(filePath);
-        if(stats.isFile()) {
-          let pathRelative = path.relative( path.join(conf.warehouse, '_temp', id), filePath);
-          let name = data.name;
-          let dirname = path.dirname(pathRelative);
-          let extname = path.extname(name);
-          let basename = path.basename(name, extname);
-
-          // 即不包括images下的图片文件
-          if(dirname==='.') {
-            data.name = rename + extname;
-          }
-
+    archive.onBeforeAppend = function(filePath, data) {
+      let stats = fs.statSync(filePath);
+      if(stats.isFile()) {
+        let pathRelative = path.relative( path.join(conf.warehouse, '_temp', id), filePath);
+        let name = data.name;
+        let dirname = path.dirname(pathRelative);
+        let extname = path.extname(name);
+        let basename = path.basename(name, extname);
+        
+        // 即不包括images下的图片文件
+        if(dirname==='.') {
+          data.name = rename + extname;
         }
-      } 
-    }
+        
+      }
+    } 
 
     archive
       .bulk([{
