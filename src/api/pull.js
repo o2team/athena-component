@@ -40,6 +40,7 @@ module.exports = async (ctx, next) => {
       // console.log(file)
     });
 
+    // 重命名工程
     if(rename) {
       archive.onBeforeAppend = function(filePath, data) {
         let stats = fs.statSync(filePath);
@@ -49,10 +50,12 @@ module.exports = async (ctx, next) => {
           let dirname = path.dirname(pathRelative);
           let extname = path.extname(name);
           let basename = path.basename(name, extname);
-          // 即不包括images目录
+
+          // 即不包括images下的图片文件
           if(dirname==='.') {
             data.name = rename + extname;
           }
+
         }
       } 
     }
@@ -66,7 +69,6 @@ module.exports = async (ctx, next) => {
       .finalize();
 
     ctx.set('Content-disposition','attachment;filename='+id+'.zip');
-
     ctx.body = archive;
 
     // 更新计数器

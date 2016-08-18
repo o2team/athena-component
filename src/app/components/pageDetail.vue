@@ -26,6 +26,10 @@
 				<h2 class="detail_code_tit">HTML结构</h2>
 				<pre class="brush: xml;">{{ contHtml }}</pre>
 			</div>
+			<div v-show="contScss">
+				<h2 class="detail_code_tit">SASS样式</h2>
+				<pre class="brush: scss;">{{ contScss }}</pre>
+			</div>
 			<div v-show="contCss">
 				<h2 class="detail_code_tit">CSS样式</h2>
 				<pre class="brush: css;">{{ contCss }}</pre>
@@ -33,6 +37,10 @@
 			<div v-show="contJs">
 				<h2 class="detail_code_tit">脚本</h2>
 				<pre class="brush: js;">{{ contJs }}</pre>
+			</div>
+			<div v-show="contJson">
+				<h2 class="detail_code_tit">组件配置</h2>
+				<pre class="brush: js;">{{ contJson }}</pre>
 			</div>
 		</div>
 	</div>
@@ -98,8 +106,10 @@ export default {
 	data () {
 		return {
 			contHtml: undefined,
+			contScss: undefined,
 			contCss: undefined,
 			contJs: undefined,
+			contJson: undefined,
 			previewurl: '',
 			widget: {}
 		}
@@ -113,11 +123,17 @@ export default {
 				that.$data.previewurl = `warehouse/_build/${ data.widget.folder }/index.html`;
 				that.$data.contHtml = data.contHtml;
 			}
-			if(data.contCss) { 
+			if(data.contScss) { 
+				that.$data.contScss = data.contScss;
+			}
+			if(!data.contScss && data.contCss) { 
 				that.$data.contCss = data.contCss;
 			}
 			if(data.contJs) { 
 				that.$data.contJs = data.contJs;
+			}
+			if(data.contJson) { 
+				that.$data.contJson = data.contJson;
 			}
 
 			// 等待页面更新

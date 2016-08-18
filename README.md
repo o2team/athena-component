@@ -157,8 +157,6 @@ npm run test
 
 为什么有些接口不直接用Leancloud提供的？保证Athena不用另外再配置Leancloud，也方便以后数据迁移。
 
-总感觉 `Leancloud` 比不上 `Mongodb`，呃hou
-
 ## Leancloud 初始化指引
 
 Class: Widget, Account
@@ -197,3 +195,4 @@ Class: Widget, Account
 	- 1个 Javascript 文件
 	- 1个 JSON 配置文件（必需）
 - 不包含外层文件夹，无组件依赖
+- 除图片文件，所有文件名跟组件名一致

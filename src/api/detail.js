@@ -16,7 +16,7 @@ AV.init({
 });
 
 module.exports = async (ctx, next) => {
-  let widget, contHtml, contCss, contJs;
+  let widget, contHtml, contScss, contCss, contJs, contJson;
 
   let id = ctx.request.query.id;
   
@@ -43,15 +43,21 @@ module.exports = async (ctx, next) => {
   let widgetBuildImgPath = path.join(widgetBuildPath, 'images');
   // 组件HTML路径
   let contHtmlPath = path.join(widgetPath, widget.get('name')+'.html');
+  // 组件SCSS路径
+  let contScssPath = path.join(widgetPath, widget.get('name')+'.scss');
   // 组件CSS路径
   let contCssPath = path.join(widgetPath, widget.get('name')+'.css');
   // 组件JS路径
   let contJsPath = path.join(widgetPath, widget.get('name')+'.js');
+  // 组件JSON路径
+  let contJsonPath = path.join(widgetPath, widget.get('name')+'.json');
 
-  // 读取组件 HTML, CSS, JS
+  // 读取组件 HTML, SCSS, CSS, JS
   try {contHtml = fs.readFileSync( contHtmlPath ).toString();} catch(err) { /* DO NOTHING */ }
+  try {contScss = fs.readFileSync( contScssPath ).toString();} catch(err) { /* DO NOTHING */ }
   try {contCss = fs.readFileSync( contCssPath ).toString();} catch(err) { /* DO NOTHING */ }
   try {contJs = fs.readFileSync( contJsPath ).toString();} catch(err) { /* DO NOTHING */ }
+  try {contJson = fs.readFileSync( contJsonPath ).toString();} catch(err) { /* DO NOTHING */ }
 
   // 编译任务，遵循AOTU代码规范
   // 只有在html文件存在时才进行编译
@@ -106,9 +112,11 @@ module.exports = async (ctx, next) => {
   
   // Response
   ctx.body = {
-    contHtml: contHtml || '',
-    contCss: contCss || '',
-    contJs: contJs || '',
+    contHtml: contHtml,
+    contScss: contScss,
+    contCss: contScss ? '' : contCss, // 如果SCSS存在就忽略CSS（这时的CSS可能是组件上传前编译的）
+    contJs: contJs,
+    contJson: contJson,
     widget: widget
   }
 }
