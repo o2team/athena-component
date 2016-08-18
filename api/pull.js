@@ -18,6 +18,12 @@ module.exports = async (ctx, next) => {
   let rename = ctx.params.rename;
 
   if(!id) { ctx.status = 404; return; }
+
+  if(!rename) {
+    ctx.set('Content-disposition','attachment;filename='+id+'.zip');
+    ctx.body = fs.readFileSync( path.join(conf.warehouse, id) );
+    return;
+  }
   
   try {
     let archive = archiver('zip');
