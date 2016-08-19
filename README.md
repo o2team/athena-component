@@ -31,7 +31,7 @@ npm install
 
 - **前端配置**
 
-	修改main.js里的数据配置项
+	修改 `main.js` 里 `Leancloud` 的配置项， 
 
 - **前端调试 ./app -> 运行后访问：http://localhost:8080**
 
@@ -47,7 +47,7 @@ npm install
 
 - **后端配置**
 
-	ac-config.js
+	ac-config.js，主要是端口与 `Leancloud` 配置项
 
 - **hack修改**
 
@@ -171,28 +171,28 @@ npm install
 
 ## Leancloud 初始化指引
 
-Class: Widget, Account
+字段如无指定，默认类型为 `String`
 
-- _Role = admin
-- _User 添加一用户 名admin 并关联至_Role admin
+- _Role，添加一角色 `admin`
+- _User，添加一用户 `admin` 并关联至 _Role admin
 	- username
 	- password
-- Business
+- Business，创建（限制写入）
 	- !name
-- Classify，固定 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴+(其他)
+- Classify，创建（限制写入），固定数据 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴
 	- !name
-- Widget
+- Widget，创建（无限制）
 	- !name
 	- !author
 	- !appId
-	- !platform (default h5)
 	- !moduleId
+	- !platform (default h5)
 	- !pullTimes (Number default 0)
 	- desc
-	- tags (Array default [])
+	- tags (Array)
 	- business (Pointer -> Business)
 	- classify (Pointer -> Classify)
-- **Account** 设 _Role admin 增删查改，开放 `find` 和 `get`
+- Account，创建（限制写入），赋予 _Role admin: create, delete, update
 	- !name
 
 ## 上传组件规范

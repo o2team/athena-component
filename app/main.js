@@ -14,11 +14,10 @@ Vue.config.debug = true;
 
 var router = new VueRouter();
 
-// 应用 ID，用来识别应用
-var APP_ID = 'FzixJuDzAVtFSG2FP705KgEo-gzGzoHsz';
-// 应用 Key，用来校验权限（Web 端可以配置安全域名来保护数据安全）
-var APP_KEY = 'dx4IHFu1FbFBB88Pn61GLGGP';
-// 初始化
+// var APP_ID = 'FzixJuDzAVtFSG2FP705KgEo-gzGzoHsz';
+// var APP_KEY = 'dx4IHFu1FbFBB88Pn61GLGGP';
+var APP_ID = 'ULAaHI9Bor3WJHCfORaRJ4BW-gzGzoHsz';
+var APP_KEY = 'pRYLYgk6yk3aK2G9tNOWhd46';
 AV.init({
   appId: APP_ID,
   appKey: APP_KEY

@@ -50,6 +50,8 @@ router.get('/api/detail', api.detail);
 router.get('/api/detail-info', api.detailInfo);
 // 业务列表
 router.get('/api/business/list', api.business.list);
+// 分类列表
+router.get('/api/classify/list', api.classify.list);
 
 router.get('/api/test', async (ctx, next) => {
   const AV = require('leancloud-storage');

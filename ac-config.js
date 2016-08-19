@@ -14,10 +14,12 @@ module.exports = {
 		// 详查http://mongoosejs.com/docs/connections.html
 		options: {}
 	},
-
+	
 	leancloud: {
-		APP_ID: 'FzixJuDzAVtFSG2FP705KgEo-gzGzoHsz',
-		APP_KEY: 'dx4IHFu1FbFBB88Pn61GLGGP'
+		// APP_ID: 'FzixJuDzAVtFSG2FP705KgEo-gzGzoHsz',
+		// APP_KEY: 'dx4IHFu1FbFBB88Pn61GLGGP'
+		APP_ID: 'ULAaHI9Bor3WJHCfORaRJ4BW-gzGzoHsz',
+		APP_KEY: 'pRYLYgk6yk3aK2G9tNOWhd46'
 	},
 
 	// 前端目录
