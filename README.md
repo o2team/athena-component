@@ -89,6 +89,8 @@ npm install
 - HTTP GET  /api/pull/:id/:rename?
 - HTTP GET  /api/detail?id=xxx
 - HTTP GET /api/detail-info?id=xxx
+- HTTP GET /api/business/list
+- HTTP GET /api/classify/list
 
 ``` javascript
 /**
@@ -137,6 +139,24 @@ npm install
  * @param {id} <String> 组件ID
  *
  * @response widget
+ */
+```
+
+``` javascript
+/**
+ * HTTP GET /api/business/list
+ * @description 业务列表
+ * 
+ * @response businesses
+ */
+```
+
+``` javascript
+/**
+ * HTTP GET /api/classify/list
+ * @description 类别列表
+ * 
+ * @response classify
  */
 ```
 

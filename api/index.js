@@ -6,5 +6,6 @@ module.exports = {
 	detail: require('./detail'),
 	detailInfo: require('./detailInfo'),
 
-	business: require('./business')
+	business: require('./business'),
+	classify: require('./classify')
 }
