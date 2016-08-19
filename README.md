@@ -202,7 +202,7 @@ npm install
 - 全部或部分：
 	- 1个 images 文件夹 + N个图片文件
 	- 1个 HTML 文件
-	- 1个 CSS / SCSS 文件，如同时存在，SCSS 优先，CSS 被忽略
+	- 1个 CSS / SCSS 文件，如同时存在，SCSS 优先，CSS 被忽略，目前只支持预处理器 `SCSS`
 	- 1个 Javascript 文件
 	- 1个 JSON 配置文件（必需）
 - 不包含外层文件夹，无组件依赖

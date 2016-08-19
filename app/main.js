@@ -14,8 +14,6 @@ Vue.config.debug = true;
 
 var router = new VueRouter();
 
-// var APP_ID = 'FzixJuDzAVtFSG2FP705KgEo-gzGzoHsz';
-// var APP_KEY = 'dx4IHFu1FbFBB88Pn61GLGGP';
 var APP_ID = 'ULAaHI9Bor3WJHCfORaRJ4BW-gzGzoHsz';
 var APP_KEY = 'pRYLYgk6yk3aK2G9tNOWhd46';
 AV.init({

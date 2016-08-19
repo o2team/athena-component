@@ -50,6 +50,9 @@
 </template>
 
 <style lang="sass">
+/* fix */
+.syntaxhighlighter {padding: 1px;}
+
 .pdetail {
 	margin: 0 auto; max-width: 1400px;overflow:hidden;
 	.pdetail_info {
