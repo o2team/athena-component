@@ -18,58 +18,89 @@ module.exports = async (ctx, next) => {
   let rename = ctx.params.rename;
   
   if(!id) { ctx.status = 404; return; }
-  
+
+  // 更新计数器
+  let updateCounter = function() {
+    let w = AV.Object.createWithoutData('Widget', id);
+    w.increment('pullTimes', 1);
+    // w.fetchWhenSave(true);
+    w.save().then(function() {
+      console.log('succ')
+    }, function(err) {
+      console.log(err)
+    });
+  }
+
   if(!rename) {
-    ctx.set('Content-disposition','attachment;filename='+id+'.zip');
+    await new Promise(function(resolve, reject) {
+      new AV.Query('Widget').get(id).then(function (widget) {
+        resolve(widget);
+      }, function(err) {
+        reject(err);
+      });
+    }).then(function(widget) {
+      ctx.set('Content-disposition','attachment;filename='+widget.get('name')+'.zip');
+      ctx.body = fs.readFileSync( path.join(conf.warehouse, id) );
+      updateCounter();
+    }).catch(function(err) {
+      console.error(err);
+      ctx.status = 404;
+    });
+  } else {
+    ctx.set('Content-disposition','attachment;filename='+rename+'.zip');
     ctx.body = fs.readFileSync( path.join(conf.warehouse, id) );
-    return;
+    updateCounter();
   }
-  
-  try {
-    let archive = archiver('zip');
-    
-    archive.on('error', function(err) {
-      throw err;
-    });
-    archive.on('entry', function(file) {
-      // console.log(file)
-    });
-    
-    // 重命名工程
-    archive.onBeforeAppend = function(filePath, data) {
-      let stats = fs.statSync(filePath);
-      if(stats.isFile()) {
-        let pathRelative = path.relative( path.join(conf.warehouse, '_temp', id), filePath);
-        let name = data.name;
-        let dirname = path.dirname(pathRelative);
-        let extname = path.extname(name);
-        let basename = path.basename(name, extname);
-        
-        // 即不包括images下的图片文件
-        if(dirname==='.') {
-          data.name = rename + extname;
-        }
-        
-      }
-    } 
+      
+  /*如果有冲泯灭
+  await Promise.resolve().then(function(widget) {
+    // 组件路径
+    let widgetTempPath = path.join(conf.warehouse, '_temp', id);
+    try {
+      fs.accessSync( widgetTempPath );
+    } catch(err) {
+      // 创建
+      fs.mkdirSync( widgetTempPath );
+      // 解压缩组件
+      await new Promise(function(resolve, reject) {
+        let readStream = fs.createReadStream( path.join( conf.warehouse, widget.id ) );
+        let writeStream = fstream.Writer( widgetTempPath );
+        readStream
+          .pipe(unzip.Parse())
+          .pipe(writeStream);
+        writeStream.on('close', function() {
+          resolve();
+        });
+      });
+    }
 
-    archive
-      .bulk([{
-        expand: true,
-        cwd: path.join(conf.warehouse, '_temp', id),
-        src: ['**']
-      }])
-      .finalize();
+    try {
+      let archive = archiver('zip');
+      
+      archive.on('error', function(err) {
+        throw err;
+      });
+      archive.on('entry', function(file) {
+        // console.log(file)
+      });
 
-    ctx.set('Content-disposition','attachment;filename='+id+'.zip');
-    ctx.body = archive;
+      archive
+        .bulk([{
+          expand: true,
+          cwd: path.join(conf.warehouse, '_temp', id),
+          src: ['**']
+        }])
+        .finalize();
 
-    // 更新计数器
-    let widget = AV.Object.createWithoutData('Widget', id);
-    widget.increment('pullTimes', 1);
-    // widget.fetchWhenSave(true);
-    widget.save();
-  } catch(err) {
-    ctx.status = 500;
-  }
+      ctx.set('Content-disposition','attachment;filename='+rename+'.zip');
+      ctx.body = archive;
+    } catch(err) {
+      console.error(err);
+      ctx.status = 500;
+    }
+  }).catch(function(err) {
+    console.error(err);
+    ctx.status = 403;
+    ctx.body = err;
+  });*/
 }
