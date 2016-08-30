@@ -7,6 +7,7 @@ const fstream = require('fstream');
 const lodash = require('lodash');
 const AV = require('leancloud-storage');
 const conf = require('../ac-config.js');
+const util = require('../util.js');
 
 const APP_ID = conf.leancloud.APP_ID;
 const APP_KEY = conf.leancloud.APP_KEY;
@@ -16,7 +17,7 @@ AV.init({
 });
 
 module.exports = async (ctx, next) => {
-  let widget, contHtml, contScss, contCss, contJs, contJson;
+  let widget, contHtml, contScss, contBuildCss, contCss, contJs, contJson;
   
   let id = ctx.request.query.id;
   
@@ -34,49 +35,39 @@ module.exports = async (ctx, next) => {
   });
 
   // 组件路径
-  let widgetPath = path.join(conf.warehouse, '_temp', widget.id);
-  try {
-    fs.accessSync( widgetPath );
-  } catch(err) {
-    // 创建
-    fs.mkdirSync( widgetPath );
-    // 解压缩组件
-    await new Promise(function(resolve, reject) {
-      let readStream = fs.createReadStream( path.join( conf.warehouse, widget.id ) );
-      let writeStream = fstream.Writer( widgetPath );
-      readStream
-        .pipe(unzip.Parse())
-        .pipe(writeStream);
-      writeStream.on('close', function() {
-        resolve();
-      });
-    });
-  }
-
+  let widgetTempPath = path.join(conf.warehouse, '_temp', widget.id);
+  
+  // 解压文件
+  await util.unzipWidget( widget.id ).catch(function(err) {
+    console.error(err);
+  });
+  
   // 组件图片路径
-  let widgetImgPath = path.join(widgetPath, 'images');
+  let widgetImgPath = path.join(widgetTempPath, 'images');
   // 组件编译路径
   let widgetBuildPath = path.join(conf.warehouse, '_build', widget.id);
   // 组件编译图片路径
   let widgetBuildImgPath = path.join(widgetBuildPath, 'images');
   // 组件HTML路径
-  let contHtmlPath = path.join(widgetPath, widget.get('name')+'.html');
+  let contHtmlPath = path.join(widgetTempPath, widget.get('name') + '.html');
   // 组件SCSS路径
-  let contScssPath = path.join(widgetPath, widget.get('name')+'.scss');
-  // 组件CSS路径
-  let contCssPath = path.join(widgetPath, widget.get('name')+'.css');
+  let contScssPath = path.join(widgetTempPath, widget.get('name') + '.scss');
+  // 组件CSS路径 - 优先用编译好的CSS文件
+  let contBuildCssPath = path.join(widgetTempPath,  '_build_' + widget.get('name') + '.css');
+  let contCssPath = path.join(widgetTempPath, widget.get('name') + '.css');
   // 组件JS路径
-  let contJsPath = path.join(widgetPath, widget.get('name')+'.js');
+  let contJsPath = path.join(widgetTempPath, widget.get('name') + '.js');
   // 组件JSON路径
-  let contJsonPath = path.join(widgetPath, widget.get('name')+'.json');
+  let contJsonPath = path.join(widgetTempPath, widget.get('name') + '.json');
 
   // 读取组件 HTML, SCSS, CSS, JS
   try {contHtml = fs.readFileSync( contHtmlPath ).toString();} catch(err) { /* DO NOTHING */ }
   try {contScss = fs.readFileSync( contScssPath ).toString();} catch(err) { /* DO NOTHING */ }
+  try {contBuildCss = fs.readFileSync( contBuildCssPath ).toString();} catch(err) { /* DO NOTHING */ }
   try {contCss = fs.readFileSync( contCssPath ).toString();} catch(err) { /* DO NOTHING */ }
   try {contJs = fs.readFileSync( contJsPath ).toString();} catch(err) { /* DO NOTHING */ }
   try {contJson = fs.readFileSync( contJsonPath ).toString();} catch(err) { /* DO NOTHING */ }
-
+  
   // 编译任务，遵循AOTU代码规范
   // 只有在html文件存在时才进行编译
   if(contHtml) {
@@ -92,7 +83,7 @@ module.exports = async (ctx, next) => {
 <title>Document</title>
 <style>
   ${commonstyle}
-  ${contCss}
+  ${contBuildCss || contCss}
 </style>
 </head>
 <body>
@@ -106,7 +97,7 @@ module.exports = async (ctx, next) => {
       try {
         // 根据配置里的虚拟变量进行基本编译
         iframe = lodash.template( iframe )(
-          JSON.parse(fs.readFileSync(path.join(widgetPath, widget.get('name')+'.json'))).data
+          JSON.parse(fs.readFileSync(path.join(widgetTempPath, widget.get('name')+'.json'))).data
         );
       } catch(err) {
         console.error('模板渲染错误：' + err);

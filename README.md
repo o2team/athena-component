@@ -97,14 +97,14 @@ npm install
  * HTTP POST /api/push
  * @description 上传组件
  *
- * @param {appId} <String> 应用ID
- * @param {moduleId} <String> 模块ID
- * @param {platform} <String> 平台 pc | h5
- * @param {widget} <String> zip组件打包文件
- * @param {author} <String> 作者，白名单校验
- * @param {description} [String] 描述，默认从组件配置文件中读取
- * @param {business} [String] 所属业务ID
- * @param {classify} [String] 所属分类ID
+ * @param {String} <appId> 应用ID
+ * @param {String} <moduleId> 模块ID
+ * @param {String} <platform> 平台 pc | h5
+ * @param {String} <widget> zip组件打包文件
+ * @param {String} <author> 作者，白名单校验
+ * @param {String} [description] 描述，默认从组件配置文件中读取
+ * @param {String} [business] 所属业务ID
+ * @param {String} [classify] 所属分类ID
  * 
  * @response 200 { no:0, data: { id: widgetId } }
  */
@@ -115,8 +115,8 @@ npm install
  * HTTP GET /api/pull/:id/:rename?
  * @description 拉取组件。更直接地 —— /warehouse/id 可直接获取到组件
  * 
- * @param {id} <String> 组件ID
- * @param {rename} [String] 重命名名称
+ * @param {String} <id> 组件ID
+ * @param {String} [rename] 重命名名称
  */
 ```
 
@@ -125,7 +125,7 @@ npm install
  * HTTP GET /api/detail?id=xxx
  * @description 组件详情，返回代码及组件信息
  * 
- * @param {id} <String> 组件ID
+ * @param {String} <id> 组件ID
  *
  * @response { contHtml, contCss, contJs, widget }
  */
@@ -136,7 +136,7 @@ npm install
  * HTTP GET /api/detail-info?id=xxx
  * @description 组件详情，返回组件信息，不包含代码
  * 
- * @param {id} <String> 组件ID
+ * @param {String} <id> 组件ID
  *
  * @response widget
  */
@@ -207,3 +207,9 @@ npm install
 	- 1个 JSON 配置文件（必需）
 - 不包含外层文件夹，无组件依赖
 - 除图片文件，所有文件名跟组件名一致
+
+## Athena 平台迭代
+
+饿~饿~饿！
+
+- 组件上传选择 `业务` 和 `分类`

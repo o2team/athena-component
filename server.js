@@ -14,7 +14,8 @@ const
   upload = multer({ dest: os.tmpdir() }),
 
   conf = require('./ac-config.js'),
-  api = require('./api');
+  api = require('./api'),
+  util = require('./util');
 
 // Middleware
 app
@@ -38,6 +39,7 @@ app
       }
     }
   });
+
 
 //--------------------API--------------------
 // 上传组件数据  POST: appId, moduleId, platform [, description, author]
