@@ -22,7 +22,9 @@ module.exports = async (ctx, next) => {
   let id = ctx.request.query.id;
   
   if(!id) { ctx.status = 404; return; }
-
+  
+  // util.dumpLog(`访问组件 - ${ctx.ip} -> ${id}`);
+  
   // 查找组件
   await new Promise(function(resolve, reject) {
     let query = new AV.Query('Widget');

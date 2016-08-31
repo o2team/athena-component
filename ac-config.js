@@ -1,7 +1,7 @@
 'use strict';
 
 const 
-	Path = require('path');
+	path = require('path');
 
 module.exports = {
 	// 运行端口
@@ -21,14 +21,16 @@ module.exports = {
 	},
 
 	// 前端目录
-	app: Path.join(__dirname, 'app'),
+	app: path.join(__dirname, 'app'),
 
 	// 组件存放目录
-	warehouse: Path.join(__dirname, 'warehouse'),
+	warehouse: path.join(__dirname, 'warehouse'),
 
 	// 数据文件存放目录
-	dbdir: Path.join(__dirname, 'database'),
+	dbdir: path.join(__dirname, 'database'),
 
+	logsDir: path.join(__dirname, 'logs'),
+	
 	tpl: {
 		cssh5: `
 * { -webkit-tap-highlight-color: transparent; outline: 0; margin: 0; padding: 0; vertical-align: baseline; }

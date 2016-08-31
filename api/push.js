@@ -6,6 +6,7 @@ const unzip = require('unzip');
 const AV = require('leancloud-storage');
 const conf = require('../ac-config.js');
 const business = require('./business');
+const util = require('../util.js');
 
 const APP_ID = conf.leancloud.APP_ID;
 const APP_KEY = conf.leancloud.APP_KEY;
@@ -36,7 +37,7 @@ module.exports = async (ctx, next) => {
 		
 	await Promise.resolve().then(function() {
 		// 检验白名单
-		// 被坑了，Leancloud的单元操作并非真正的Promise，体现为异常的传递不一致
+		// Leancloud的单元操作并非真正的Promise，体现为异常的传递不一致
 		// 在then中抛异常，后台直接跪了，而不是给它自己的catch捕获
 		var query = new AV.Query('Account');
 		query.equalTo('name', author);
@@ -114,6 +115,7 @@ module.exports = async (ctx, next) => {
 			});
 		});
 	}).then(function(wid) {
+		util.dumpLog(`上传组件 - ${author} ${ctx.ip} -> ${wid}`);
 		// Response
 		ctx.status = 200;
 		ctx.body = JSON.stringify({

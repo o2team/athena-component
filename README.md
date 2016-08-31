@@ -49,7 +49,7 @@ npm install
 
 	ac-config.js，主要是端口与 `Leancloud` 配置项
 
-- **hack修改**
+- **hack修改** （现在用不上了，重命名的工作已经交给客户端）
 
 	archiver 的 on('entry') 触发前时的状态已经是 `finalize:true`，即已经添加到压缩文件里了，但我们需要在文件添加到队列前重命名文件，因此在 `./node_modules/archiver/lib/core.js` 搜索 `Archiver.prototype._append = function(filepath, data)`，在它里面第一行添加 `this.onBeforeAppend && this.onBeforeAppend(filepath, data);`，如下：
 	
@@ -166,10 +166,13 @@ npm install
 - 白名单列表查询
 - 白名单 增/删
 - 组件标签 增/删
+- 用户登录/登出
 
 为什么有些接口不直接用Leancloud提供的？保证Athena不用另外再配置Leancloud，也方便以后数据迁移。
 
 ## Leancloud 初始化指引
+
+*为什么建议手动初始化？`Leancloud` 并不像 `Mongodb` 拥有“版本”的记录，数据在第一次插入时就固定了它的类型，类型是不能被更改的*
 
 字段如无指定，默认类型为 `String`
 
@@ -213,3 +216,6 @@ npm install
 饿~饿~饿！
 
 - 组件上传选择 `业务` 和 `分类`
+- 组件上传分析SASS依赖，编译SASS
+- 组件下载安置SASS依赖
+- 组件重命名

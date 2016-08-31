@@ -24,11 +24,13 @@ module.exports = async (ctx, next) => {
 
   // 更新计数器
   let updateCounter = function() {
+    util.dumpLog(`下载组件 - ${ctx.ip} -> ${id}`);
+    
     let w = AV.Object.createWithoutData('Widget', id);
     w.increment('pullTimes', 1);
     // w.fetchWhenSave(true);
     w.save().then(function() {
-      console.log('succ')
+      // console.log('succ')
     }, function(err) {
       console.log(err)
     });
@@ -43,7 +45,6 @@ module.exports = async (ctx, next) => {
     });
   }).then(function() {
     // 解压组件
-    console.log(widget.id)
     return util.unzipWidget( widget.id );
   }).then(function() {
     let archive = archiver('zip');

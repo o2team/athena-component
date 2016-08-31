@@ -6,7 +6,8 @@ var fdList = [
 	conf.warehouse,
 	path.join(conf.warehouse, '_build'),
 	path.join(conf.warehouse, '_temp'),
-	conf.dbdir
+	conf.dbdir,
+	conf.logsDir
 ];
 
 function createFolder(fd, errcount) {
