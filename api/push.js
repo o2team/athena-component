@@ -124,6 +124,10 @@ module.exports = async (ctx, next) => {
 				id: wid
 			}
 		});
+		// 解压文件
+  		util.unzipWidget( wid ).catch(function(err) {
+    		console.error(err);
+  		});
 	}).catch(function(err) {
 		console.error(err);
 		ctx.status = 403;

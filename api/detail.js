@@ -85,7 +85,7 @@ module.exports = async (ctx, next) => {
 <title>Document</title>
 <style>
   ${commonstyle}
-  ${contBuildCss || contCss}
+  ${contBuildCss || contCss || ''}
 </style>
 </head>
 <body>
