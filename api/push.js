@@ -111,22 +111,26 @@ module.exports = async (ctx, next) => {
 			let writeStream = fs.createWriteStream( path.join(conf.warehouse, w.id) );
 			readStream.pipe( writeStream );
 			writeStream.on('finish', function() {
-				resolve(w.id);
+				resolve(w);
 			});
 		});
-	}).then(function(wid) {
-		util.dumpLog(`上传组件 - ${author} ${ctx.ip} -> ${wid}`);
+	}).then(function(w) {
+		util.dumpLog(`上传组件 - ${author} ${ctx.ip} -> ${w.id}`);
 		// Response
 		ctx.status = 200;
 		ctx.body = JSON.stringify({
 			no: 0,
 			data: {
-				id: wid
+				id: w.id
 			}
 		});
 		// 解压文件
-  		util.unzipWidget( wid ).catch(function(err) {
+  		util.unzipWidget( w.id ).catch(function(err) {
     		console.error(err);
+  		});
+  		// 编译组件
+  		util.buildWidget( w.id, w).catch(function(err) {
+  			console.error(err);
   		});
 	}).catch(function(err) {
 		console.error(err);

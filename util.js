@@ -131,7 +131,7 @@ exports.buildWidget = function (id, widget) {
 		  	});
 
 	      let commonstyle = conf.tpl[`css${widget.get('platform')}`] || '';
-				let iframe = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Document</title><style>${commonstyle};${contBuiltCss || contCss || ''}</style></head><body>${contBuiltHtml}<script>${contJs}</script></body></html>`;
+				let iframe = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>Document</title><style>${commonstyle};${contBuiltCss || contCss || ''}</style></head><body>${contBuiltHtml}<script>${contJs}</script></body></html>`;
 
 	      // 写2/4：预览HTML
 	      fs.writeFileSync(widgetBuiltHtmlPath, iframe);
@@ -148,7 +148,7 @@ exports.buildWidget = function (id, widget) {
         // 写4/4：网页截图 [异步完成]
 				let instance = await phantom.create(['--ignore-ssl-errors=true', '--local-to-remote-url-access=true']);
 		  	let page = await instance.createPage();
-		  	// await page.property('viewportSize', {width: 375, height: 667});
+		  	await page.property('viewportSize', {width: 375, height: 667});
 		  	await page.open('file:///' + path.resolve(`${conf.warehouse}/_build/${id}/index.html`));
 		  	await page.render(`${conf.warehouse}/_build/${id}/capture.png`);
 		  	instance.exit();
