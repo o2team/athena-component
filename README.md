@@ -18,6 +18,11 @@
 - 安装 phantomJS（>=2.1.1）
 - 注册 Leancloud 并配置，[Leancloud 初始化指引](#Leancloud 初始化指引)
 
+截图可能会出现截图里文字不见了的情况，因为——系统没有页面用到的字体，解决：
+
+- 在centos中执行：yum install bitmap-fonts bitmap-fonts-cjk
+- 在ubuntu中执行：sudo apt-get install xfonts-wqy
+
 ``` bash
 git clone https://github.com/o2team/athena-component.git
 

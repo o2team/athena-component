@@ -125,12 +125,18 @@ module.exports = async (ctx, next) => {
 			}
 		});
 		// 解压文件
-  		util.unzipWidget( w.id ).catch(function(err) {
+  		util.unzipWidget( w.id )
+  		.then(function() {
+  			setTimeout(function() {
+// 编译组件
+  			util.buildWidget( w.id, w).catch(function(err) {
+  				console.error(err);
+  			});
+  			}, 5000);
+  			
+  		})
+  		.catch(function(err) {
     		console.error(err);
-  		});
-  		// 编译组件
-  		util.buildWidget( w.id, w).catch(function(err) {
-  			console.error(err);
   		});
 	}).catch(function(err) {
 		console.error(err);

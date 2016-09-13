@@ -47,7 +47,7 @@ exports.unzipWidget = function (id) {
 			readStream.on('error', function (err) {
 				reject(err);
 			});
-			writeStream.on('close', function () {
+			writeStream.on('end', function () {
 			  resolve();
 			});
 		}
