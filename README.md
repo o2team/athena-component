@@ -5,17 +5,18 @@
 ## 技术组成
 
 - 前端 vue+webpack
-- 后端 koa
+- 后端 koa+phantomJS
 - 数据存储 Leancloud
 
 ## 前端页面展示
 
-![site-capture](_capture/site-capture.png)
+![site-capture](_capture/site-capture2.png)
 
 ## 部署指引
 
-- 安装 NodeJS（建议版本>=6.0.0）
-- 注册 Leancloud
+- 安装 NodeJS（>=4.5.0，前端DEV模式需要 Node 6.x）
+- 安装 phantomJS（>=2.1.1）
+- 注册 Leancloud 并配置，[Leancloud 初始化指引](#Leancloud 初始化指引)
 
 ``` bash
 git clone https://github.com/o2team/athena-component.git
@@ -184,7 +185,7 @@ npm install
 	- !name
 - Classify，创建（限制写入），固定数据 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴
 	- !name
-- Widget，创建（无限制）
+- Widget，创建（无限制），限制 _Role admin: delete
 	- !name
 	- !author
 	- !appId

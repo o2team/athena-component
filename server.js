@@ -56,20 +56,15 @@ router.get('/api/business/list', api.business.list);
 router.get('/api/classify/list', api.classify.list);
 
 router.get('/api/test', async (ctx, next) => {
-  const AV = require('leancloud-storage');
-  const APP_ID = conf.leancloud.APP_ID;
-const APP_KEY = conf.leancloud.APP_KEY;
-AV.init({
-  appId: APP_ID,
-  appKey: APP_KEY
-});
+  var phantom = require('phantom');
 
-  var query = new AV.Query('Business');
-      query.get('57ac2c19c4c9710054613d5e2').then(function (data) {
-        console.log(data)
-      }, function (error) {
-        console.log(error)
-      });
+  phantom = await phantom.create(['--ignore-ssl-errors=true', '--local-to-remote-url-access=true']);
+  let page = await phantom.createPage();
+  await page.property('viewportSize', {width: 375, height: 667});
+  await page.property('content', '2rdfjghhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+  // await page.open('http://acp.aotu.io/warehouse/_build/57cee31e67f3560057b65226/index.html');
+  await page.render('hhehee.png');
+  phantom.exit();
 });
 
 app.listen(conf.port);

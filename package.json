@@ -29,6 +29,7 @@
     "lodash": "^3.10.0",
     "mongoose": "^4.4.17",
     "node-uuid": "^1.4.7",
+    "phantom": "^2.1.21",
     "unzip": "^0.1.11"
   },
   "devDependencies": {

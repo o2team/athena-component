@@ -44,10 +44,32 @@
 			</ul>
 		</div>
 		<ul class="wlist">
+			<style>
+				.wlist_item {width: 200px;}
+					.wlist_item_wrap {display: block; background: #fff; height: 132px; border: 1px solid transparent; border-bottom: 1px solid #ccc; overflow: hidden; -webkit-transition: .6s ease; transition: .6s ease;}
+						.wlist_item_show {height: 100px; background: #ccc;}
+							.wlist_item_show img {width: 100%;}
+						.wlist_item_info {height: 32px; background: #fff; -webkit-transition: .3s ease; transition: .3s ease;}
+							.wlist_item_name {height: 32px; line-height: 32px; white-space: nowrap; word-wrap: normal; overflow: hidden; text-overflow: ellipsis; text-align: center;}
+							.wlist_item_meta {padding: 0 10px; height: 30px;}
+								.wlist_item_meta > div {float: left; width: 50%;height: 30px; line-height: 30px;}
+								.wlist_item_meta_pulltimes {text-align: right;}
+				.wlist_item:hover .wlist_item_info {-webkit-transform: translate(0, -30px); transform: translate(0, -30px);}
+				.wlist_item:hover .wlist_item_wrap {border: 1px solid orange;}
+			</style>
 			<li v-for="item in wlist" class="wlist_item">
-				<div class="wlist_item_wrap">
-					<a class="wlist_item_anchor" v-link="{ name:'detail', params:{id:item.id} }">{{item.attributes.name}}</a>
-					<div class="wlist_item_tags">{{isItemTagsAddActive}}
+				<a class="wlist_item_wrap" v-link="{ name:'detail', params:{id:item.id} }">
+					<div class="wlist_item_show"><img :src="'warehouse/_build/'+item.id+'/capture.png'" onerror="this.src='http://jdc.jd.com/img/200x100?color=5CC26F&textColor=fff&text=No Capture'"></div>
+					<div class="wlist_item_info">
+						<div class="wlist_item_name">{{item.attributes.name}}</div>
+						<div class="wlist_item_meta">
+							<div class="wlist_item_meta_author">{{item.attributes.author}}</div>
+							<div class="wlist_item_meta_pulltimes" title="拉取次数">{{item.attributes.pullTimes}}</div>
+						</div>
+					</div>
+
+					
+					<!-- <div class="wlist_item_tags">{{isItemTagsAddActive}}
 						<ul class="wlist_item_tags_ul">
 							<li v-for="y in item.attributes.tags" class="wlist_item_tags_item">
 								<span>{{ y }}</span>
@@ -60,8 +82,8 @@
 								<div class="wlist_item_tags_add_button confirm" @click="addTag(item, item.newTagName)">&#xe605;</div>
 							</li>
 						</ul>
-					</div>
-				</div>
+					</div> -->
+				</a>
 			</li>
 		</ul>
 		<!-- <a class="more" href="javascript:;" @click="loadMore()" v-show="!search.isSearching">加载更多...</a> -->
@@ -74,6 +96,7 @@
 
 .plist {
 	margin-left: 233px;
+	background: #f4f4f4;
 	.plist_wrap {
 		margin: 0 auto;
 		width: 1590px;

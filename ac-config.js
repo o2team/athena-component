@@ -33,6 +33,7 @@ module.exports = {
 	
 	tpl: {
 		cssh5: `
+html {font-size: 20px;}
 * { -webkit-tap-highlight-color: transparent; outline: 0; margin: 0; padding: 0; vertical-align: baseline; }
 body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin: 0; padding: 0; vertical-align: baseline; }
 img { border: 0 none; vertical-align: top; }
