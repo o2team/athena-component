@@ -47,7 +47,7 @@
 			<style>
 				.wlist_item {width: 200px;}
 					.wlist_item_wrap {display: block; background: #fff; height: 132px; border: 1px solid transparent; border-bottom: 1px solid #ccc; overflow: hidden; -webkit-transition: .6s ease; transition: .6s ease;}
-						.wlist_item_show {height: 100px; background: #ccc; overflow: hidden;}
+						.wlist_item_show {height: 100px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAV1gAAFdYB1mtZ/QAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAXdEVYdENyZWF0aW9uIFRpbWUAMjAxNi4yLjE5feXuqAAAAElJREFUOI3t0bEJwEAMQ1EpZIzbfzAt8q9KaZEikObUyjyMbQANAZREZUTX2LzMAT4A7vYiQLY7kGQsbWutVZG6wYM04P8jHkDaCZEYwmwI7+IAAAAASUVORK5CYII=); overflow: hidden;}
 							.wlist_item_show img {width: 100%;}
 						.wlist_item_info {height: 32px; background: #fff; -webkit-transition: .3s ease; transition: .3s ease;}
 							.wlist_item_name {height: 32px; line-height: 32px; white-space: nowrap; word-wrap: normal; overflow: hidden; text-overflow: ellipsis; text-align: center;}

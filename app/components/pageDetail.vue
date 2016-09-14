@@ -1,7 +1,7 @@
 <template>
 <div class="pdetail">
 	<div class="pdetail_info">
-		<div class="pdetail_info_name">{{ widget.name }}</div>
+		<div class="pdetail_info_name">{{ widget.name }} <button class="pdetail_del">删除</button></div>
 	</div>
 	<div class="pdetail_tags">
 		<ul>
@@ -47,7 +47,7 @@
 		</div>
 	</div>
 
-	<a class="pdetail_download" href="api/pull/{{ widget.objectId }}">一键下载组件</a>
+	<a class="pdetail_download" href="api/down/{{ widget.objectId }}">一键下载组件</a>
 </div>
 </template>
 
@@ -60,6 +60,16 @@
 	.pdetail_info {
 		margin: 30px 0 0;
 		.pdetail_info_name {padding: 10px 0; font-size: 24px; border-bottom: 1px solid #e4e4e4; text-align: center;}
+		.pdetail_del {
+			float: right;
+			padding: 0 20px;
+			background: #f03b55;
+			border: 0;
+			color: #fff;
+			cursor: pointer;
+			height: 30px;
+			line-height: 30px;
+		}
 	}
 	.pdetail_tags {
 		padding: 10px 0;

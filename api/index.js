@@ -3,6 +3,7 @@
 module.exports = {
 	push: require('./push'),
 	pull: require('./pull'),
+	down: require('./down'),
 	detail: require('./detail'),
 	detailInfo: require('./detailInfo'),
 
