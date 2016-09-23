@@ -25,9 +25,6 @@
 
 <div class="plist">
 	<div class="plist_wrap">
-		<!-- <div class="searchtag">
-			<input class="searchtag_input" type="text" placeholder="搜索标签，输入后按下回车键" @keyup.enter="searchtag(searchTagName)" v-model="searchTagName">
-		</div> -->
 		<div class="plist_header">
 			<ul>
 				<li 
@@ -43,6 +40,11 @@
 				</li>
 			</ul>
 		</div>
+
+		<!-- S 组件搜索 -->
+		<div class="plist_search"><input class="plist_search_inp" type="text" placeholder="输入组件名搜索" v-model="state.searchName"></div>
+		<!-- E 组件搜索 -->
+
 		<ul class="wlist">
 			<style>
 				.wlist_item {width: 200px;}
@@ -57,7 +59,7 @@
 				.wlist_item:hover .wlist_item_info {-webkit-transform: translate(0, -30px); transform: translate(0, -30px);}
 				.wlist_item:hover .wlist_item_wrap {border: 1px solid orange;}
 			</style>
-			<li v-for="item in wlist" class="wlist_item">
+			<li v-for="item in wlist | filterBy state.searchName in 'attributes.name' | filterBy state.classify in 'attributes.classify' | filterBy state.business in 'attributes.business'" class="wlist_item">
 				<a class="wlist_item_wrap" v-link="{ name:'detail', params:{id:item.id} }">
 					<div class="wlist_item_show"><img :src="'warehouse/_build/'+item.id+'/capture.png'" onerror="this.src='http://jdc.jd.com/img/200x100?color=5CC26F&textColor=fff&text=No Capture'"></div>
 					<div class="wlist_item_info">
@@ -92,8 +94,16 @@
 </template>
 
 <style lang="sass">
-/*.mod_footer {display: none !important;}*/
-
+/* 组件搜索 */
+.plist_search {
+	padding: 71px 0 10px;
+	.plist_search_inp {
+		padding: 10px; width: 100%;
+		border: 1px solid #6190e8; background: #f8f8f8; text-align: center;
+		&:focus {background: #fff;}
+	}
+}
+				
 .plist {
 	margin-left: 233px;
 	background: #f4f4f4;
@@ -157,7 +167,6 @@
 	}
 }
 .wlist {
-	padding-top: 81px;
 	overflow: hidden;
 }
 .wlist_item {
@@ -352,23 +361,22 @@
 export default {
 	data () {
 		return {
-			// 用于按类别筛选组件列表
+			// 用于过滤组件
 			state: {
 				business: null,
-				classify: null
+				classify: null,
+				searchName: ''
 			},
 			
 			wlist: [], // 用于渲染组件列表
-			rawAllWidgets: [], // 记录全部组件不变
-
+			
 			blist: [], allWidgetCount: 0,
 			classify: [],
 
 			search: {
 				isSearching: false,
 				prewlist: null
-			},
-			searchTagName: ''
+			}
 		}
 	},
 	ready () {
@@ -403,75 +411,27 @@ export default {
 		getWidgets: function() {
 			var that = this;
 
-			if(this.rawAllWidgets.length==0) {
-				var query = new AV.Query('Widget');
-				query.descending('createdAt');
-				
-				if(this.state.business) {
-					var bus = AV.Object.createWithoutData('Business', this.state.business);
-					query.equalTo('business', bus);
-				}
-				if(this.state.classify) {
-					var cls = AV.Object.createWithoutData('Classify', this.state.classify);
-					query.equalTo('business', cls);
-				}
-				
-				query.find().then(function (results) {
-  					that.wlist = results;
-  					that.rawAllWidgets = [].concat(results);
-				});
-			} else {
-				// 手动筛选，不用再重复请求数据了
-				// 能不能像Angular一样使用filter呀
-
-				var newArr = [];
-				var stateBusiness = this.state.business;
-				var stateClassify = this.state.classify;
-				for( var i=0; i<this.rawAllWidgets.length; i++ ) {
-					// 意思是如果不指定业务或类别，默认就通过了
-					var bpass = !stateBusiness;
-					var cpass = !stateClassify;
-
-					if( stateBusiness ) {
-						bpass = this.rawAllWidgets[i].attributes.business && this.rawAllWidgets[i].attributes.business.id === stateBusiness;
-					}
-					if( stateClassify ) {
-						cpass = this.rawAllWidgets[i].attributes.classify && this.rawAllWidgets[i].attributes.classify.id === stateClassify;
-					}
-
-					if(bpass && cpass) {
-						newArr.push( this.rawAllWidgets[i] );
-					}
-				}
-				
-				this.wlist = newArr;
+			var query = new AV.Query('Widget');
+			query.descending('createdAt');
+			
+			if(this.state.business) {
+				var bus = AV.Object.createWithoutData('Business', this.state.business);
+				query.equalTo('business', bus);
 			}
+			if(this.state.classify) {
+				var cls = AV.Object.createWithoutData('Classify', this.state.classify);
+				query.equalTo('business', cls);
+			}
+			
+			query.find().then(function (results) {
+  				that.wlist = results;
+			});
 		},
 		getAllWidgetsCount: function() {
 			var that = this;
 			new AV.Query('Widget').count().then(function(count) {
 				that.allWidgetCount = count;
 			});
-		},
-		searchtag: function(searchTagName) {
-			var that = this;
-
-			if(searchTagName) {
-				var tagFilter = searchTagName;
-				var query = new AV.Query('Widget');
-				query.equalTo('tags', tagFilter);
-				query.find().then(function(results) {
-					// 如果之前的状态不也是搜索状态
-					if(!that.search.isSearching) {
-						that.search.prewlist = that.wlist;
-					}
-					that.wlist = results;
-					that.search.isSearching = !!searchTagName;
-				});
-			} else {
-				this.wlist = this.search.prewlist;
-				that.search.isSearching = !!searchTagName;
-			}
 		},
 		addTag: function(item, newTagName) {
 			if(!newTagName) {
@@ -521,12 +481,12 @@ export default {
 		}
 	},
 	watch: {
-		'state': {
-			handler: function(value, oldValue) {
-				this.getWidgets();
-			},
-			deep: true
-		}
+		// 'state': {
+		// 	handler: function(value, oldValue) {
+		// 		this.getWidgets();
+		// 	},
+		// 	deep: true
+		// }
 	}
 }
 </script>

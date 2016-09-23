@@ -46,8 +46,11 @@
 			</div>
 		</div>
 	</div>
-
-	<a class="pdetail_download" href="api/down/{{ widget.objectId }}">一键下载组件</a>
+	
+	<div class="pdetail_download">
+		<input class="pdetail_download_rename" placeholder="重命名" v-model="rename">
+		<a class="pdetail_download_btn" href="api/down/{{ widget.objectId }}/{{ rename }}">一键下载组件</a>
+	</div>
 </div>
 </template>
 
@@ -90,18 +93,31 @@
 
 	.pdetail_download {
 		position: fixed;
-		bottom: 30px; right: 50px;
+		bottom: 30px; right: 50px;	
+		width: 180px;
+	}
+	.pdetail_download_rename {
 		display: block;
-		padding: 0 20px;
+		margin-bottom: -1px;
+		width: 100%;
+		line-height: 24px;
+		border: 1px solid #6190e8;
+		outline: 0;
+		text-align: center;
+	}
+	.pdetail_download_btn {
+		display: block;
+		width: 100%;
 		height: 28px; line-height: 28px;
 		border: 1px solid #6190e8;
-		background: #6190e8;
+		background: #77A0EB;
 		color: #fff;
+		text-align: center;
 		cursor: pointer;
 		transition: .2s ease; will-change: background, color;
 		&:hover {
-			background: #fff;
-			color: #333;
+			background: #6190e8;
+			/*color: #333;*/
 		}
 	}
 }
@@ -137,7 +153,8 @@ export default {
 			contJs: undefined,
 			contJson: undefined,
 			previewurl: '',
-			widget: {}
+			widget: {},
+			rename: ''
 		}
 	},
 	ready () {
