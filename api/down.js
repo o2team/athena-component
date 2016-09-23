@@ -16,6 +16,7 @@ AV.init({
 
 module.exports = async (ctx, next) => {
   let id = ctx.params.id;
+  let rename = ctx.params.rename;
 
   let widget;
   
@@ -43,11 +44,10 @@ module.exports = async (ctx, next) => {
       reject(err);
     });
   }).then(function() {
-    // 解压组件
     return util.unzipWidget( widget.id );
   }).then(function() {
     return util.buildWidget( widget.id, widget);
-  }).then(function() {
+  }).then(function (integrate) {
     let archive = archiver('zip');
     
     archive.on('error', function(err) {
@@ -56,9 +56,18 @@ module.exports = async (ctx, next) => {
     archive.on('entry', function(file) {
       // console.log(file)
     });
+    
+    let realName = widget.get('name');
+    let wname = rename || realName;
 
-    var integrate = JSON.parse(fs.readFileSync(path.join(conf.warehouse, '_build', id, 'integrate.json')));
-    var wname = widget.get('name');
+    // 重命名
+    if(rename) {
+      let regExp = new RegExp(realName, 'g');
+      integrate.contBuiltHtml && (integrate.contBuiltHtml = integrate.contBuiltHtml.replace(regExp, rename));
+      integrate.contBuiltCss && (integrate.contBuiltCss = integrate.contBuiltCss.replace(regExp, rename));
+      integrate.contCss && (integrate.contCss = integrate.contCss.replace(regExp, rename));
+      integrate.contJs && (integrate.contJs = integrate.contJs.replace(regExp, rename));
+    }
 
     if(integrate.contBuiltHtml) {
       archive.append(new Buffer(integrate.contBuiltHtml), {name: wname + '.html'});

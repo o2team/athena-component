@@ -44,7 +44,10 @@ module.exports = async (ctx, next) => {
 		return new Promise(function(resolve, reject) {
 			query.find().then(function (results) {
 				if(results.length===0) {
-					reject('用户不在白名单之列');
+					reject({
+						type: 'unauth',
+						message: '用户不在白名单之列'
+					});
 				} else {
 					resolve();
 				}
@@ -139,11 +142,10 @@ module.exports = async (ctx, next) => {
     		console.error(err);
   		});
 	}).catch(function(err) {
-		console.error(err);
 		ctx.status = 403;
-		// ctx.body = err;
 		ctx.body = JSON.stringify({
-			err: err
+			err: err,
+			type: err.type
 		});
 	});
 }

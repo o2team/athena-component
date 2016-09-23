@@ -47,7 +47,7 @@ router.post('/api/push', upload.single('widget'), api.push);
 // 通过id拉取组件打包文件
 router.get('/api/pull/:id/:rename?', api.pull);
 // 下载编译好的组件
-router.get('/api/down/:id', api.down);
+router.get('/api/down/:id/:rename?', api.down);
 // 组件详情 ?id=xx
 router.get('/api/detail', api.detail);
 // 组件详情，不包含代码 ?id=xx
