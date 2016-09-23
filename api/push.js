@@ -141,6 +141,9 @@ module.exports = async (ctx, next) => {
 	}).catch(function(err) {
 		console.error(err);
 		ctx.status = 403;
-		ctx.body = err;
+		// ctx.body = err;
+		ctx.body = JSON.stringify({
+			err: err
+		});
 	});
 }
