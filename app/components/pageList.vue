@@ -1,98 +1,3 @@
-<template>
-<aside class="mod_aside">
-	<div class="mod_aside_header">
-		<h2>业务导航</h2>
-	</div>
-	<div class="mod_aside_list">
-		<h3></h3>
-		<ul>
-			<li class="mod_aside_list_item" 
-				v-bind:class="{'active': !state.business}"
-				@click="state.business = null">
-				<span class="mod_aside_list_item_name">全部</span>
-				<span class="mod_aside_list_item_count">{{ allWidgetCount }}</span>
-			</li>
-			<li class="mod_aside_list_item" 
-				v-for="item in blist" 
-				v-bind:class="{'active': state.business == item.id}"
-				@click="state.business = item.id">
-				<span class="mod_aside_list_item_name">{{ item.attributes.name }}</span>
-				<span class="mod_aside_list_item_count">{{ item.count || 0 }}</span>
-			</li>
-		</ul>
-	</div>
-</aside>
-
-<div class="plist">
-	<div class="plist_wrap">
-		<div class="plist_header">
-			<ul>
-				<li 
-					v-bind:class="{'active': !state.classify}"
-					@click="state.classify = null">
-					<a href="javascript:;">不限</a>
-				</li>
-				<li 
-					v-for="item in classify" 
-					v-bind:class="{'active': state.classify == item.id}" 
-					@click="state.classify = item.id">
-					<a href="javascript:;">{{ item.attributes.name }}</a>
-				</li>
-			</ul>
-		</div>
-
-		<!-- S 组件搜索 -->
-		<div class="plist_search"><input class="plist_search_inp" type="text" placeholder="输入组件名搜索" v-model="state.searchName"></div>
-		<!-- E 组件搜索 -->
-
-		<ul class="wlist">
-			<style>
-				.wlist_item {width: 200px;}
-					.wlist_item_wrap {display: block; background: #fff; height: 132px; border: 1px solid transparent; border-bottom: 1px solid #ccc; overflow: hidden; -webkit-transition: .6s ease; transition: .6s ease;}
-						.wlist_item_show {height: 100px; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAV1gAAFdYB1mtZ/QAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAXdEVYdENyZWF0aW9uIFRpbWUAMjAxNi4yLjE5feXuqAAAAElJREFUOI3t0bEJwEAMQ1EpZIzbfzAt8q9KaZEikObUyjyMbQANAZREZUTX2LzMAT4A7vYiQLY7kGQsbWutVZG6wYM04P8jHkDaCZEYwmwI7+IAAAAASUVORK5CYII=); overflow: hidden;}
-							.wlist_item_show img {width: 100%;}
-						.wlist_item_info {height: 32px; background: #fff; -webkit-transition: .3s ease; transition: .3s ease;}
-							.wlist_item_name {height: 32px; line-height: 32px; white-space: nowrap; word-wrap: normal; overflow: hidden; text-overflow: ellipsis; text-align: center;}
-							.wlist_item_meta {padding: 0 10px; height: 30px;}
-								.wlist_item_meta > div {float: left; width: 50%;height: 30px; line-height: 30px;}
-								.wlist_item_meta_pulltimes {text-align: right;}
-				.wlist_item:hover .wlist_item_info {-webkit-transform: translate(0, -30px); transform: translate(0, -30px);}
-				.wlist_item:hover .wlist_item_wrap {border: 1px solid orange;}
-			</style>
-			<li v-for="item in wlist | filterBy state.searchName in 'attributes.name' | filterBy state.classify in 'attributes.classify' | filterBy state.business in 'attributes.business'" class="wlist_item">
-				<a class="wlist_item_wrap" v-link="{ name:'detail', params:{id:item.id} }">
-					<div class="wlist_item_show"><img :src="'warehouse/_build/'+item.id+'/capture.png'" onerror="this.src='http://jdc.jd.com/img/200x100?color=5CC26F&textColor=fff&text=No Capture'"></div>
-					<div class="wlist_item_info">
-						<div class="wlist_item_name">{{item.attributes.name}}</div>
-						<div class="wlist_item_meta">
-							<div class="wlist_item_meta_author">{{item.attributes.author}}</div>
-							<div class="wlist_item_meta_pulltimes" title="拉取次数">{{item.attributes.pullTimes}}</div>
-						</div>
-					</div>
-
-					
-					<!-- <div class="wlist_item_tags">{{isItemTagsAddActive}}
-						<ul class="wlist_item_tags_ul">
-							<li v-for="y in item.attributes.tags" class="wlist_item_tags_item">
-								<span>{{ y }}</span>
-								<i class="close" @click="removeTag(item, y, $index)">&#xe606;</i>
-							</li>
-							<li class="wlist_item_tags_add">
-								<div class="wlist_item_tags_add_button add">&#xe60b;</div>
-								<div class="wlist_item_tags_add_button cancel">&#xe606;</div>
-								<input class="wlist_item_tags_add_input" type="text" v-model="item.newTagName">
-								<div class="wlist_item_tags_add_button confirm" @click="addTag(item, item.newTagName)">&#xe605;</div>
-							</li>
-						</ul>
-					</div> -->
-				</a>
-			</li>
-		</ul>
-		<!-- <a class="more" href="javascript:;" @click="loadMore()" v-show="!search.isSearching">加载更多...</a> -->
-	</div>
-</div>
-</template>
-
 <style lang="sass">
 /* 组件搜索 */
 .plist_search {
@@ -134,6 +39,9 @@
 			display: inline-block;
 			margin-left: 10px;
 			line-height: 40px;
+			&:first-child {
+				margin-left: 0;
+			}
 		}
 		a {
 			padding: 3px 10px;
@@ -186,112 +94,6 @@
 		font-size:12px;color:#6190e8;
 		text-align: center;
 	}
-	.wlist_item_tags {
-		
-	}
-	.wlist_item_tags_ul {
-	
-	}
-	.wlist_item_tags_item {
-		display: inline-block;
-		margin-top: 5px;
-		margin-right: 5px;
-		padding: 0 10px;
-		height: 22px; border-radius: 11px;
-		font-size: 12px;
-		background: #e4e4e4;
-		i.close {
-			position: relative;
-			display: inline-block;
-			margin-left: 5px;
-			width: 11px; height: 15px;
-			cursor: pointer;
-
-			font-family: 'iconfont';
-			font-size: 14px;
-			color: #666;
-			/*&:before, &:after {
-				content:'';
-				position: absolute;
-				top: 7px; left: 2px;
-				width: 100%; height: 1px;
-				background: #000;
-				transition: .2s ease;
-			}
-			&:before { transform: rotate(45deg); }
-			&:after { transform: rotate(-45deg); }
-			&:hover:before { transform: rotate(135deg); }
-			&:hover:after { transform: rotate(45deg); }*/
-		}
-		span {
-			display: inline-block;
-			max-width: 200px;
-			overflow: hidden; text-overflow: ellipsis;
-		}
-		span, i.close {
-			/*line-height: 22px;*/
-			vertical-align: middle;
-		}
-	}
-	.wlist_item_tags_add {
-		$btnw: 22px;
-		$inpw: 70px;
-		position: relative;
-		/*display: inline-block;*/
-		margin-top: 5px;
-		/*margin-right: 5px;*/
-		width: $btnw; height: $btnw; border-radius: $btnw;
-		border: 1px solid #ccc;
-		background: #e4e4e4;
-		vertical-align: top;
-		overflow: hidden;
-		transition: .2s linear;
-		.wlist_item_tags_add_input {
-			position: absolute;
-			top: 0; left: $btnw - 1;
-			padding: 0 5px;
-			height: $btnw - 2;
-			width: $inpw;
-			border: 1px solid #ccc;
-			border-radius: 3px;
-			outline: 0;
-		}
-		.wlist_item_tags_add_button {
-			position: absolute;
-			top: -1px;
-			width: $btnw; height: $btnw; line-height: $btnw;
-			border: 1px solid #ccc;
-			border-radius: $btnw;
-			cursor: pointer;
-			background: #e4e4e4;
-			font-family: 'iconfont';
-			font-size: 12px;
-			text-align: center;
-			&.add, &.cancel {
-				left: -1px;
-			}
-			&.cancel {
-				display: none;
-			}
-			&.confirm {
-				left: $btnw - 1 + $inpw;
-			}
-		}
-		&.active {
-			width: $btnw * 2 + $inpw;
-			.wlist_item_tags_add_button.add {display: none;}
-			.wlist_item_tags_add_button.cancel {display: block;}
-		}
-	}
-}
-.more {
-	box-sizing: border-box;
-	display: block;
-	margin-top: 50px;
-	width: 100%; height: 40px; line-height: 40px;
-	font-size: 16px;
-	border: 1px solid #6190e8;
-	text-align: center;
 }
 
 
@@ -355,20 +157,182 @@
     	}
     }
 }
+
+/* 组件项 */
+.wlist_item {
+	position: relative;
+	width: 200px;
+	.wlist_item_wrap {
+		display: block;
+		height: 132px; 
+		background: #fff; 
+		border: 1px solid transparent; border-bottom: 1px solid #ccc; 
+		overflow: hidden; 
+		-webkit-transition: .6s ease; transition: .6s ease;
+	}
+	.wlist_item_show {
+		height: 100px;
+		background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAV1gAAFdYB1mtZ/QAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAXdEVYdENyZWF0aW9uIFRpbWUAMjAxNi4yLjE5feXuqAAAAElJREFUOI3t0bEJwEAMQ1EpZIzbfzAt8q9KaZEikObUyjyMbQANAZREZUTX2LzMAT4A7vYiQLY7kGQsbWutVZG6wYM04P8jHkDaCZEYwmwI7+IAAAAASUVORK5CYII=);
+		overflow: hidden;
+		img {
+			width: 100%;
+		}
+	}
+	.wlist_item_info {
+		height: 32px; 
+		background: #fff; 
+		-webkit-transition: .3s ease; transition: .3s ease;
+	}
+	.wlist_item_name {
+		height: 32px; line-height: 32px; 
+		white-space: nowrap; word-wrap: normal; overflow: hidden; text-overflow: ellipsis; 
+		text-align: center;
+	}
+	.wlist_item_meta {
+		padding: 0 10px; 
+		height: 30px;
+		> div {
+			float: left; 
+			width: 50%; height: 30px; line-height: 30px;
+		}
+	}
+	.wlist_item_meta_pulltimes {
+		text-align: right;
+	}
+	.wlist_item_del {
+		position: absolute;
+		top: 0; left: 0;
+		width: 100%; height: 100%;
+		background: rgba(0,0,0,0.7);
+		text-align: center;
+		cursor: pointer;
+		&:before {
+			content: '';
+			display: inline-block;
+			width: 0; height: 100%;
+			font-size: 0;
+		}
+		&:before, .wlist_item_del_btn {
+			vertical-align: middle;
+		}
+		.wlist_item_del_btn {
+			display: inline-block;
+			padding: 3px 20px;
+			border-radius: 2px;
+			background: #df3e3e;
+			color: #fff;
+			&:hover {
+				background: #db2828;
+			}
+		}
+	}
+	&:hover {
+		.wlist_item_wrap {
+			border: 1px solid orange;
+		}
+		.wlist_item_info {
+			-webkit-transform: translate(0, -30px); transform: translate(0, -30px);
+		}
+	}
+}
+				
+/* 管理 */
+.manage {
+	position: fixed;
+	padding: 5px 10px;
+	bottom: 20px; right: 20px;
+	border-radius: 4px;
+	background: #6190e8;
+	color: #fff;
+}
 </style>
+
+<template>
+<aside class="mod_aside">
+	<div class="mod_aside_header">
+		<h2>业务导航</h2>
+	</div>
+	<div class="mod_aside_list">
+		<h3></h3>
+		<ul>
+			<li class="mod_aside_list_item" 
+				v-bind:class="{'active': !state.business}"
+				@click="state.business = null">
+				<span class="mod_aside_list_item_name">全部</span>
+				<span class="mod_aside_list_item_count">{{ allWidgetCount }}</span>
+			</li>
+			<li class="mod_aside_list_item" 
+				v-for="item in blist" 
+				v-bind:class="{'active': state.business == item.id}"
+				@click="state.business = item.id">
+				<span class="mod_aside_list_item_name">{{ item.attributes.name }}</span>
+				<span class="mod_aside_list_item_count">{{ item.count || 0 }}</span>
+			</li>
+		</ul>
+	</div>
+</aside>
+
+<div class="plist">
+	<div class="plist_wrap">
+		<div class="plist_header">
+			<ul>
+				<li 
+					v-bind:class="{'active': !state.classify}"
+					@click="state.classify = null">
+					<a href="javascript:;">不限</a>
+				</li>
+				<li 
+					v-for="item in classify" 
+					v-bind:class="{'active': state.classify == item.id}" 
+					@click="state.classify = item.id">
+					<a href="javascript:;">{{ item.attributes.name }}</a>
+				</li>
+			</ul>
+		</div>
+
+		<!-- S 组件搜索 -->
+		<div class="plist_search"><input class="plist_search_inp" type="text" placeholder="输入组件名搜索" v-model="state.searchName"></div>
+		<!-- E 组件搜索 -->
+
+		<ul class="wlist">
+			<!-- S 组件项 -->
+			<li v-for="item in wlist | filterBy state.searchName in 'attributes.name' | filterBy state.classify in 'attributes.classify' | filterBy state.business in 'attributes.business'" class="wlist_item">
+				<a class="wlist_item_wrap" v-link="{ name:'detail', params:{id:item.id} }">
+					<div class="wlist_item_show"><img :src="'warehouse/_build/'+item.id+'/capture.png'" onerror="this.src='http://jdc.jd.com/img/200x100?color=5CC26F&textColor=fff&text=No Capture'"></div>
+					<div class="wlist_item_info">
+						<div class="wlist_item_name">{{item.attributes.name}}</div>
+						<div class="wlist_item_meta">
+							<div class="wlist_item_meta_author">{{item.attributes.author}}</div>
+							<div class="wlist_item_meta_pulltimes" title="拉取次数">{{item.attributes.pullTimes}}</div>
+						</div>
+					</div>
+				</a>
+				<div class="wlist_item_del" v-show="isManageMode" @click="delWidget(item.id, $index)"><div class="wlist_item_del_btn">删除</div></div>
+			</li>
+			<!-- E 组件项 -->
+		</ul>
+	</div>
+</div>
+
+<a class="manage" @click="toggleManage" href="javascript:;">切换管理模式</a>
+</template>
 
 <script>
 export default {
 	data () {
 		return {
-			// 用于过滤组件
+			// Filter 条件
 			state: {
 				business: null,
 				classify: null,
 				searchName: ''
 			},
+
+			// 管理模式
+			isManageMode: false,
 			
-			wlist: [], // 用于渲染组件列表
+			// 渲染列表
+			wlist: [],
 			
 			blist: [], allWidgetCount: 0,
 			classify: [],
@@ -391,6 +355,7 @@ export default {
 			// 计数，有点蛋疼，里层异步赋值不刷新视图？
 			that.blist.forEach(function(e, i) {
 				var query = new AV.Query('Widget');
+				query.notEqualTo('state', 0);
 				query.equalTo('business', e);
 				query.count().then(function (count) {
 					that.blist.$set(i, Object.assign({}, e, {count:count}));
@@ -400,36 +365,42 @@ export default {
 		new AV.Query('Classify').find().then(function(results) {
 			that.classify = results;
 		});
-
-		$('.wlist').on('click', '.wlist_item_tags_add_button.add, .wlist_item_tags_add_button.cancel', function() {
-			$(this).parent().toggleClass('active');
-		}).on('click', '.wlist_item_tags_add_button.confirm', function() {
-			$(this).parent().removeClass('active');
-		});
 	},
 	methods: {
+		// 删除组件
+		delWidget: function (itemId, index) {
+			var that = this;
+			if(confirm('确定要删除该组件吗')) {
+				var w = AV.Object.createWithoutData('Widget', itemId);
+				w.set('state', 0);
+				w.save().then(function (data) {
+					_POP_.toast('删除成功');
+					that.wlist.splice(index, 1);
+				}, function (error) {
+					_POP_.toast('删除失败');
+				});
+			}
+		},
+		// 切换管理模式
+		toggleManage: function () {
+			this.isManageMode = !this.isManageMode;
+		},
+		// 获取组件
 		getWidgets: function() {
 			var that = this;
 
 			var query = new AV.Query('Widget');
 			query.descending('createdAt');
-			
-			if(this.state.business) {
-				var bus = AV.Object.createWithoutData('Business', this.state.business);
-				query.equalTo('business', bus);
-			}
-			if(this.state.classify) {
-				var cls = AV.Object.createWithoutData('Classify', this.state.classify);
-				query.equalTo('business', cls);
-			}
-			
+			// query.descending('pullTimes');
+			query.notEqualTo('state', 0);
 			query.find().then(function (results) {
   				that.wlist = results;
 			});
 		},
+		// 获取组件总数
 		getAllWidgetsCount: function() {
 			var that = this;
-			new AV.Query('Widget').count().then(function(count) {
+			new AV.Query('Widget').notEqualTo('state', 0).count().then(function(count) {
 				that.allWidgetCount = count;
 			});
 		},
@@ -459,24 +430,6 @@ export default {
   				_POP_.toast('删除成功');
 			}, function (error) {
   				_POP_.toast('删除失败');
-			});
-		},
-		loadMore: function() {
-			var that = this;
-			var nowLen = this.wlist.length;
-
-			var query = new AV.Query('Widget');
-			query.descending('createdAt');
-			query.limit(5);
-			query.skip(nowLen);
-			query.find().then(function (results) {
-				if(results.length>0) {
-					that.wlist = that.wlist.concat(results);
-				} else {
-					_POP_.toast('没有更多的数据了');
-				}
-			}, function (error) {
-				
 			});
 		}
 	},

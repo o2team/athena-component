@@ -16,7 +16,7 @@ AV.init({
 
 module.exports = async (ctx, next) => {
   let id = ctx.params.id;
-  let rename = ctx.params.rename;
+  let rename = ctx.params.rename ? ctx.params.rename.trim() : '';
 
   let widget;
   
@@ -56,7 +56,7 @@ module.exports = async (ctx, next) => {
     archive.on('entry', function(file) {
       // console.log(file)
     });
-    
+
     let realName = widget.get('name');
     let wname = rename || realName;
 
