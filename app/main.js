@@ -85,7 +85,9 @@ router.map({
 router.beforeEach(function (transition) {
   var auth = transition.to.auth;
   var currentUser = AV.User.current();
-  router.app.$broadcast('Auth', currentUser);
+  Vue.nextTick(function(){
+    router.app.$broadcast('Auth', currentUser);
+  });
   
   if (!auth) {
     transition.next();
