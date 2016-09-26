@@ -156,27 +156,14 @@ export default {
 
 		});
 	},
+	props: ['user'],
 	data () {
 		return {
 			wlist: [],
 			addAccountName: '',
 			isShowLoginPop: false,
 			loginUsername: '',
-			loginPassword: '',
-			user: {
-				init: function(currentUser) {
-					this.hasLogin = !!currentUser;
-					if(currentUser) {
-						this.username = currentUser.attributes.username;
-					}
-				},
-				destory: function() {
-					this.hasLogin = false;
-					this.username = '';
-				},
-				hasLogin: false,
-				username: ''
-			}
+			loginPassword: ''
 		}
 	},
 	methods: {

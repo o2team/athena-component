@@ -1,11 +1,11 @@
 <template>
-<mod-header></mod-header>
+<mod-header :user="user"></mod-header>
 
 <div class="mod_container">
-	<router-view></router-view>
+	<router-view :user="user"></router-view>
 </div>
 
-<mod-footer></mod-footer>
+<mod-footer :user="user"></mod-footer>
 </template>
 
 <style>
@@ -28,6 +28,25 @@ export default {
   	components: {
   	  	modHeader,
   	  	modFooter
+  	},
+  	data () {
+  		return {
+  			// 用户信息
+			user: {
+				init: function(currentUser) {
+					this.hasLogin = !!currentUser;
+					if(currentUser) {
+						this.username = currentUser.attributes.username;
+					}
+				},
+				destory: function() {
+					this.hasLogin = false;
+					this.username = '';
+				},
+				hasLogin: false,
+				username: ''
+			}
+  		}
   	}
 }
 </script>

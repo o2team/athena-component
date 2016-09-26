@@ -313,12 +313,13 @@
 		</ul>
 	</div>
 </div>
-
-<a class="manage" @click="toggleManage" href="javascript:;">切换管理模式</a>
+{{ '123' + user.init() }}
+<a class="manage" @click="toggleManage" href="javascript:;" v-show="user.hasLogin">切换管理模式</a>
 </template>
 
 <script>
 export default {
+	props: ['user'],
 	data () {
 		return {
 			// Filter 条件
