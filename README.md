@@ -8,6 +8,10 @@
 - 后端 koa+phantomJS
 - 数据存储 Leancloud
 
+## 特色功能
+
+- 后台自动截图预览
+
 ## 前端页面展示
 
 ![site-capture](_capture/site-capture2.png)
@@ -201,6 +205,7 @@ npm install
 	- tags (Array)
 	- business (Pointer -> Business)
 	- classify (Pointer -> Classify)
+	- state (Number default 1) 状态，0=已删除
 - Account，创建（限制写入），赋予 _Role admin: create, delete, update
 	- !name
 
@@ -216,6 +221,7 @@ npm install
 	- 1个 JSON 配置文件（必需）
 - 不包含外层文件夹，无组件依赖
 - 除图片文件，所有文件名跟组件名一致
+- 组件命名务必要有一定的复杂度，避免跟CSS关键字、JS关键字、HTML标签相同，因为组件的重命名为纯粹的字符串替换
 
 ## Athena 平台迭代
 
