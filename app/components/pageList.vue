@@ -3,6 +3,7 @@
 .plist_search {
 	padding: 71px 0 10px;
 	.plist_search_inp {
+		box-sizing: border-box;
 		padding: 10px; width: 100%;
 		border: 1px solid #6190e8; background: #f8f8f8; text-align: center;
 		&:focus {background: #fff;}
@@ -74,29 +75,6 @@
 		}
 	}
 }
-.wlist {
-	overflow: hidden;
-}
-.wlist_item {
-	float: left;
-	margin-right: 10px;
-	margin-bottom: 10px;
-	vertical-align: top;
-	.wlist_item_wrap {
-		min-width: 114px;
-		max-width: 300px;
-	}
-	.wlist_item_anchor {
-		display:block;
-		padding:0 30px;
-		height:24px;line-height:24px;
-		border:1px solid #6190e8;
-		font-size:12px;color:#6190e8;
-		text-align: center;
-	}
-}
-
-
 
 .mod_aside {
 	position: absolute;
@@ -157,21 +135,29 @@
     	}
     }
 }
-
+.wlist {
+	margin: 0 -10px;
+	overflow: hidden;
+}
 /* 组件项 */
 .wlist_item {
 	position: relative;
-	width: 200px;
+	width: 227px;
+	float: left;
+	margin: 0 10px 10px;
+	vertical-align: top;
 	.wlist_item_wrap {
 		display: block;
-		height: 132px; 
+		height: 432px; 
+		min-width: 114px;
+		max-width: 300px;
 		background: #fff; 
 		border: 1px solid transparent; border-bottom: 1px solid #ccc; 
 		overflow: hidden; 
 		-webkit-transition: .6s ease; transition: .6s ease;
 	}
 	.wlist_item_show {
-		height: 100px;
+		height: 400px;
 		background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAV1gAAFdYB1mtZ/QAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAXdEVYdENyZWF0aW9uIFRpbWUAMjAxNi4yLjE5feXuqAAAAElJREFUOI3t0bEJwEAMQ1EpZIzbfzAt8q9KaZEikObUyjyMbQANAZREZUTX2LzMAT4A7vYiQLY7kGQsbWutVZG6wYM04P8jHkDaCZEYwmwI7+IAAAAASUVORK5CYII=);
 		overflow: hidden;
 		img {
