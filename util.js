@@ -177,7 +177,7 @@ exports.buildWidget = function (id, widget) {
 		
 		// 写预览HTML文件
 		let commonstyle = conf.tpl[`css${widget.get('platform')}`] || '';
-		let iframe = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>Document</title><style>${commonstyle};${contBuiltCss || contCss || ''}</style></head><body>${contBuiltHtml}<script>${contJs}</script></body></html>`;
+		let iframe = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>Document</title><style>${commonstyle}${contBuiltCss || contCss || ''}</style></head><body>${contBuiltHtml}<script>${contJs}</script></body></html>`;
 		try {
 			fs.writeFileSync(widgetBuiltHtmlPath, iframe);
 		} catch(err) {
