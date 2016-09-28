@@ -185,14 +185,14 @@ exports.buildWidget = function (id, widget) {
 			rollback(err);
 			return;
 		}
-
+		
 		// 复制图片
 		let reader = fstream.Reader(widgetTempImgPath);
 		let writer = fstream.Writer(widgetBuiltImgPath);
 		reader.pipe(writer);
 		reader.on('error', function () { rollback(); })
 		writer.on('close', function () { });
-
+		
 		// 网页截图
 		let instance = await phantom.create(['--ignore-ssl-errors=true', '--local-to-remote-url-access=true']);
 		let page = await instance.createPage();

@@ -91,6 +91,12 @@ npm install
 
 	（待更新）
 
+- **清空組件緩存**
+
+	``` bash
+	node cleanup
+	```
+
 ## API
 
 总览：
