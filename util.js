@@ -163,7 +163,7 @@ exports.buildWidget = function (id, widget) {
 		    JSON.parse(contJson).data
 		  );
 		} catch(err) {
-		  console.error('模板渲染错误：' + err);
+		  console.error('Tmpl Compile failed：' + err);
 		}
 
 		// 提前返回
