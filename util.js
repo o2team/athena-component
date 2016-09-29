@@ -186,6 +186,7 @@ exports.buildWidget = function (id, widget) {
 <meta name="format-detection" content="telephone=no" />
 <title>Document</title>
 <style>${commonstyle}${contBuiltCss || contCss || ''}</style>
+<script>!function(){var o=768;document.write('<style id="o2HtmlFontSize"></style>');var e,t=function(){var e,t;if(document&&document.documentElement&&(e=document.documentElement.clientWidth,t=document.documentElement.clientHeight),!e||!t){if(!window.localStorage["o2-cw"]||!window.localStorage["o2-ch"])return void n();e=parseInt(window.localStorage["o2-cw"]),t=parseInt(window.localStorage["o2-ch"])}var c=o&&e>o?o/375:e/375;window.localStorage["o2-cw"]=e,window.localStorage["o2-ch"]=t,window.zoom=window.o2Zoom=c,document.getElementById("o2HtmlFontSize").innerHTML="html{font-size:"+20*c+"px;}.o2-zoom,.zoom{zoom:"+c/2+";}.o2-scale{-webkit-transform: scale("+c/2+"); transform: scale("+c/2+");}"},n=function(){e||(e=setInterval(function(){document&&document.documentElement&&document.documentElement.clientWidth&&document.documentElement.clientHeight&&(t(),clearInterval(e),e=void 0)},100))};t(),window.addEventListener("resize",t)}();</script>
 </head>
 <body>
 ${contBuiltHtml}
