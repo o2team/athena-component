@@ -198,7 +198,7 @@ npm install
 	- password
 - Business，创建（限制写入）
 	- !name
-- Classify，创建（限制写入），固定数据 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴
+- Classify，创建（限制写入），固定数据 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴+其他
 	- !name
 - Widget，创建（无限制），限制 _Role admin: delete
 	- !name

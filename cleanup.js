@@ -46,10 +46,11 @@ fs.readdir(conf.warehouse, function(err, files) {
 			}).then(function() {
 				return util.buildWidget(f, widget);
 			}).then(function() {
-				console.log('重编译完成')
+				console.log('Compiled Succ: ' + f);
 			}).catch(function(err) {
-				console.log(err);
+				// console.log(err);
+				console.log('Compiled Failed: ' + f);
 			});
 		}
 	})
-})
+});
