@@ -157,10 +157,18 @@ exports.buildWidget = function (id, widget) {
 
 		// HTML编译，变量在配置文件的data字段提供
 		contHtml = contHtml.replace('<% widget.scriptStart() %>', '').replace('<% widget.scriptEnd() %>', '');
+		let manualData;
 		try {
-		  integrate.contBuiltHtml = contBuiltHtml = lodash.template(contHtml)(
-		    JSON.parse(contJson).data
-		  );
+			let reg = '(/\\\*([^*]|[\\\r\\\n]|(\\\*+([^*/]|[\\\r\\\n])))*\\\*+/)|(//.*)';
+			let exp = new RegExp(reg, 'g');
+			contJson = contJson.replace(exp, '');
+			manualData = JSON.parse(contJson).data;
+		} catch(err) {
+			console.error(new Date() + ' JSON parse error');
+			manualData = {};
+		}
+		try {
+		  integrate.contBuiltHtml = contBuiltHtml = lodash.template(contHtml)(manualData);
 		} catch(err) {
 		  console.error('Tmpl Compile failed：' + err);
 		}
