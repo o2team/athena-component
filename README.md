@@ -94,7 +94,7 @@ npm install
 - **清空組件緩存**
 
 	``` bash
-	node cleanup
+	babel-node cleanup
 	```
 
 ## API

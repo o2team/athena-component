@@ -148,7 +148,7 @@
 	vertical-align: top;
 	.wlist_item_wrap {
 		display: block;
-		height: 432px; 
+		height: 257px; 
 		min-width: 114px;
 		max-width: 300px;
 		background: #fff; 
@@ -157,7 +157,7 @@
 		-webkit-transition: .6s ease; transition: .6s ease;
 	}
 	.wlist_item_show {
-		height: 400px;
+		height: 225px;
 		background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAV1gAAFdYB1mtZ/QAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAXdEVYdENyZWF0aW9uIFRpbWUAMjAxNi4yLjE5feXuqAAAAElJREFUOI3t0bEJwEAMQ1EpZIzbfzAt8q9KaZEikObUyjyMbQANAZREZUTX2LzMAT4A7vYiQLY7kGQsbWutVZG6wYM04P8jHkDaCZEYwmwI7+IAAAAASUVORK5CYII=);
 		overflow: hidden;
 		img {

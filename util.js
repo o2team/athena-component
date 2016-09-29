@@ -41,6 +41,7 @@ exports.unzipWidget = function (id) {
 		let widgetTempPath = path.join(conf.warehouse, '_temp', id);
 		try {
 		  fs.accessSync( widgetTempPath );
+		  resolve();
 		} catch(err) {
 			try {
 		  	// 创建文件夹
@@ -58,12 +59,10 @@ exports.unzipWidget = function (id) {
 			readStream.on('error', function (err) {
 				reject(err);
 			});
-			writeStream.on('end', function () {
-			  resolve();
+			writeStream.on('close', function () {
+				resolve();
 			});
 		}
-		resolve();
-		
 	});
 }
 
@@ -145,7 +144,7 @@ exports.buildWidget = function (id, widget) {
 		try {contCss = fs.readFileSync(contCssPath).toString(); integrate.contCss = contCss;} catch(err) { /* DO NOTHING */ }
 		try {contJs = fs.readFileSync(contJsPath).toString(); integrate.contJs = contJs;} catch(err) { /* DO NOTHING */ }
 		try {contJson = fs.readFileSync(contJsonPath).toString(); integrate.contJson = contJson;} catch(err) { /* DO NOTHING */ }
-
+		
 		// 如果没有HTML就没必要编译
 		if(!contHtml) {
 			if(!writeIntegrate(integrate)) {
@@ -196,7 +195,7 @@ exports.buildWidget = function (id, widget) {
 		// 网页截图
 		let instance = await phantom.create(['--ignore-ssl-errors=true', '--local-to-remote-url-access=true']);
 		let page = await instance.createPage();
-		await page.property('viewportSize', {width: 375, height: 667});
+		await page.property('viewportSize', {width: 750, height: 750});
 		await page.open('file:///' + path.resolve(`${conf.warehouse}/_build/${id}/index.html`));
 		await page.render(`${conf.warehouse}/_build/${id}/capture.png`);
 		instance.exit();
