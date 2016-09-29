@@ -211,7 +211,7 @@ ${contBuiltHtml}
 		// 网页截图
 		let instance = await phantom.create(['--ignore-ssl-errors=true', '--local-to-remote-url-access=true']);
 		let page = await instance.createPage();
-		await page.property('viewportSize', {width: 750, height: 750});
+		await page.property('viewportSize', {width: 375, height: 375});
 		await page.open('file:///' + path.resolve(`${conf.warehouse}/_build/${id}/index.html`));
 		await page.render(`${conf.warehouse}/_build/${id}/capture.png`);
 		instance.exit();
