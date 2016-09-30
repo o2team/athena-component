@@ -147,7 +147,6 @@
 	margin: 0 10px 10px;
 	vertical-align: top;
 	.wlist_item_wrap {
-		display: block;
 		height: 257px; 
 		min-width: 114px;
 		max-width: 300px;
@@ -157,6 +156,7 @@
 		-webkit-transition: .6s ease; transition: .6s ease;
 	}
 	.wlist_item_show {
+		display: block;
 		height: 225px;
 		background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAV1gAAFdYB1mtZ/QAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAXdEVYdENyZWF0aW9uIFRpbWUAMjAxNi4yLjE5feXuqAAAAElJREFUOI3t0bEJwEAMQ1EpZIzbfzAt8q9KaZEikObUyjyMbQANAZREZUTX2LzMAT4A7vYiQLY7kGQsbWutVZG6wYM04P8jHkDaCZEYwmwI7+IAAAAASUVORK5CYII=);
 		overflow: hidden;
@@ -183,6 +183,8 @@
 		}
 	}
 	.wlist_item_meta_pulltimes {
+		-webkit-user-select: none;
+		user-select: none;
 		text-align: right;
 	}
 	.wlist_item_del {
@@ -283,16 +285,18 @@
 		<ul class="wlist">
 			<!-- S 组件项 -->
 			<li v-for="item in wlist | filterBy state.searchName in 'attributes.name' | filterBy state.classify in 'attributes.classify' | filterBy state.business in 'attributes.business'" class="wlist_item">
-				<a class="wlist_item_wrap" v-link="{ name:'detail', params:{id:item.id} }">
-					<div class="wlist_item_show"><img :src="'warehouse/_build/'+item.id+'/capture.png'" onerror="this.src='http://jdc.jd.com/img/200x100?color=5CC26F&textColor=fff&text=No Capture'"></div>
+				<div class="wlist_item_wrap">
+					<a class="wlist_item_show" v-link="{ name:'detail', params:{id:item.id} }">
+						<img :src="'warehouse/_build/'+item.id+'/capture.png'" onerror="this.src='http://jdc.jd.com/img/200x100?color=5CC26F&textColor=fff&text=No Capture'">
+					</a>
 					<div class="wlist_item_info">
 						<div class="wlist_item_name">{{item.attributes.name}}</div>
 						<div class="wlist_item_meta">
-							<div class="wlist_item_meta_author">{{item.attributes.author}}</div>
+							<div class="wlist_item_meta_id">{{item.id}}</div>
 							<div class="wlist_item_meta_pulltimes" title="拉取次数">{{item.attributes.pullTimes}}</div>
 						</div>
 					</div>
-				</a>
+				</div>
 				<div class="wlist_item_del" v-show="isManageMode" @click="delWidget(item.id, $index)"><div class="wlist_item_del_btn">删除</div></div>
 			</li>
 			<!-- E 组件项 -->
