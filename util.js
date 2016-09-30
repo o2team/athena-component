@@ -168,11 +168,11 @@ exports.buildWidget = function (id, widget) {
 			if(wdataList instanceof Array && wdataList.length>0) {
 				manualData = wdataList;
 			} else {
-				manualData = [data] || [];
+				manualData = [wdata] || [];
 			}
 		} catch(err) {
-			console.error(new Date() + ' JSON parse error');
-			manualData = {};
+			console.error(err, new Date() + ' JSON parse error');
+			manualData = [];
 		}
 		try {
 			integrate.contBuiltHtml = '';
