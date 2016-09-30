@@ -8,5 +8,6 @@ module.exports = {
 	detailInfo: require('./detailInfo'),
 
 	business: require('./business'),
-	classify: require('./classify')
+	classify: require('./classify'),
+	rebuild: require('./rebuild')
 }

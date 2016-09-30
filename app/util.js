@@ -1,3 +1,8 @@
+/**
+ * ==================================================
+ * 通用弹层
+ * ==================================================
+ */
 var _POP_ = {
     toast: function(text) {
         if(!text) return;
@@ -21,5 +26,33 @@ var _POP_ = {
             clearTimeout(timer);
             dom.parentNode.removeChild(dom);
         });
+    }
+}
+
+/**
+ * ==================================================
+ * 通用Cookie操作函数
+ * ==================================================
+ */
+var Cookie = {
+    setCookie: function(name, value, days) {
+        var date = new Date();
+        date.setDate(date.getDate() + days);    //保存15天
+        document.cookie = name + '=' + escape(value) + ';expires=' + date.toGMTString();
+    },
+    getCookie: function(name) {
+        var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+        if(arr) {
+            return unescape(arr[2]); 
+        }
+        return null;
+    },
+    delCookie: function(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = this.getCookie(name);
+        if(cval) {
+            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+        }
     }
 }
