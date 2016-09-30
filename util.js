@@ -147,7 +147,7 @@ exports.buildWidget = function (id, widget) {
 		
 		// 如果没有HTML就没必要编译
 		if(!contHtml) {
-			if(!writeIntegrate(writeIntegrate)) {
+			if(!writeIntegrate(integrate)) {
 				rollback();
 				// 此处虽然写失败，不需要return中断，因为内容仍存在变量中
 			}
