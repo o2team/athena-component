@@ -167,12 +167,14 @@ exports.buildWidget = function (id, widget) {
 			let wdataList = wconf.dataList;
 			if(wdataList instanceof Array && wdataList.length>0) {
 				manualData = wdataList;
+			} else if(wdata) {
+				manualData = [wdata];
 			} else {
-				manualData = [wdata] || [];
+				manualData = [{}];
 			}
 		} catch(err) {
 			console.error(err, new Date() + ' JSON parse error');
-			manualData = [];
+			manualData = [{}];
 		}
 		try {
 			integrate.contBuiltHtml = '';
