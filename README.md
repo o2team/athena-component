@@ -27,6 +27,8 @@
 - 在centos中执行：yum install bitmap-fonts bitmap-fonts-cjk
 - 在ubuntu中执行：sudo apt-get install xfonts-wqy
 
+为了更好的截图体验，请在系统安装 `STHeiti-Light.ttc` 和 `STHeiti-Medium.ttc`
+
 ``` bash
 git clone https://github.com/o2team/athena-component.git
 
@@ -228,6 +230,8 @@ npm install
 - 不包含外层文件夹，无组件依赖
 - 除图片文件，所有文件名跟组件名一致
 - 组件命名务必要有一定的复杂度，避免跟CSS关键字、JS关键字、HTML标签相同，因为组件的重命名为纯粹的字符串替换
+- 配置文件 `data` 字段填写编译组件的必要参数
+- 配置文件 `dataList` 字段为多态服务，比 `data` 优先，必须是一个数组，数组子项就相当于一个 `data`
 
 ## Athena 平台迭代
 
@@ -237,3 +241,4 @@ npm install
 - 组件上传分析SASS依赖，编译SASS
 - 组件下载安置SASS依赖
 - 组件重命名
+- autoprefix

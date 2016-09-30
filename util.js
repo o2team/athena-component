@@ -162,13 +162,25 @@ exports.buildWidget = function (id, widget) {
 			let reg = '(/\\\*([^*]|[\\\r\\\n]|(\\\*+([^*/]|[\\\r\\\n])))*\\\*+/)|(//.*)';
 			let exp = new RegExp(reg, 'g');
 			contJson = contJson.replace(exp, '');
-			manualData = JSON.parse(contJson).data;
+			let wconf = JSON.parse(contJson);
+			let wdata = wconf.data;
+			let wdataList = wconf.dataList;
+			if(wdataList instanceof Array && wdataList.length>0) {
+				manualData = wdataList;
+			} else {
+				manualData = [data] || [];
+			}
 		} catch(err) {
 			console.error(new Date() + ' JSON parse error');
 			manualData = {};
 		}
 		try {
-		  integrate.contBuiltHtml = contBuiltHtml = lodash.template(contHtml)(manualData);
+			integrate.contBuiltHtml = '';
+			contBuiltHtml = '';
+			manualData.forEach(function(dataItem) {
+				 contBuiltHtml = contBuiltHtml + lodash.template(contHtml)(dataItem);
+				 integrate.contBuiltHtml = contBuiltHtml;
+			});
 		} catch(err) {
 		  console.error('模板渲染错误：' + err);
 		}

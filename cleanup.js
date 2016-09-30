@@ -39,7 +39,7 @@ fs.readdir(conf.warehouse, function(err, files) {
 					widget = w;
 				  resolve();
 				}, function(err) {
-				  reject(err);
+				  reject('state=0');
 				});
 			}).then(function(w) {
 				return util.unzipWidget(f);
@@ -48,8 +48,7 @@ fs.readdir(conf.warehouse, function(err, files) {
 			}).then(function() {
 				console.log('Compiled Succ: ' + f);
 			}).catch(function(err) {
-				// console.log(err);
-				console.log('Compiled Failed: ' + f);
+				console.log('Compiled Failed: ' + f + err);
 			});
 		}
 	})
