@@ -287,7 +287,7 @@
 			<li v-for="item in wlist | filterBy state.searchName in 'attributes.name' | filterBy state.classify in 'attributes.classify' | filterBy state.business in 'attributes.business'" class="wlist_item">
 				<div class="wlist_item_wrap">
 					<a class="wlist_item_show" v-link="{ name:'detail', params:{id:item.id} }">
-						<img :src="'warehouse/_build/'+item.id+'/capture.png'" onerror="this.src='http://jdc.jd.com/img/200x100?color=5CC26F&textColor=fff&text=No Capture'">
+						<div data-cimg="{{item.id}}"></div>
 					</a>
 					<div class="wlist_item_info">
 						<div class="wlist_item_name">{{item.attributes.name}}</div>
@@ -386,6 +386,9 @@ export default {
 			query.notEqualTo('state', 0);
 			query.find().then(function (results) {
   				that.wlist = results;
+  				that.$nextTick(function () {
+  					that.cacheImg();
+  				});
 			});
 		},
 		// 获取组件总数
@@ -421,6 +424,41 @@ export default {
   				_POP_.toast('删除成功');
 			}, function (error) {
   				_POP_.toast('删除失败');
+			});
+		},
+		cacheImg: function() {
+			$('[data-cimg]').each(function(index, domEl) {
+				var wid = $(this).data('cimg');
+				var cimg = document.createElement('img');
+				var canvas = document.createElement('canvas');
+				cimg.onerror = function() {
+					cimg.onload = null;
+					this.src = 'http://jdc.jd.com/img/200x100?color=5CC26F&textColor=fff&text=No Capture';
+				}
+				if(localStorage && canvas.getContext) {
+					var lsdata = localStorage.getItem(wid);
+					var imgcontent = canvas.getContext('2d');
+					lsdata = lsdata ? JSON.parse(lsdata) : '';
+					if(lsdata && lsdata.expires > Date.now()) {
+						cimg.src = lsdata.data;
+					} else {
+						cimg.onload = function() {
+							console.log(wid)
+							canvas.width = this.width;
+							canvas.height = this.height;
+							imgcontent.drawImage(this, 0, 0, this.width, this.height);
+							var imgAsDataUrl = canvas.toDataURL('image/png');
+							localStorage.setItem(wid, JSON.stringify({
+								expires: Date.now() + 864000000, // 10天
+								data: imgAsDataUrl
+							}));
+						}
+						cimg.src = 'warehouse/_build/' + wid + '/capture.png';
+					}
+				} else {
+					cimg.src = 'warehouse/_build/' + wid + '/capture.png';
+				}
+				domEl.appendChild(cimg);
 			});
 		}
 	},

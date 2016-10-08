@@ -32,10 +32,14 @@ app
         }
       }
       let p = path.join(__dirname, this.path);
-      let fstat = yield stat(p);
-      if(fstat.isFile()) {
-        this.type = path.extname(p);
-        this.body = fs.createReadStream(p);
+      try {
+        let fstat = yield stat(p);
+        if(fstat.isFile()) {
+          this.type = path.extname(p);
+          this.body = fs.createReadStream(p);
+        }
+      } catch(err) {
+        // eh
       }
     }
   });

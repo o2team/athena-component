@@ -14,7 +14,7 @@
 
 ## 前端页面展示
 
-![site-capture](_capture/site-capture2.png)
+![site-capture](_capture/site-capture3.png)
 
 ## 部署指引
 
