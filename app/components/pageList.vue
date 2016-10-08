@@ -429,6 +429,7 @@ export default {
 		cacheImg: function() {
 			$('[data-cimg]').each(function(index, domEl) {
 				var wid = $(this).data('cimg');
+				$(this).removeAttr('data-cimg');
 				var cimg = document.createElement('img');
 				var canvas = document.createElement('canvas');
 				cimg.onerror = function() {
@@ -443,7 +444,6 @@ export default {
 						cimg.src = lsdata.data;
 					} else {
 						cimg.onload = function() {
-							console.log(wid)
 							canvas.width = this.width;
 							canvas.height = this.height;
 							imgcontent.drawImage(this, 0, 0, this.width, this.height);
@@ -463,12 +463,12 @@ export default {
 		}
 	},
 	watch: {
-		// 'state': {
-		// 	handler: function(value, oldValue) {
-		// 		this.getWidgets();
-		// 	},
-		// 	deep: true
-		// }
+		'state': {
+			handler: function(value, oldValue) {
+				this.cacheImg();
+			},
+			deep: true
+		}
 	}
 }
 </script>
