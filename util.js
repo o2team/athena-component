@@ -38,6 +38,7 @@ exports.unzipWidget = function (id) {
 		if(!id) { reject('没有提供组件ID'); return; }
 
 		// 组件路径
+		let widgetPath = path.join( conf.warehouse, id );
 		let widgetTempPath = path.join(conf.warehouse, '_temp', id);
 		try {
 		  fs.accessSync( widgetTempPath );
@@ -51,8 +52,8 @@ exports.unzipWidget = function (id) {
 		  	return;
 		  }
 		  // 解压缩组件
-			let readStream = fs.createReadStream( path.join( conf.warehouse, id ) );
-			let writeStream = fstream.Writer( widgetTempPath );
+			let readStream = fs.createReadStream(widgetPath);
+			let writeStream = fstream.Writer(widgetTempPath);
 			readStream
 			  .pipe(unzip.Parse())
 			  .pipe(writeStream);
@@ -79,10 +80,12 @@ exports.buildWidget = function (id, widget) {
 		const widgetBuiltPath = path.join(conf.warehouse, '_build', id);
 		// 编译图片路径
 		const widgetBuiltImgPath = path.join(widgetBuiltPath, 'images');
-		// 编译整合信息文件（为减少文件读写次数而生）
+		// 编译整合信息文件（为减少文件读写次数而生）（也许我还可以把它写到数据库里）
 		const widgetBuiltIntegratePath = path.join(widgetBuiltPath, 'integrate.json');
 		// 编译预览HTML路径
 		const widgetBuiltHtmlPath = path.join(widgetBuiltPath, 'index.html');
+		// 编译截图路径
+		const widgetBuiltCapturePath = path.join(widgetBuiltPath, 'capture.png');
 
 		// 如果有，直接返回
 		if(this.existsSync(widgetBuiltIntegratePath)) {
@@ -136,6 +139,8 @@ exports.buildWidget = function (id, widget) {
 		let contJsPath = path.join(widgetTempPath, widget.get('name') + '.js');
 		// 解压JSON路径
 		let contJsonPath = path.join(widgetTempPath, widget.get('name') + '.json');
+		// 解压截图文件路径（如果有）
+		let contCapturePath = path.join(widgetTempPath, 'capture.png');
 
 		// 读取组件 HTML, SCSS, CSS, JS
 		try {contHtml = fs.readFileSync(contHtmlPath).toString(); integrate.contHtml = contHtml;} catch(err) { /* DO NOTHING */ }
@@ -155,24 +160,25 @@ exports.buildWidget = function (id, widget) {
 			return;
 		}
 
-		// HTML编译，变量在配置文件的data字段提供
+		// HTML编译，变量在配置文件的 dataList/data 字段提供
 		contHtml = contHtml.replace('<% widget.scriptStart() %>', '').replace('<% widget.scriptEnd() %>', '');
 		let manualData;
 		try {
-			let reg = '(/\\\*([^*]|[\\\r\\\n]|(\\\*+([^*/]|[\\\r\\\n])))*\\\*+/)|(//.*)';
-			let exp = new RegExp(reg, 'g');
-			contJson = contJson.replace(exp, '');
+			// 清除配置文件中的注释
+			let regExp = new RegExp('(/\\\*([^*]|[\\\r\\\n]|(\\\*+([^*/]|[\\\r\\\n])))*\\\*+/)|(//.*)', 'g');
+			contJson = contJson.replace(regExp, '');
 			let wconf = JSON.parse(contJson);
 			let wdata = wconf.data;
 			let wdataList = wconf.dataList;
 			if(wdataList instanceof Array && wdataList.length>0) {
 				manualData = wdataList;
-			} else if(wdata) {
+			} else if (wdata) {
 				manualData = [wdata];
 			} else {
+				// 因为至少至少要有一次无参数编译
 				manualData = [{}];
 			}
-		} catch(err) {
+		} catch (err) {
 			console.error(err, new Date() + ' JSON parse error');
 			manualData = [{}];
 		}
@@ -180,8 +186,8 @@ exports.buildWidget = function (id, widget) {
 			integrate.contBuiltHtml = '';
 			contBuiltHtml = '';
 			manualData.forEach(function(dataItem) {
-				 contBuiltHtml = contBuiltHtml + lodash.template(contHtml)(dataItem);
-				 integrate.contBuiltHtml = contBuiltHtml;
+				contBuiltHtml = contBuiltHtml + lodash.template(contHtml)(dataItem);
+				integrate.contBuiltHtml = contBuiltHtml;
 			});
 		} catch(err) {
 		  console.error('Tmpl Compile failed：' + err);
@@ -230,13 +236,21 @@ ${contBuiltHtml}
 		reader.on('error', function () { rollback(); })
 		writer.on('close', function () { });
 		
-		// 网页截图
-		let instance = await phantom.create(['--ignore-ssl-errors=true', '--local-to-remote-url-access=true']);
-		let page = await instance.createPage();
-		await page.property('viewportSize', {width: 375, height: 375});
-		await page.open('file:///' + path.resolve(`${conf.warehouse}/_build/${id}/index.html`));
-		await page.render(`${conf.warehouse}/_build/${id}/capture.png`);
-		instance.exit();
+		// 网页截图，如果用户自己提供了截图就不自动截图了
+		if(this.existsSync(contCapturePath)) {
+			fse.copy(contCapturePath, widgetBuiltCapturePath, function (err) {
+				if (err) {
+					console.error(err);
+				}
+			})
+		} else {
+			let instance = await phantom.create(['--ignore-ssl-errors=true', '--local-to-remote-url-access=true']);
+			let page = await instance.createPage();
+			await page.property('viewportSize', {width: 375, height: 375});
+			await page.open('file:///' + path.resolve(`${conf.warehouse}/_build/${id}/index.html`));
+			await page.render(widgetBuiltCapturePath);
+			instance.exit();
+		}
 	});
 }
 

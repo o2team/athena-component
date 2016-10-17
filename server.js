@@ -35,6 +35,9 @@ app
       try {
         let fstat = yield stat(p);
         if(fstat.isFile()) {
+          // this.set('Cache-Control', 'max-age=2592000');
+          // this.set('Etag', '2344444');
+          // this.set('Expires', 'Sat, 08 Oct 2016 11:25:39 GMT');
           this.type = path.extname(p);
           this.body = fs.createReadStream(p);
         }

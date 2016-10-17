@@ -287,6 +287,7 @@
 			<li v-for="item in wlist | filterBy state.searchName in 'attributes.name' | filterBy state.classify in 'attributes.classify' | filterBy state.business in 'attributes.business'" class="wlist_item">
 				<div class="wlist_item_wrap">
 					<a class="wlist_item_show" v-link="{ name:'detail', params:{id:item.id} }">
+						<!-- <img :src="'warehouse/_build/'+item.id+'/capture.png'"> -->
 						<div data-cimg="{{item.id}}"></div>
 					</a>
 					<div class="wlist_item_info">
@@ -387,8 +388,8 @@ export default {
 			query.find().then(function (results) {
   				that.wlist = results;
   				that.$nextTick(function () {
-  					that.cacheImg();
-  				});
+					that.cacheImg();
+				});
 			});
 		},
 		// 获取组件总数
@@ -429,7 +430,6 @@ export default {
 		cacheImg: function() {
 			$('[data-cimg]').each(function(index, domEl) {
 				var wid = $(this).data('cimg');
-				$(this).removeAttr('data-cimg');
 				var cimg = document.createElement('img');
 				var canvas = document.createElement('canvas');
 				cimg.onerror = function() {
@@ -444,6 +444,7 @@ export default {
 						cimg.src = lsdata.data;
 					} else {
 						cimg.onload = function() {
+							console.log(wid)
 							canvas.width = this.width;
 							canvas.height = this.height;
 							imgcontent.drawImage(this, 0, 0, this.width, this.height);
