@@ -34,35 +34,50 @@ exports.existsSync = function (pd) {
  * @param {id} <String>
  */
 exports.unzipWidget = function (id) {
-	return new Promise(function (resolve, reject) {
+	return new Promise((resolve, reject) => {
 		if(!id) { reject('没有提供组件ID'); return; }
+
+		const rollback = function () {
+			fse.remove(widgetTempPath, function(err) {
+				if(err) {console.error(err);}
+			});
+		}
 
 		// 组件路径
 		let widgetPath = path.join( conf.warehouse, id );
 		let widgetTempPath = path.join(conf.warehouse, '_temp', id);
+
+		if(this.existsSync(widgetTempPath)) {
+			resolve();
+			return;
+		}
+
 		try {
-		  fs.accessSync( widgetTempPath );
-		  resolve();
+			fs.mkdirSync( widgetTempPath );
 		} catch(err) {
-			try {
-		  	// 创建文件夹
-		  	fs.mkdirSync( widgetTempPath );
-		  } catch(err) {
-		  	reject(err);
-		  	return;
-		  }
-		  // 解压缩组件
-			let readStream = fs.createReadStream(widgetPath);
-			let writeStream = fstream.Writer(widgetTempPath);
+			reject(err);
+			return;
+		}
+
+		// 解压缩组件
+		let readStream = fs.createReadStream(widgetPath);
+		let writeStream = fstream.Writer(widgetTempPath);
+
+		try {
 			readStream
 			  .pipe(unzip.Parse())
 			  .pipe(writeStream);
 			readStream.on('error', function (err) {
 				reject(err);
+				rollback();
 			});
 			writeStream.on('close', function () {
 				resolve();
 			});
+		} catch (err) {
+			reject(err);
+			console.error(err);
+			rollback();
 		}
 	});
 }
