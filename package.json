@@ -31,7 +31,7 @@
     "mongoose": "^4.4.17",
     "node-uuid": "^1.4.7",
     "phantom": "^2.1.21",
-    "unzip": "^0.1.11"
+    "unzip": "https://github.com/AnkurMali/node-unzip.git"
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",

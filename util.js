@@ -34,7 +34,7 @@ exports.existsSync = function (pd) {
  * @param {id} <String>
  */
 exports.unzipWidget = function (id) {
-	return new Promise(function (resolve, reject) {
+	return new Promise((resolve, reject) => {
 		if(!id) { reject('没有提供组件ID'); return; }
 
 		const rollback = function () {
