@@ -22,6 +22,9 @@ module.exports = async (ctx, next) => {
   
   if(!id) { ctx.status = 404; return; }
 
+  let widgetTmpPath = path.join(conf.warehouse, '_temp', id)
+  let widgetTmpImagesPath = path.join(widgetTmpPath, 'images')
+
   // 更新计数器
   let updateCounter = function() {
     util.dumpLog(`下载组件[一键] - ${ctx.ip} -> ${id}`);
@@ -59,10 +62,11 @@ module.exports = async (ctx, next) => {
 
     let realName = widget.get('name');
     let wname = rename || realName;
+    let regExp
 
     // 重命名
     if(rename) {
-      let regExp = new RegExp(realName, 'g');
+      regExp = new RegExp(realName, 'g');
       integrate.contBuiltHtml && (integrate.contBuiltHtml = integrate.contBuiltHtml.replace(regExp, rename));
       integrate.contBuiltCss && (integrate.contBuiltCss = integrate.contBuiltCss.replace(regExp, rename));
       integrate.contCss && (integrate.contCss = integrate.contCss.replace(regExp, rename));
@@ -81,13 +85,27 @@ module.exports = async (ctx, next) => {
       archive.append(new Buffer(integrate.contJs), {name: wname + '.js'});
     }
 
-    archive
-      .bulk([{
-        expand: true,
-        cwd: path.join(conf.warehouse, '_temp', id, 'images'),
-        src: ['**', '!_build_*.css'],
-        dest: 'images'
-      }])
+    if (rename) {
+      try {
+        let files = fs.readdirSync(widgetTmpImagesPath)
+        files.forEach(function (filename) {
+          let oldPath = path.join(widgetTmpImagesPath, filename)
+          let newPath = path.join('images', filename.replace(regExp, rename))
+          archive.append(fs.createReadStream(oldPath), {name: newPath})
+        })
+      } catch (error) {
+        
+      }
+    } else {
+      archive
+        .bulk([{
+          expand: true,
+          cwd: widgetTmpImagesPath,
+          src: ['**', '!_build_*.css'],
+          dest: 'images'
+        }])
+    }
+      
     archive.finalize();
 
     ctx.set('Content-disposition','attachment;filename=' + wname + '.zip');
