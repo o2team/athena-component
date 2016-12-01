@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/o2team/athena-component#readme",
   "dependencies": {
-    "archiver": "^1.0.1",
+    "archiver": "file:plugins/archiver-1.0.1.tgz",
     "fs-extra": "^0.30.0",
     "fstream": "^1.0.10",
     "koa": "^2.0.0",
@@ -31,7 +31,7 @@
     "mongoose": "^4.4.17",
     "node-uuid": "^1.4.7",
     "phantom": "^2.1.21",
-    "unzip": "https://github.com/AnkurMali/node-unzip.git"
+    "unzip": "AnkurMali/node-unzip"
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",

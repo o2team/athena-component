@@ -255,6 +255,7 @@ ${contBuiltHtml}
 		if(this.existsSync(contCapturePath)) {
 			fse.copy(contCapturePath, widgetBuiltCapturePath, function (err) {
 				if (err) {
+					rollback();
 					console.error(err);
 				}
 			})

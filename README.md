@@ -11,6 +11,7 @@
 ## 特色功能
 
 - 后台自动截图预览
+- 多态编译
 
 ## 前端页面展示
 
@@ -26,8 +27,7 @@
 
 - 在centos中执行：yum install bitmap-fonts bitmap-fonts-cjk
 - 在ubuntu中执行：sudo apt-get install xfonts-wqy
-
-为了更好的截图体验，请在系统安装 `STHeiti-Light.ttc` 和 `STHeiti-Medium.ttc`
+- 安装字体 `STHeiti-Light.ttc` 和 `STHeiti-Medium.ttc`
 
 ``` bash
 git clone https://github.com/o2team/athena-component.git
@@ -60,28 +60,6 @@ npm install
 - **后端配置**
 
 	ac-config.js，主要是端口与 `Leancloud` 配置项
-
-- **hack修改** （现在用不上了，重命名的工作已经交给客户端）
-
-	archiver 的 on('entry') 触发前时的状态已经是 `finalize:true`，即已经添加到压缩文件里了，但我们需要在文件添加到队列前重命名文件，因此在 `./node_modules/archiver/lib/core.js` 搜索 `Archiver.prototype._append = function(filepath, data)`，在它里面第一行添加 `this.onBeforeAppend && this.onBeforeAppend(filepath, data);`，如下：
-	
-	``` javascript
-	Archiver.prototype._append = function(filepath, data) {
-		this.onBeforeAppend && this.onBeforeAppend(filepath, data);
-		/* ... */
-	};
-	```
-	
-	如此，就可以在自己代码中自定义：
-	
-	``` javascript
-	archive.onBeforeAppend = function(filePath, data) {
-		// Do something. 这里是重命名
-		data.name = new Date().getTime().toString();
-	}
-	```
-	
-	后续：其实做到像 `on('beforeAppend', function() {})` 这样写，但还没摸透它，就酱
 
 - **后端开发 ./ -> 运行后访问：http://localhost**
 
