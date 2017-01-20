@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const unzip = require('unzip');
 const AV = require('leancloud-storage');
-const conf = require('../ac-config.js');
+const conf = require('../config/config.js');
 const business = require('./business');
 const util = require('../util.js');
 
@@ -24,7 +24,7 @@ module.exports = async (ctx, next) => {
 	let desc = body.description;
 	let business = body.business;
 	let classify = body.classify;
-	
+
 	let widget = ctx.req.file;
 
 	if(!appId || !moduleId || !platform || !author || !widget) {
@@ -32,9 +32,9 @@ module.exports = async (ctx, next) => {
 		ctx.body = '必要参数缺失';
 		return;
 	}
-	
+
 	let wname = path.basename(widget.originalname, '.zip');
-		
+
 	await Promise.resolve().then(function() {
 		// 检验白名单
 		// Leancloud的单元操作并非真正的Promise，体现为异常的传递不一致
@@ -53,7 +53,7 @@ module.exports = async (ctx, next) => {
 				}
 			});
 		});
-	
+
 	}).then(function() {
 		// 指定的business是否存在
 		if(business) {
@@ -106,7 +106,7 @@ module.exports = async (ctx, next) => {
 				reject(err);
 			});
 		})
-			
+
 	}).then(function(w) {
 		// 拷贝文件到新文件夹
 		return new Promise(function(resolve, reject) {
@@ -131,12 +131,11 @@ module.exports = async (ctx, next) => {
   		util.unzipWidget( w.id )
   		.then(function() {
   			setTimeout(function() {
-// 编译组件
+        // 编译组件
   			util.buildWidget( w.id, w).catch(function(err) {
   				console.error(err);
   			});
   			}, 5000);
-  			
   		})
   		.catch(function(err) {
     		console.error(err);

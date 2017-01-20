@@ -14,8 +14,13 @@ Vue.config.debug = true;
 
 var router = new VueRouter();
 
-var APP_ID = 'ULAaHI9Bor3WJHCfORaRJ4BW-gzGzoHsz';
-var APP_KEY = 'pRYLYgk6yk3aK2G9tNOWhd46';
+// Prod
+var APP_ID = 'ULAaHI9Bor3WJHCfORaRJ4BW-gzGzoHsz'
+var APP_KEY = 'pRYLYgk6yk3aK2G9tNOWhd46'
+// Dev
+var APP_ID = 'au4n3kqk359vDNoUWJHe3pJ2-gzGzoHsz'
+var APP_KEY = 'k7F8i5aRninXmrUpdR5CCEBI'
+
 AV.init({
   appId: APP_ID,
   appKey: APP_KEY
@@ -88,7 +93,7 @@ router.beforeEach(function (transition) {
   Vue.nextTick(function(){
     router.app.$broadcast('Auth', currentUser);
   });
-  
+
   if (!auth) {
     transition.next();
   } else {

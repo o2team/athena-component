@@ -7,12 +7,12 @@ const unzip = require('unzip');
 const fstream = require('fstream');
 const lodash = require('lodash');
 const phantom = require('phantom');
-const conf = require('./ac-config.js');
+const conf = require('./config/config.js');
 
 function getDate () {
   let ts = new Date();
-  return ts.getFullYear() + '-' + 
-    ('0' + (ts.getMonth() + 1)).slice(-2) + '-' + 
+  return ts.getFullYear() + '-' +
+    ('0' + (ts.getMonth() + 1)).slice(-2) + '-' +
     ('0' + (ts.getDate() + 1)).slice(-2) + ' ' +
     ('0' + ts.getHours()).slice(-2) + ':' +
     ('0' + ts.getMinutes()).slice(-2) + ':' +
@@ -164,7 +164,7 @@ exports.buildWidget = function (id, widget) {
 		try {contCss = fs.readFileSync(contCssPath).toString(); integrate.contCss = contCss;} catch(err) { /* DO NOTHING */ }
 		try {contJs = fs.readFileSync(contJsPath).toString(); integrate.contJs = contJs;} catch(err) { /* DO NOTHING */ }
 		try {contJson = fs.readFileSync(contJsonPath).toString(); integrate.contJson = contJson;} catch(err) { /* DO NOTHING */ }
-		
+
 		// 如果没有HTML就没必要编译
 		if(!contHtml) {
 			if(!writeIntegrate(integrate)) {
@@ -203,7 +203,7 @@ exports.buildWidget = function (id, widget) {
 			manualData.forEach(function(dataItem) {
 				contBuiltHtml = contBuiltHtml + lodash.template(contHtml)(dataItem);
 				integrate.contBuiltHtml = contBuiltHtml;
-			});
+			})
 		} catch(err) {
 		  console.error('模板渲染错误：' + err);
 		}
@@ -216,7 +216,7 @@ exports.buildWidget = function (id, widget) {
 			rollback();
 			return;
 		}
-		
+
 		// 写预览HTML文件
 		let commonstyle = conf.tpl[`css${widget.get('platform')}`] || '';
 		let iframe = `<!DOCTYPE html>
@@ -243,14 +243,14 @@ ${contBuiltHtml}
 			rollback(err);
 			return;
 		}
-		
+
 		// 复制图片
 		let reader = fstream.Reader(widgetTempImgPath);
 		let writer = fstream.Writer(widgetBuiltImgPath);
 		reader.pipe(writer);
 		reader.on('error', function () { rollback(); })
 		writer.on('close', function () { });
-		
+
 		// 网页截图，如果用户自己提供了截图就不自动截图了
 		if(this.existsSync(contCapturePath)) {
 			fse.copy(contCapturePath, widgetBuiltCapturePath, function (err) {

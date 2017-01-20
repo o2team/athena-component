@@ -1,6 +1,6 @@
 const
 	mongoose = require('mongoose'),
-	conf = require('./ac-config.js');
+	conf = require('./config/config.js');
 
 mongoose.connect(conf.mongodb.uri, conf.mongodb.options);
 var Schema = mongoose.Schema;

@@ -6,7 +6,7 @@ const unzip = require('unzip');
 const fstream = require('fstream');
 const lodash = require('lodash');
 const AV = require('leancloud-storage');
-const conf = require('../ac-config.js');
+const conf = require('../config/config.js');
 const util = require('../util.js');
 
 const APP_ID = conf.leancloud.APP_ID;
@@ -18,13 +18,13 @@ AV.init({
 
 module.exports = async (ctx, next) => {
   let widget;
-  
+
   let id = ctx.request.query.id;
-  
+
   if(!id) { ctx.status = 404; return; }
-  
+
   // util.dumpLog(`访问组件 - ${ctx.ip} -> ${id}`);
-  
+
   // 查找组件
   await new Promise(function(resolve, reject) {
     let query = new AV.Query('Widget');
@@ -38,12 +38,12 @@ module.exports = async (ctx, next) => {
 
   // 组件路径
   let widgetTempPath = path.join(conf.warehouse, '_temp', widget.id);
-  
+
   // 解压文件
   await util.unzipWidget( widget.id ).catch(function(err) {
     console.error(err);
   });
-  
+
   // 编译组件
   await util.buildWidget( widget.id, widget)
   .then(function(integrate) {

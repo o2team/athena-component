@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 const AV = require('leancloud-storage');
-const conf = require('../ac-config.js');
+const conf = require('../config/config.js');
 const util = require('../util.js');
 
 const APP_ID = conf.leancloud.APP_ID;
@@ -19,7 +19,7 @@ module.exports = async (ctx, next) => {
   let rename = ctx.params.rename ? ctx.params.rename.trim() : '';
 
   let widget;
-  
+
   if(!id) { ctx.status = 404; return; }
 
   let widgetTmpPath = path.join(conf.warehouse, '_temp', id)
@@ -28,7 +28,7 @@ module.exports = async (ctx, next) => {
   // 更新计数器
   let updateCounter = function() {
     util.dumpLog(`下载组件[一键] - ${ctx.ip} -> ${id}`);
-    
+
     let w = AV.Object.createWithoutData('Widget', id);
     w.increment('pullTimes', 1);
     // w.fetchWhenSave(true);
@@ -38,7 +38,7 @@ module.exports = async (ctx, next) => {
       console.log(err)
     });
   }
-  
+
   await new Promise(function(resolve, reject) {
     new AV.Query('Widget').get(id).then(function (w) {
       widget = w;
@@ -52,7 +52,7 @@ module.exports = async (ctx, next) => {
     return util.buildWidget( widget.id, widget);
   }).then(function (integrate) {
     let archive = archiver('zip');
-    
+
     archive.on('error', function(err) {
       throw err;
     });
@@ -94,7 +94,7 @@ module.exports = async (ctx, next) => {
           archive.append(fs.createReadStream(oldPath), {name: newPath})
         })
       } catch (error) {
-        
+
       }
     } else {
       archive
@@ -105,7 +105,7 @@ module.exports = async (ctx, next) => {
           dest: 'images'
         }])
     }
-      
+
     archive.finalize();
 
     ctx.set('Content-disposition','attachment;filename=' + wname + '.zip');
