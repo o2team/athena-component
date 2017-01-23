@@ -6,6 +6,8 @@
 
 > Athena之父增加了本地的单组件编译功能，所以组件平台的编译将进行最大幅度的精简，且要解决一些稳定使用之后暴露出来的问题，而且，在文哥带领下经历过一轮漫长又艰巨的Vue+Vuex+Webpack业务实践之后，更加感受到组件平台古老的代码方式该有点改变了……敬请期待
 
+> 嘿嘿，据传小编现在要大改项目，AC要用上VUEX了，马上进入电气时代
+
 * * *
 
 ## 技术组成
@@ -49,39 +51,39 @@ npm install
 
 - **前端配置**
 
-	修改 `main.js` 里 `Leancloud` 的配置项， 
+  修改 `main.js` 里 `Leancloud` 的配置项， 
 
 - **前端调试 ./app -> 运行后访问：http://localhost:8080**
 
-	``` bash
-	npm run dev
-	```
+  ``` bash
+  npm run dev
+  ```
 
 - **前端编译 ./app**
 
-	``` bash
-	npm run build
-	```
+  ``` bash
+  npm run build
+  ```
 
 - **后端配置**
 
-	ac-config.js，主要是端口与 `Leancloud` 配置项
+  ac-config.js，主要是端口与 `Leancloud` 配置项
 
 - **后端开发 ./ -> 运行后访问：http://localhost**
 
-	``` bash
-	npm start
-	```
+  ``` bash
+  npm start
+  ```
 
 - **前后端双服务联调指引**
 
-	（待更新）
+  （待更新）
 
 - **清空組件緩存**
 
-	``` bash
-	babel-node cleanup
-	```
+  ``` bash
+  babel-node cleanup
+  ```
 
 ## API
 
@@ -180,38 +182,38 @@ npm install
 
 - _Role，添加一角色 `admin`
 - _User，添加一用户 `admin` 并关联至 _Role admin
-	- username
-	- password
+  - username
+  - password
 - Business，创建（限制写入）
-	- !name
+  - !name
 - Classify，创建（限制写入），固定数据 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴+其他
-	- !name
+  - !name
 - Widget，创建（无限制），限制 _Role admin: delete
-	- !name
-	- !author
-	- !appId
-	- !moduleId
-	- !platform (default h5)
-	- !pullTimes (Number default 0)
-	- desc
-	- tags (Array)
-	- business (Pointer -> Business)
-	- classify (Pointer -> Classify)
-	- state (Number default 1) 状态，0=已删除
+  - !name
+  - !author
+  - !appId
+  - !moduleId
+  - !platform (default h5)
+  - !pullTimes (Number default 0)
+  - desc
+  - tags (Array)
+  - business (Pointer -> Business)
+  - classify (Pointer -> Classify)
+  - state (Number default 1) 状态，0=已删除
 - Account，创建（限制写入），赋予 _Role admin: create, delete, update
-	- !name
+  - !name
 
 ## 上传组件规范
 
 （待确认）
 
 - 全部或部分：
-	- 1个 images 文件夹 + N个图片文件
-	- 1个 HTML 文件
-	- 1个 CSS / SCSS 文件，如同时存在，SCSS 优先，CSS 被忽略，目前只支持预处理器 `SCSS`
-	- 1个 Javascript 文件
-	- 1个 JSON 配置文件（必需）
-	- 1个 capture.png 截图文件（可选）
+  - 1个 images 文件夹 + N个图片文件
+  - 1个 HTML 文件
+  - 1个 CSS / SCSS 文件，如同时存在，SCSS 优先，CSS 被忽略，目前只支持预处理器 `SCSS`
+  - 1个 Javascript 文件
+  - 1个 JSON 配置文件（必需）
+  - 1个 capture.png 截图文件（可选）
 - 不包含外层文件夹，无组件依赖
 - 除图片文件，所有文件名跟组件名一致
 - 组件命名务必要有一定的复杂度，避免跟CSS关键字、JS关键字、HTML标签相同，因为组件的重命名为纯粹的字符串替换

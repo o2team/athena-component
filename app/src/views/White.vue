@@ -16,7 +16,7 @@
 					<a class="white_item_button del" @click="delAccount(item.id, $index)" href="javascript:;">删除</a>
 				</td>
 			</tr>
-			
+
 			<tr class="white_item">
 				<td>
 					<input class="white_item_input" type="text" v-model="addAccountName" placeholder="用户名">
@@ -30,49 +30,6 @@
 	</table>
 </div>
 </template>
-
-<style lang="sass">
-.white_table {
-	width: 100%; table-layout: fixed;
-	thead {
-		border-bottom: 2px solid #ccc;
-		th {padding: 10px 10px; text-align: left;}
-	}
-}
-.white_item {
-	height:50px; border-bottom: 1px solid #ccc;
-	td {
-		padding:0 10px;
-	}
-	.white_item_button {
-		display: inline-block;
-		padding: 0 20px;
-		height: 25px; line-height: 25px;
-		background: transparent; border:0; border-radius:3px; letter-spacing: 1px; cursor: pointer;
-		&.del {
-			background: #E34231; color:#fff;
-			&:hover {background: #E65647;}
-		}
-		&.add {
-			background: #009A61; color:#fff;
-			&:hover {background: #00B371;}
-		}
-	}
-	.white_item_input {
-		box-sizing: content-box;
-		padding: 0;
-		width: 100%; height: 30px;
-		background-color: transparent;
-		border: none; border-bottom: 1px solid #9e9e9e;
-		border-radius: 0; outline: none; box-shadow: none;
-		transition: all 0.3s;
-		&:focus {
-			border-bottom: 1px solid #26a69a;
-			box-shadow: 0 1px 0 0 #26a69a;
-		}
-	}
-}
-</style>
 
 <script>
 export default {
@@ -126,3 +83,46 @@ export default {
 	}
 }
 </script>
+
+<style lang="sass">
+.white_table {
+  width: 100%; table-layout: fixed;
+  thead {
+    border-bottom: 2px solid #ccc;
+    th {padding: 10px 10px; text-align: left;}
+  }
+}
+.white_item {
+  height:50px; border-bottom: 1px solid #ccc;
+  td {
+    padding:0 10px;
+  }
+  .white_item_button {
+    display: inline-block;
+    padding: 0 20px;
+    height: 25px; line-height: 25px;
+    background: transparent; border:0; border-radius:3px; letter-spacing: 1px; cursor: pointer;
+    &.del {
+      background: #E34231; color:#fff;
+      &:hover {background: #E65647;}
+    }
+    &.add {
+      background: #009A61; color:#fff;
+      &:hover {background: #00B371;}
+    }
+  }
+  .white_item_input {
+    box-sizing: content-box;
+    padding: 0;
+    width: 100%; height: 30px;
+    background-color: transparent;
+    border: none; border-bottom: 1px solid #9e9e9e;
+    border-radius: 0; outline: none; box-shadow: none;
+    transition: all 0.3s;
+    &:focus {
+      border-bottom: 1px solid #26a69a;
+      box-shadow: 0 1px 0 0 #26a69a;
+    }
+  }
+}
+</style>

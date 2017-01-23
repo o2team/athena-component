@@ -29,8 +29,8 @@ module.exports = async (ctx, next) => {
   await new Promise(function(resolve, reject) {
     let query = new AV.Query('Widget');
     query.get(id).then(function (data) {
-      widget = data;
-      resolve();
+      widget = data
+      resolve()
     }, function (err) {
       console.error(err);
     });
