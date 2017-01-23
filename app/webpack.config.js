@@ -1,7 +1,10 @@
-var path = require('path');
+const path = require('path')
 
 module.exports = {
-  entry: ['./main.js'],
+  context: __dirname,
+  entry: {
+    app: './src/app.js'
+  },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -9,14 +12,23 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.vue$/, loader: 'vue' },
-      { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.scss$/, loader: 'style!css!sass' },
-      { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192' }
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.scss$/,
+        loader: 'style!css!sass'
+      },
+      {
+        test: /\.(png|jpg)$/,
+        loader: 'url-loader'
+      }
     ]
-  },
-  babel: {
-    presets: ['es2015', 'stage-0'],
-    plugins: ['transform-runtime']
   }
 }

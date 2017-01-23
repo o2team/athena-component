@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const fse = require('fs-extra');
 const AV = require('leancloud-storage');
-const conf = require('./ac-config.js');
+const conf = require('./config/config.js');
 const util = require('./util');
 
 const APP_ID = conf.leancloud.APP_ID;

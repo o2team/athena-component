@@ -1,6 +1,6 @@
 var fs = require('fs'),
 	path = require('path')
-	conf = require('./ac-config.js');
+	conf = require('./config/config.js');
 
 var fdList = [
 	conf.warehouse,

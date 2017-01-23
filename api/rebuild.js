@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const fse = require('fs-extra');
 const AV = require('leancloud-storage');
-const conf = require('../ac-config.js');
+const conf = require('../config/config.js');
 const util = require('../util');
 
 const APP_ID = conf.leancloud.APP_ID;
@@ -20,7 +20,7 @@ const wTemp = path.join(conf.warehouse, '_temp');
 module.exports = async (ctx, next) => {
 	let widget;
 	let id = ctx.request.query.id;
-	
+
 	new Promise(function(resolve, reject) {
 		new AV.Query('Widget').notEqualTo('state', 0).get(f).then(function (w) {
 			widget = w;
