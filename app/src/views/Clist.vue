@@ -33,7 +33,8 @@
           <router-link
             :to="{name: 'detail', params: {id:item.id}}"
             class="wlist_item_show">
-            <img v-lazy="'http://acp.aotu.io/warehouse/_build/' + item.id + '/capture.png'">
+            <!-- <img v-lazy="'http://acp.aotu.io/warehouse/_build/' + item.id + '/capture.png'"> -->
+            <img v-lazy="'/warehouse/_build/' + item.id + '/capture.png'">
           </router-link>
           <div class="wlist_item_info">
             <div class="wlist_item_name">{{item.attributes.name}}</div>
@@ -46,6 +47,8 @@
         <div class="wlist_item_del" v-show="isManageMode" @click="delWidget(item.id, index)"><div class="wlist_item_del_btn">删除</div></div>
       </li>
     </ul>
+
+    <div v-show="!pageCanload" class="clist_nomore">没有更多的组件了……</div>
   </div>
 
   <div
@@ -73,6 +76,7 @@ export default {
       pageIndex: 0,
       pagePer: 20,
       pageCount: 0,
+      pageCanload: true,
 
       // 管理模式
       isManageMode: false,
@@ -93,13 +97,13 @@ export default {
     new AV.Query('Business').find().then((results) => {
       this.blist = results
 
-      // 计数，有点蛋疼，里层异步赋值不刷新视图？
       this.blist.forEach((e, i) => {
-        var query = new AV.Query('Widget')
+        let query = new AV.Query('Widget')
         query.notEqualTo('state', 0)
         query.equalTo('business', e)
         query.count().then((count) => {
-          this.blist.$set(i, Object.assign({}, e, {count:count}))
+          // 触发数组更新
+          this.$set(this.blist, i, Object.assign({}, e, {count:count}))
         })
       })
     })
@@ -112,13 +116,20 @@ export default {
   methods: {
     resetPage () {
       this.pageIndex = 0
+      this.pageCanload = true
     },
     changeStateBusiness (id) {
+      if (id === this.stateBusiness) {
+        return
+      }
       this.resetPage()
       this.stateBusiness = id
       this.getWidgets()
     },
     changeStateClassify (id) {
+      if (id === this.stateClassify) {
+        return
+      }
       this.resetPage()
       this.stateClassify = id
       this.getWidgets()
@@ -126,7 +137,7 @@ export default {
     // 删除组件
     delWidget (itemId, index) {
       if (confirm('确定要删除该组件吗')) {
-        var w = AV.Object.createWithoutData('Widget', itemId)
+        let w = AV.Object.createWithoutData('Widget', itemId)
         w.set('state', 0)
         w.save().then((data) => {
           _POP_.toast('删除成功')
@@ -142,7 +153,10 @@ export default {
     },
     // 获取组件
     getWidgets () {
-      var query = new AV.Query('Widget')
+      if (!this.pageCanload) {
+        return
+      }
+      let query = new AV.Query('Widget')
       query.descending('createdAt')
       query.notEqualTo('state', 0)
       if (this.stateBusiness) {
@@ -159,6 +173,9 @@ export default {
       query.limit(this.pagePer)
       query.skip(this.pageIndex * this.pagePer)
       query.find().then((results) => {
+        if (results.length === 0) {
+          this.pageCanload = false
+        }
         if (this.pageIndex > 0) {
           this.wlist = this.wlist.concat(results)
         } else {
@@ -178,7 +195,7 @@ export default {
         return
       }
       // 存储TAG
-      var w = new AV.Object.createWithoutData('Widget', item.id)
+      let w = new AV.Object.createWithoutData('Widget', item.id)
       w.addUnique('tags', [newTagName])
       w.save().then((w) => {
         item.attributes.tags.push(newTagName)
@@ -189,7 +206,7 @@ export default {
       })
     },
     removeTag (item, y, index) {
-      var w = AV.Object.createWithoutData('Widget', item.id)
+      let w = AV.Object.createWithoutData('Widget', item.id)
       w.remove('tags', [y])
       w.save().then((success) => {
         item.attributes.tags.splice(index, 1)
@@ -409,6 +426,11 @@ export default {
       background: #db2828;
     }
   }
+}
+.clist_nomore {
+  padding: 60px 0 50px;
+  font-size: 16px;
+  text-align: center;
 }
 
 .clist_manage {

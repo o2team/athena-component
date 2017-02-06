@@ -12,7 +12,8 @@ import App from './App.vue'
 
 Vue.use(VueResource)
 Vue.use(VueLazyload, {
-  loading: 'src/images/loading.gif'
+  loading: 'src/images/loading.gif',
+  attempt: 2
 })
 Vue.mixin(mixins)
 

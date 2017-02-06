@@ -1,4 +1,4 @@
-export default function ngLikeFilter (arr, property, equalTo) {
+module.exports = function ngLikeFilter (arr, property, equalTo) {
   if (!property || !equalTo) {
     return arr
   }

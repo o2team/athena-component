@@ -1,7 +1,7 @@
 const fmtDateNormal = require('./fmtDateNormal')
 const ngLikeFilter = require('./ngLikeFilter')
 
-export default {
+module.exports = {
   fmtDateNormal,
   ngLikeFilter
 }

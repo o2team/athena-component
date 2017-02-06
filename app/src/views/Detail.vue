@@ -71,27 +71,25 @@ export default {
 		}
 	},
 	mounted () {
-		let that = this
-		var domContHtmlDetailCodeTitTabs = $('.conthtml .detail_code_tit_tab')
-		var domContHtmlBuilt = $('.conthtml_built')
-		var domContHtmlRaw = $('.conthtml_raw')
-		var domContScssDetailCodeTitTabs = $('.contscss .detail_code_tit_tab')
-		var domContScssBuilt = $('.contscss_built')
-		var domContScssRaw = $('.contscss_raw')
-    console.log(this.$route.params.id)
-  	this.$http.get('api/detail?id='+this.$route.params.id).then(function (res) {
+		let domContHtmlDetailCodeTitTabs = $('.conthtml .detail_code_tit_tab')
+		let domContHtmlBuilt = $('.conthtml_built')
+		let domContHtmlRaw = $('.conthtml_raw')
+		let domContScssDetailCodeTitTabs = $('.contscss .detail_code_tit_tab')
+		let domContScssBuilt = $('.contscss_built')
+		let domContScssRaw = $('.contscss_raw')
+  	this.$http.get('api/detail?id='+this.$route.params.id).then((res) => {
   		let data = res.data
-			if(data.contHtml) {
-				that.$data.previewurl = `warehouse/_build/${ data.widget.objectId }/index.html`
-				that.$data.contHtml = data.contHtml
-				that.$data.contBuiltHtml = data.contBuiltHtml
+			if (data.contHtml) {
+				this.previewurl = `warehouse/_build/${ data.widget.objectId }/index.html`
+				this.contHtml = data.contHtml
+				this.contBuiltHtml = data.contBuiltHtml
 
 				// 初始化 HTML Tab
 				domContHtmlBuilt.show()
 				domContHtmlRaw.hide()
 				domContHtmlDetailCodeTitTabs.eq(0).addClass('active')
 				domContHtmlDetailCodeTitTabs.click(function() {
-					var index = $(this).index()
+					let index = $(this).index()
 					if(index===0) {
 						domContHtmlBuilt.show()
 						domContHtmlRaw.hide()
@@ -106,15 +104,15 @@ export default {
 				})
 			}
 			if(data.contScss) {
-				that.$data.contScss = data.contScss
-				that.$data.contBuiltCss = data.contBuiltCss
+				this.contScss = data.contScss
+				this.contBuiltCss = data.contBuiltCss
 
 				// 初始化 SCSS Tab
 				domContScssBuilt.show()
 				domContScssRaw.hide()
 				domContScssDetailCodeTitTabs.eq(0).addClass('active')
 				domContScssDetailCodeTitTabs.click(function() {
-					var index = $(this).index()
+					let index = $(this).index()
 					if(index===0) {
 						domContScssBuilt.show()
 						domContScssRaw.hide()
@@ -129,22 +127,22 @@ export default {
 				})
 			}
 			if(!data.contScss && data.contCss) {
-				that.$data.contCss = data.contCss
+				this.contCss = data.contCss
 			}
 			if(data.contJs) {
-				that.$data.contJs = data.contJs
+				this.contJs = data.contJs
 			}
 			if(data.contJson) {
-				that.$data.contJson = data.contJson
+				this.contJson = data.contJson
 			}
 
 			// 等待页面更新
-			setTimeout(function() {
-				SyntaxHighlighter.highlight()
-			}, 0)
+			// this.$nextTick(() => {
+			// 	SyntaxHighlighter.highlight()
+			// })
 
-			that.$data.widget = data.widget
-		}, function(data, status, request) {
+			this.widget = data.widget
+		}, (data, status, request) => {
       console.log('fail' + status + "," + request)
     })
 	}
@@ -156,7 +154,10 @@ export default {
 .syntaxhighlighter {padding: 1px;}
 
 .pdetail {
-  margin: 0 auto; max-width: 1400px;overflow:hidden;
+  margin: 0 auto;
+  max-width: 1400px;
+  overflow:hidden;
+  min-height: 850px;
   .pdetail_info {
     margin: 30px 0 0;
     .pdetail_info_name {padding: 10px 0; font-size: 24px; border-bottom: 1px solid #e4e4e4; text-align: center;}
