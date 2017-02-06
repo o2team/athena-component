@@ -35,6 +35,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "vue-lazyload": "^1.0.0-rc9",
     "vue-resource": "^0.7.0",
     "vuex": "^2.1.1"
   }

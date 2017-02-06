@@ -1,52 +1,53 @@
-'use strict';
+const fs = require('fs')
+const path = require('path')
+const unzip = require('unzip')
+const fstream = require('fstream')
+const lodash = require('lodash')
+const AV = require('leancloud-storage')
+const conf = require('../config/config.js')
+const util = require('../util.js')
 
-const fs = require('fs');
-const path = require('path');
-const unzip = require('unzip');
-const fstream = require('fstream');
-const lodash = require('lodash');
-const AV = require('leancloud-storage');
-const conf = require('../config/config.js');
-const util = require('../util.js');
-
-const APP_ID = conf.leancloud.APP_ID;
-const APP_KEY = conf.leancloud.APP_KEY;
+const APP_ID = conf.leancloud.APP_ID
+const APP_KEY = conf.leancloud.APP_KEY
 AV.init({
   appId: APP_ID,
   appKey: APP_KEY
-});
+})
 
 module.exports = async (ctx, next) => {
-  let widget;
+  let widget
 
-  let id = ctx.request.query.id;
+  let id = ctx.request.query.id
 
-  if(!id) { ctx.status = 404; return; }
+  if (!id) {
+    ctx.status = 404
+    return
+  }
 
-  // util.dumpLog(`访问组件 - ${ctx.ip} -> ${id}`);
+  // util.dumpLog(`访问组件 - ${ctx.ip} -> ${id}`)
 
   // 查找组件
-  await new Promise(function(resolve, reject) {
-    let query = new AV.Query('Widget');
-    query.get(id).then(function (data) {
+  await new Promise((resolve, reject) => {
+    let query = new AV.Query('Widget')
+    query.get(id).then((data) => {
       widget = data
       resolve()
-    }, function (err) {
-      console.error(err);
-    });
-  });
+    }, (err) => {
+      console.error(err)
+    })
+  })
 
   // 组件路径
-  let widgetTempPath = path.join(conf.warehouse, '_temp', widget.id);
+  let widgetTempPath = path.join(conf.warehouse, '_temp', widget.id)
 
   // 解压文件
-  await util.unzipWidget( widget.id ).catch(function(err) {
-    console.error(err);
-  });
+  await util.unzipWidget( widget.id ).catch((err) => {
+    console.error(err)
+  })
 
   // 编译组件
   await util.buildWidget( widget.id, widget)
-  .then(function(integrate) {
+  .then((integrate) => {
     // Response
     ctx.body = {
       contHtml: integrate.contHtml,
@@ -59,8 +60,8 @@ module.exports = async (ctx, next) => {
       widget: widget
     }
   })
-  .catch(function(err) {
-    console.error(err);
-    ctx.status = 404;
-  });
+  .catch((err) => {
+    console.error(err)
+    ctx.status = 404
+  })
 }
