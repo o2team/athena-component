@@ -1,4 +1,4 @@
-export default function fmtDateNormal (text) {
+module.exports = function fmtDateNormal (text) {
   var past = new Date(text)
 
   if (past === 'Invalid Date') {

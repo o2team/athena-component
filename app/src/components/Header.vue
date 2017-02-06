@@ -11,12 +11,14 @@
 	<nav class="mod_header_nav">
 		<div class="mod_header_nav_wrap">
 			<router-link
-        :to="{path: '/list', name:'list', activeClass: 'active'}"
+        :to="{path: '/list', name:'list'}"
+        active-class="active"
         class="mod_header_nav_item">
         <div class="mod_header_nav_item">组件</div>
       </router-link>
 			<router-link
-        :to="{path: '/white', name:'white', activeClass: 'active'}"
+        :to="{path: '/white', name:'white'}"
+        active-class="active"
         v-show="sessionUser"
         class="mod_header_nav_item">
         <div class="mod_header_nav_item">白名单</div>
@@ -153,7 +155,7 @@ $headerHeight: 70px;
   div {
     display: block;
     padding: 0 24px;
-    line-height: $headerHeight;
+    line-height: $headerHeight - 2px;
     font-size: 16px;
     opacity: .8;
     color: #6190E8;
