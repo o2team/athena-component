@@ -6,7 +6,7 @@
 
 > Athena之父增加了本地的单组件编译功能，所以组件平台的编译将进行最大幅度的精简，且要解决一些稳定使用之后暴露出来的问题，而且，在文哥带领下经历过一轮漫长又艰巨的Vue+Vuex+Webpack业务实践之后，更加感受到组件平台古老的代码方式该有点改变了……敬请期待
 
-> 嘿嘿，据传小编现在要大改项目，AC要用上VUEX了，马上进入电气时代
+> AC要用上VUEX了，马上进入电气时代
 
 * * *
 
@@ -27,7 +27,7 @@
 
 ## 部署指引
 
-- 安装 NodeJS（>=4.5.0，前端DEV模式需要 Node 6.x）
+- 安装 NodeJS 6.x
 - 安装 phantomJS（>=2.1.1）
 - 注册 Leancloud 并配置，[Leancloud 初始化指引](#Leancloud 初始化指引)
 
@@ -42,48 +42,29 @@ git clone https://github.com/o2team/athena-component.git
 
 cd athena-component
 npm install
-npm install babel-cli -g
 node install
 
 cd app
 npm install
+npm run build
+
+cd ../
+npm start
 ```
 
-- **前端配置**
+### 前端 ./app
 
-  修改 `main.js` 里 `Leancloud` 的配置项， 
+- 前端配置：`./src/app.js`
+- 前端开发：`npm run dev`
+- 前端编译：`npm run build`
 
-- **前端调试 ./app -> 运行后访问：http://localhost:8080**
+### 后端
 
-  ``` bash
-  npm run dev
-  ```
-
-- **前端编译 ./app**
-
-  ``` bash
-  npm run build
-  ```
-
-- **后端配置**
-
-  ac-config.js，主要是端口与 `Leancloud` 配置项
-
-- **后端开发 ./ -> 运行后访问：http://localhost**
-
-  ``` bash
-  npm start
-  ```
-
-- **前后端双服务联调指引**
-
-  （待更新）
-
-- **清空組件緩存**
-
-  ``` bash
-  babel-node cleanup
-  ```
+- 后端配置：`./config/*`
+- 后端开发：`npm run dev`
+- 后端部署：`npm start`
+- 工具
+  - 清空組件緩存：`babel-node cleanup`
 
 ## API
 
