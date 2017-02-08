@@ -12,8 +12,8 @@
 
 ## 技术组成
 
-- 前端 vue+webpack
-- 后端 koa+phantomJS
+- 前端 vue2+webpack2
+- 后端 koa2+phantomJS
 - 数据存储 Leancloud
 
 ## 特色功能

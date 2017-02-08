@@ -91,6 +91,11 @@ export default {
   computed: {
   },
   mounted () {
+    let queryBusiness = this.$route.query.business
+    let queryClassify = this.$route.query.classify
+    this.stateBusiness = queryBusiness || null
+    this.stateClassify = queryClassify || null
+
     this.getWidgets()
     this.getAllWidgetsCount()
 
@@ -117,21 +122,29 @@ export default {
     resetPage () {
       this.pageIndex = 0
       this.pageCanload = true
+      let tmpQuery = {}
+      if (this.stateBusiness) {
+        tmpQuery.business = this.stateBusiness
+      }
+      if (this.stateClassify) {
+        tmpQuery.classify = this.stateClassify
+      }
+      this.$router.replace({name: 'list', query: tmpQuery})
     },
     changeStateBusiness (id) {
       if (id === this.stateBusiness) {
         return
       }
-      this.resetPage()
       this.stateBusiness = id
+      this.resetPage()
       this.getWidgets()
     },
     changeStateClassify (id) {
       if (id === this.stateClassify) {
         return
       }
-      this.resetPage()
       this.stateClassify = id
+      this.resetPage()
       this.getWidgets()
     },
     // 删除组件
