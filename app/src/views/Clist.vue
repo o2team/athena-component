@@ -30,8 +30,7 @@
         :item="item"
         :index="index"
         :isManageMode="isManageMode"
-        :delWidget="delWidget"
-        ></item>
+        :delWidget="delWidget"></item>
     </ul>
 
     <div v-show="!pageCanload" class="clist_nomore">没有更多的组件了……</div>
