@@ -75,8 +75,6 @@ export default {
       classify: []
     }
   },
-  computed: {
-  },
   mounted () {
     let queryBusiness = this.$route.query.business
     let queryClassify = this.$route.query.classify

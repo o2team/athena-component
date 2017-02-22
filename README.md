@@ -210,3 +210,23 @@ npm start
 - 组件下载安置SASS依赖
 - 组件重命名
 - autoprefix
+
+
+## 其他额
+
+SyntaxHighlighter 自定义编译
+ 
+``` bash
+gulp setup-project
+gulp build --brushes=css,javascript,sass,xml --theme=default
+```
+
+问题归档：
+
+```
+Cannot assign to read only property 'exports' of object '#<Object>'
+```
+
+[问题解决](http://www.mamicode.com/info-detail-1694072.html)
+要配对使用require和module.exports以及import和export default
+所以自定义修改了 `brush-base` 的包

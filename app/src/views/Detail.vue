@@ -55,6 +55,17 @@
 </template>
 
 <script>
+import SyntaxHighlighter, {registerBrush} from 'syntaxhighlighter'
+import brushCss from 'brush-css'
+import brushSass from 'brush-sass'
+import brushJs from 'brush-javascript'
+import brushXml from 'brush-xml'
+
+registerBrush(brushCss)
+registerBrush(brushSass)
+registerBrush(brushJs)
+registerBrush(brushXml)
+
 export default {
 	data () {
 		return {
@@ -137,9 +148,10 @@ export default {
 			}
 
 			// 等待页面更新
-			// this.$nextTick(() => {
-			// 	SyntaxHighlighter.highlight()
-			// })
+			this.$nextTick(() => {
+				SyntaxHighlighter.highlight()
+        // SyntaxHighlighter.highlight({gutter: false})
+			})
 
 			this.widget = data.widget
 		}, (data, status, request) => {
@@ -150,6 +162,8 @@ export default {
 </script>
 
 <style lang="sass">
+@import '../sass/theme';
+
 /* fix */
 .syntaxhighlighter {padding: 1px;}
 
