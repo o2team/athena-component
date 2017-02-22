@@ -24,28 +24,13 @@
     <div class="clist_main_search"><input type="text" placeholder="输入组件名搜索" v-model="stateSearchName"></div>
 
     <ul class="wlist">
-      <li
+      <item
         v-for="(item, index) in wlist"
         :key="item.id"
-        :data-id="item.id"
-        class="wlist_item">
-        <div class="wlist_item_wrap">
-          <router-link
-            :to="{name: 'detail', params: {id:item.id}}"
-            class="wlist_item_show">
-            <!-- <img v-lazy="'http://acp.aotu.io/warehouse/_build/' + item.id + '/capture.png'"> -->
-            <img v-lazy="'/warehouse/_build/' + item.id + '/capture.png'">
-          </router-link>
-          <div class="wlist_item_info">
-            <div class="wlist_item_name">{{item.attributes.name}}</div>
-            <div class="wlist_item_meta">
-              <div class="wlist_item_meta_id">{{item.id}}</div>
-              <div class="wlist_item_meta_pulltimes" title="拉取次数">{{item.attributes.pullTimes}}</div>
-            </div>
-          </div>
-        </div>
-        <div class="wlist_item_del" v-show="isManageMode" @click="delWidget(item.id, index)"><div class="wlist_item_del_btn">删除</div></div>
-      </li>
+        :item="item"
+        :index="index"
+        :isManageMode="isManageMode"
+        :delWidget="delWidget"></item>
     </ul>
 
     <div v-show="!pageCanload" class="clist_nomore">没有更多的组件了……</div>
@@ -60,10 +45,12 @@
 
 <script>
 import Sidebar from '../components/clist/Sidebar.vue'
+import Item from '../components/clist/Item.vue'
 
 export default {
   components: {
-    Sidebar
+    Sidebar,
+    Item
   },
   data () {
     return {
@@ -88,9 +75,12 @@ export default {
       classify: []
     }
   },
-  computed: {
-  },
   mounted () {
+    let queryBusiness = this.$route.query.business
+    let queryClassify = this.$route.query.classify
+    this.stateBusiness = queryBusiness || null
+    this.stateClassify = queryClassify || null
+
     this.getWidgets()
     this.getAllWidgetsCount()
 
@@ -117,21 +107,29 @@ export default {
     resetPage () {
       this.pageIndex = 0
       this.pageCanload = true
+      let tmpQuery = {}
+      if (this.stateBusiness) {
+        tmpQuery.business = this.stateBusiness
+      }
+      if (this.stateClassify) {
+        tmpQuery.classify = this.stateClassify
+      }
+      this.$router.replace({name: 'list', query: tmpQuery})
     },
     changeStateBusiness (id) {
       if (id === this.stateBusiness) {
         return
       }
-      this.resetPage()
       this.stateBusiness = id
+      this.resetPage()
       this.getWidgets()
     },
     changeStateClassify (id) {
       if (id === this.stateClassify) {
         return
       }
-      this.resetPage()
       this.stateClassify = id
+      this.resetPage()
       this.getWidgets()
     },
     // 删除组件
@@ -342,90 +340,6 @@ export default {
 .wlist {
   padding: 0 10px;
   overflow: hidden;
-}
-/* 组件项 */
-.wlist_item {
-  position: relative;
-  width: 227px;
-  float: left;
-  margin: 0 10px 10px;
-  vertical-align: top;
-  &:hover {
-    .wlist_item_wrap {
-      border: 1px solid orange;
-    }
-    .wlist_item_info {
-      -webkit-transform: translate(0, -30px); transform: translate(0, -30px);
-    }
-  }
-}
-.wlist_item_wrap {
-  height: 257px;
-  min-width: 114px;
-  max-width: 300px;
-  background: #fff;
-  border: 1px solid transparent; border-bottom: 1px solid #ccc;
-  overflow: hidden;
-  -webkit-transition: .6s ease; transition: .6s ease;
-}
-.wlist_item_show {
-  display: block;
-  height: 225px;
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAV1gAAFdYB1mtZ/QAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAXdEVYdENyZWF0aW9uIFRpbWUAMjAxNi4yLjE5feXuqAAAAElJREFUOI3t0bEJwEAMQ1EpZIzbfzAt8q9KaZEikObUyjyMbQANAZREZUTX2LzMAT4A7vYiQLY7kGQsbWutVZG6wYM04P8jHkDaCZEYwmwI7+IAAAAASUVORK5CYII=);
-  overflow: hidden;
-  img {
-    width: 100%;
-  }
-}
-.wlist_item_info {
-  height: 32px;
-  background: #fff;
-  -webkit-transition: .3s ease; transition: .3s ease;
-}
-.wlist_item_name {
-  height: 32px; line-height: 32px;
-  white-space: nowrap; word-wrap: normal; overflow: hidden; text-overflow: ellipsis;
-  text-align: center;
-}
-.wlist_item_meta {
-  padding: 0 10px;
-  height: 30px;
-  > div {
-    float: left;
-    width: 50%; height: 30px; line-height: 30px;
-  }
-}
-.wlist_item_meta_pulltimes {
-  -webkit-user-select: none;
-  user-select: none;
-  text-align: right;
-}
-.wlist_item_del {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  text-align: center;
-  cursor: pointer;
-  &:before {
-    content: '';
-    display: inline-block;
-    width: 0; height: 100%;
-    font-size: 0;
-  }
-  &:before, .wlist_item_del_btn {
-    vertical-align: middle;
-  }
-  .wlist_item_del_btn {
-    display: inline-block;
-    padding: 3px 20px;
-    border-radius: 2px;
-    background: #df3e3e;
-    color: #fff;
-    &:hover {
-      background: #db2828;
-    }
-  }
 }
 .clist_nomore {
   padding: 60px 0 50px;

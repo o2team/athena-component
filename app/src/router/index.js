@@ -6,18 +6,6 @@ import Clist from '../views/Clist.vue'
 import Detail from '../views/Detail.vue'
 import White from '../views/White.vue'
 
-// Prod
-var APP_ID = 'ULAaHI9Bor3WJHCfORaRJ4BW-gzGzoHsz'
-var APP_KEY = 'pRYLYgk6yk3aK2G9tNOWhd46'
-// Dev
-var APP_ID = 'au4n3kqk359vDNoUWJHe3pJ2-gzGzoHsz'
-var APP_KEY = 'k7F8i5aRninXmrUpdR5CCEBI'
-
-AV.init({
-  appId: APP_ID,
-  appKey: APP_KEY
-})
-
 Vue.use(Router)
 
 const router = new Router({

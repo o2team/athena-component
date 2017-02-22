@@ -35,6 +35,12 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "brush-base": "file:plugins/brush-base.zip",
+    "brush-css": "^4.0.0",
+    "brush-javascript": "^4.0.0",
+    "brush-sass": "^4.0.0",
+    "brush-xml": "^4.0.0",
+    "syntaxhighlighter": "^4.0.1",
     "vue-lazyload": "^1.0.0-rc9",
     "vue-resource": "^0.7.0",
     "vuex": "^2.1.1"
