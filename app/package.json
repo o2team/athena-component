@@ -21,6 +21,7 @@
     "babel-preset-stage-3": "^6.11.0",
     "babel-runtime": "^6.6.1",
     "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.8.5",
     "node-sass": "^3.8.0",
     "sass-loader": "^4.0.0",
@@ -31,11 +32,11 @@
     "vue-loader": "^10.0.2",
     "vue-router": "^2.1.0",
     "vue-style-loader": "^1.0.0",
-    "webpack": "^2.2.0",
+    "webpack": "^2.3.3",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "brush-base": "file:plugins/brush-base.zip",
+    "brush-base": "file:plugins/brush-base-4.0.0.tgz",
     "brush-css": "^4.0.0",
     "brush-javascript": "^4.0.0",
     "brush-sass": "^4.0.0",
