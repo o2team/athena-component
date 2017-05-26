@@ -31,12 +31,16 @@ exports.existsSync = function (pd) {
  * 解压缩组件
  * @param {id} <String>
  */
-exports.unzipWidget = function (id) {
+exports.unzipWidget = function (id, isPush) {
   return new Promise((resolve, reject) => {
     if (!id) {
       reject('没有提供组件ID')
       return
     }
+
+    // 组件路径
+    let widgetPath = path.join(conf.warehouse, id)
+    let widgetTempPath = path.join(conf.warehouse, '_temp', id)
 
     const rollback = function () {
       fse.remove(widgetTempPath, function (err) {
@@ -46,13 +50,13 @@ exports.unzipWidget = function (id) {
       })
     }
 
-    // 组件路径
-    let widgetPath = path.join(conf.warehouse, id)
-    let widgetTempPath = path.join(conf.warehouse, '_temp', id)
-
     if (this.existsSync(widgetTempPath)) {
-      resolve()
-      return
+      if (isPush) {
+        try {fse.removeSync(widgetTempPath)} catch (error) {}
+      } else {
+        resolve()
+        return
+      }
     }
 
     try {
@@ -90,7 +94,7 @@ exports.unzipWidget = function (id) {
  * @param {id} <String>
  * @param {widget} <Object> Leancloud 查询对象
  */
-exports.buildWidget = function (id, widget) {
+exports.buildWidget = function (id, widget, isPush) {
   return new Promise(async (resolve, reject) => {
     if (!id) {
       reject('没有提供组件ID')
@@ -110,8 +114,13 @@ exports.buildWidget = function (id, widget) {
 
     // 如果有，直接返回
     if (this.existsSync(widgetBuiltIntegratePath)) {
-      resolve(JSON.parse(fs.readFileSync(widgetBuiltIntegratePath).toString()))
-      return
+      if (isPush) {
+        // fse.removeSync(widgetBuiltPath)
+        try {fse.emptyDirSync(widgetBuiltPath)} catch (error) {}
+      } else {
+        resolve(JSON.parse(fs.readFileSync(widgetBuiltIntegratePath).toString()))
+        return
+      }
     }
 
     // 定义 回滚处理
@@ -231,10 +240,10 @@ exports.buildWidget = function (id, widget) {
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
 <title>Document</title>
 <style>${commonstyle}${contBuiltCss || contCss || ''}</style>
 <script>!function(){var o=768;document.write('<style id="o2HtmlFontSize"></style>');var e,t=function(){var e,t;if(document&&document.documentElement&&(e=document.documentElement.clientWidth,t=document.documentElement.clientHeight),!e||!t){if(!window.localStorage["o2-cw"]||!window.localStorage["o2-ch"])return void n();e=parseInt(window.localStorage["o2-cw"]),t=parseInt(window.localStorage["o2-ch"])}var c=o&&e>o?o/375:e/375;window.localStorage["o2-cw"]=e,window.localStorage["o2-ch"]=t,window.zoom=window.o2Zoom=c,document.getElementById("o2HtmlFontSize").innerHTML="html{font-size:"+20*c+"px;}.o2-zoom,.zoom{zoom:"+c/2+";}.o2-scale{-webkit-transform: scale("+c/2+"); transform: scale("+c/2+");}"},n=function(){e||(e=setInterval(function(){document&&document.documentElement&&document.documentElement.clientWidth&&document.documentElement.clientHeight&&(t(),clearInterval(e),e=void 0)},100))};t(),window.addEventListener("resize",t)}();</script>

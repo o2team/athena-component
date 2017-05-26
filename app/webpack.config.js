@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
   context: __dirname,
@@ -44,7 +45,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.scss$/,
+        test: /\.s[a|c]ss$/,
         loader: 'style!css!sass'
       },
       {
@@ -54,6 +55,7 @@ module.exports = {
     ]
   },
   plugins: [
+    // new ExtractTextPlugin('style.css'),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor'],
       minChunks: Infinity
