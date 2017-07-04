@@ -2,6 +2,8 @@
 
 集合组件上传、组件拉取、和组件预览功能。
 
+2017-06-26：项目数据已从 Leancloud 迁移至 Quark，组件文件也改为存储在 Quark，而不再存在文件系统中（当然编译及预览文件依然会存在文件系统）
+
 * * *
 
 > Athena之父增加了本地的单组件编译功能，所以组件平台的编译将进行最大幅度的精简，且要解决一些稳定使用之后暴露出来的问题，而且，在文哥带领下经历过一轮漫长又艰巨的Vue+Vuex+Webpack业务实践之后，更加感受到组件平台古老的代码方式该有点改变了……敬请期待
@@ -65,6 +67,13 @@ npm start
 - 后端部署：`npm start`
 - 工具
   - 清空組件緩存：`babel-node cleanup`
+
+### 凹凸手册
+
+- ssh -i ~/.ssh/QCloud_O2 aotu@xxx.xx.xxx.xxx（chmod  600  QCloud_O2）
+- ~/wwwroot/acp.aotu.io
+- git pull
+- pm2 restart xxx
 
 ## API
 
@@ -170,17 +179,19 @@ npm start
 - Classify，创建（限制写入），固定数据 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴+其他
   - !name
 - Widget，创建（无限制），限制 _Role admin: delete
+  - stamp ms 组件更新时间戳，不等同updatedAt
+  - package
   - !name
   - !author
-  - !appId
-  - !moduleId
-  - !platform (default h5)
+  - appId
+  - moduleId
+  - !platform (0 = h5 | 1 = pc)
   - !pullTimes (Number default 0)
-  - desc
-  - tags (Array)
+  - // desc
+  - // tags (Array)
   - business (Pointer -> Business)
   - classify (Pointer -> Classify)
-  - state (Number default 1) 状态，0=已删除
+  - state (Number default 1) 状态，0=已删除 -> 改为相反
 - Account，创建（限制写入），赋予 _Role admin: create, delete, update
   - !name
 

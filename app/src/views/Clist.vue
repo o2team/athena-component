@@ -1,7 +1,7 @@
 <template>
 <div class="clist">
   <sidebar
-    :blist="blist"
+    :businessList="businessList"
     :allWidgetCount="pageCount"
     :stateBusiness="stateBusiness"
     :changeStateBusiness="changeStateBusiness"></sidebar>
@@ -14,26 +14,26 @@
         }"
         @click="changeStateClassify(null)">不限</li>
       <li
-        v-for="item in classify"
+        v-for="item in classifyList"
         :class="{
-          active: stateClassify === item.id
+          active: stateClassify === item.objectId
         }"
-        @click="changeStateClassify(item.id)">{{item.attributes.name}}</li>
+        @click="changeStateClassify(item.objectId)">{{item.name}}</li>
     </ul>
 
     <div class="clist_main_search"><input type="text" placeholder="输入组件名搜索" v-model="stateSearchName"></div>
 
     <ul class="wlist">
       <item
-        v-for="(item, index) in wlist"
-        :key="item.id"
+        v-for="(item, index) in widgetList"
+        :key="item.objectId"
         :item="item"
         :index="index"
         :isManageMode="isManageMode"
         :delWidget="delWidget"></item>
     </ul>
 
-    <div v-show="!pageCanload" class="clist_nomore">没有更多的组件了……</div>
+    <div v-show="widgetListEnd" class="clist_nomore">没有更多的组件了……</div>
   </div>
 
   <div
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import Sidebar from '../components/clist/Sidebar.vue'
 import Item from '../components/clist/Item.vue'
 
@@ -61,52 +62,30 @@ export default {
 
       // Pagination
       pageIndex: 0,
-      pagePer: 20,
       pageCount: 0,
-      pageCanload: true,
 
       // 管理模式
-      isManageMode: false,
-
-      // 渲染列表
-      wlist: [],
-
-      blist: [],
-      classify: []
+      isManageMode: false
     }
   },
-  mounted () {
-    let queryBusiness = this.$route.query.business
-    let queryClassify = this.$route.query.classify
-    this.stateBusiness = queryBusiness || null
-    this.stateClassify = queryClassify || null
-
-    this.getWidgets()
-    this.getAllWidgetsCount()
-
-    new AV.Query('Business').find().then((results) => {
-      this.blist = results
-
-      this.blist.forEach((e, i) => {
-        let query = new AV.Query('Widget')
-        query.notEqualTo('state', 0)
-        query.equalTo('business', e)
-        query.count().then((count) => {
-          // 触发数组更新
-          this.$set(this.blist, i, Object.assign({}, e, {count:count}))
-        })
-      })
+  computed: {
+    ...mapGetters({
+      widgetList: 'widgetList',
+      widgetListEnd: 'widgetListEnd',
+      widgetDelStatus: 'widgetDelStatus',
+      businessList: 'businessList',
+      classifyList: 'classifyList'
     })
-    new AV.Query('Classify').find().then((results) => {
-      this.classify = results
-    })
-
-    window.addEventListener('scroll', this.pagination(), false)
   },
   methods: {
+    ...mapActions([
+      'getWidgetList',
+      'delWidget',
+      'getBusinessList',
+      'getClassifyList'
+    ]),
     resetPage () {
       this.pageIndex = 0
-      this.pageCanload = true
       let tmpQuery = {}
       if (this.stateBusiness) {
         tmpQuery.business = this.stateBusiness
@@ -132,87 +111,29 @@ export default {
       this.resetPage()
       this.getWidgets()
     },
-    // 删除组件
-    delWidget (itemId, index) {
-      if (confirm('确定要删除该组件吗')) {
-        let w = AV.Object.createWithoutData('Widget', itemId)
-        w.set('state', 0)
-        w.save().then((data) => {
-          _POP_.toast('删除成功')
-          this.wlist.splice(index, 1)
-        }, function (error) {
-          _POP_.toast('删除失败')
-        })
-      }
-    },
     // 切换管理模式
     toggleManage () {
       this.isManageMode = !this.isManageMode
     },
     // 获取组件
     getWidgets () {
-      if (!this.pageCanload) {
+      if (this.pageIndex > 0 && this.widgetListEnd) {
         return
       }
-      let query = new AV.Query('Widget')
-      query.descending('createdAt')
-      query.notEqualTo('state', 0)
-      if (this.stateBusiness) {
-        let tmpBusiness = AV.Object.createWithoutData('Business', this.stateBusiness)
-        query.equalTo('business', tmpBusiness)
-      }
-      if (this.stateClassify) {
-        let tmpClassify = AV.Object.createWithoutData('Classify', this.stateClassify)
-        query.equalTo('classify', tmpClassify)
-      }
-      if (this.stateSearchName) {
-        query.contains('name', this.stateSearchName)
-      }
-      query.limit(this.pagePer)
-      query.skip(this.pageIndex * this.pagePer)
-      query.find().then((results) => {
-        if (results.length === 0) {
-          this.pageCanload = false
-        }
-        if (this.pageIndex > 0) {
-          this.wlist = this.wlist.concat(results)
-        } else {
-          this.wlist = results
-        }
+      this.getWidgetList({
+        keyword: this.stateSearchName,
+        business: this.stateBusiness,
+        classify: this.stateClassify,
+        page: this.pageIndex,
+        added: this.pageIndex > 0
       })
     },
     // 获取组件总数
-    getAllWidgetsCount () {
-      new AV.Query('Widget').notEqualTo('state', 0).count().then((count) => {
-        this.pageCount = count
-      })
-    },
-    addTag (item, newTagName) {
-      if(!newTagName) {
-        _POP_.toast('标签为空')
-        return
-      }
-      // 存储TAG
-      let w = new AV.Object.createWithoutData('Widget', item.id)
-      w.addUnique('tags', [newTagName])
-      w.save().then((w) => {
-        item.attributes.tags.push(newTagName)
-        item.newTagName = ''
-        _POP_.toast('添加成功')
-      }, (error) => {
-        _POP_.toast('添加失败')
-      })
-    },
-    removeTag (item, y, index) {
-      let w = AV.Object.createWithoutData('Widget', item.id)
-      w.remove('tags', [y])
-      w.save().then((success) => {
-        item.attributes.tags.splice(index, 1)
-        _POP_.toast('删除成功')
-      }, (error) => {
-        _POP_.toast('删除失败')
-      })
-    },
+    // getAllWidgetsCount () {
+    //   new AV.Query('Widget').notEqualTo('state', 0).count().then((count) => {
+    //     this.pageCount = count
+    //   })
+    // },
     throttle (fn, delay) {
       let now, lastExec, timer, context, args
 
@@ -275,9 +196,30 @@ export default {
       }, 500)
     }
   },
+  mounted () {
+    this.getWidgetList({})
+    this.getBusinessList()
+    this.getClassifyList()
+
+    let queryBusiness = this.$route.query.business
+    let queryClassify = this.$route.query.classify
+    this.stateBusiness = queryBusiness || null
+    this.stateClassify = queryClassify || null
+
+    // this.getAllWidgetsCount()
+
+    window.addEventListener('scroll', this.pagination(), false)
+  },
   watch: {
+    widgetDelStatus (val) {
+      if (val === 0) {
+        _POP_.toast('删除成功')
+      } else if (val === 1) {
+        _POP_.toast('删除失败')
+      }
+    },
     state: {
-      handler: function(value, oldValue) {
+      handler: function (value, oldValue) {
         this.cacheImg()
       },
       deep: true

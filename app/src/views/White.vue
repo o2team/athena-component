@@ -9,11 +9,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="white_item" v-for="(item, index) in wlist">
-				<td>{{ item.attributes.name }}</td>
-				<td>{{ item.createdAt | fmtDateNormal }}</td>
+			<tr class="white_item" v-for="(item, index) in accountList">
+				<td>{{item.name || item.attributes.name}}</td>
+				<td>{{item.createdAt || item.attributes.createdAt | fmtDateNormal}}</td>
 				<td class="white_item_handle">
-					<a class="white_item_button del" @click="delAccount(item.id, index)" href="javascript:;">删除</a>
+					<a class="white_item_button del" @click="deletingAccount(item.objectId, index)" href="javascript:;">删除</a>
 				</td>
 			</tr>
 
@@ -23,7 +23,7 @@
 				</td>
 				<td></td>
 				<td class="white_item_handle">
-					<a class="white_item_button add" @click="addAccount(addAccountName)" href="javascript:;">添加</a>
+					<a class="white_item_button add" @click="addingAccount(addAccountName)" href="javascript:;">添加</a>
 				</td>
 			</tr>
 		</tbody>
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   data () {
     return {
@@ -39,40 +41,50 @@ export default {
       addAccountName: ''
     }
   },
+  computed: {
+    ...mapGetters({
+      accountList: 'accountList',
+      accountAddStatus: 'accountAddStatus',
+      accountDelStatus: 'accountDelStatus'
+    })
+  },
+  methods: {
+    ...mapActions([
+      'getAccountList',
+      'addAccount',
+      'delAccount'
+    ]),
+    addingAccount (addAccountName) {
+      if (!addAccountName) {
+        _POP_.toast('用户名为空')
+        return
+      }
+      this.addAccount({name: addAccountName})
+    },
+    deletingAccount (accountId, index) {
+      this.delAccount({id: accountId})
+    }
+  },
 	mounted () {
-		let query = new AV.Query('Account')
-		query.find().then((results) => {
-  		this.wlist = results
-		}, (error) => {
-		})
+		this.getAccountList()
 	},
-	methods: {
-		addAccount (addAccountName) {
-			if (!addAccountName) {
-				_POP_.toast('用户名为空')
-				return
-			}
-			let nAccountObj = AV.Object.extend('Account')
-			let nAccount = new nAccountObj()
-			nAccount.set('name', addAccountName)
-			nAccount.save().then((a) => {
-				this.wlist.push(a)
-				_POP_.toast('添加成功')
-			}, (error) => {
-				_POP_.toast('添加失败')
-			})
-			this.addAccountName = ''
-		},
-		delAccount (accountId, index) {
-			let account = AV.Object.createWithoutData('Account', accountId)
-			account.destroy().then((success) => {
-				this.wlist.splice(index, 1)
-  			_POP_.toast('删除成功')
-			}, (error) => {
-  			_POP_.toast('删除失败')
-			})
-		}
-	}
+  watch: {
+    accountAddStatus (val) {
+      if (val === 0) {
+        _POP_.toast('添加成功')
+      } else if (val === 1) {
+        _POP_.toast('添加失败')
+      }
+      this.addAccountName = ''
+    },
+    accountDelStatus (val) {
+      if (val === 0) {
+        _POP_.toast('删除成功')
+      } else if (val === 1) {
+        _POP_.toast('删除失败')
+      }
+    }
+  }
 }
 </script>
 

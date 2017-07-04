@@ -12,24 +12,17 @@ import App from './App.vue'
 
 Vue.use(VueResource)
 Vue.use(VueLazyload, {
+  // error: 'src/images/loading.gif',
   loading: 'src/images/loading.gif',
   attempt: 2
 })
 Vue.mixin(mixins)
 
-Vue.config.debug = true;
+Vue.config.debug = true
 
-// Prod
-var APP_ID = 'ULAaHI9Bor3WJHCfORaRJ4BW-gzGzoHsz'
-var APP_KEY = 'pRYLYgk6yk3aK2G9tNOWhd46'
-// Dev
-// var APP_ID = 'au4n3kqk359vDNoUWJHe3pJ2-gzGzoHsz'
-// var APP_KEY = 'k7F8i5aRninXmrUpdR5CCEBI'
-
-AV.init({
-  appId: APP_ID,
-  appKey: APP_KEY
-})
+// Parse
+Parse.initialize('cj44zwy3w00000f659ubkvzhq', 'cj44zwy3x00020f65e7h1ebfa')
+Parse.serverURL = 'http://quark.jd.com/j44zwy3w0000/'
 
 Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key])

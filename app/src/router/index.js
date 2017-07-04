@@ -55,7 +55,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   let auth = to.meta.auth
 
-  if (!auth || AV.User.current()) {
+  if (!auth || Parse.User.current()) {
     next()
   } else {
     // @todo 路障

@@ -13,17 +13,17 @@
         @click="changeStateBusiness(null)"
         class="clist_sidebar_it">
         <span class="clist_sidebar_it_name">全部</span>
-        <span class="clist_sidebar_it_count">{{allWidgetCount}}</span>
+        <!-- <span class="clist_sidebar_it_count">{{allWidgetCount}}</span> -->
       </li>
       <li
-        v-for="item in blist"
+        v-for="item in businessList"
         :class="{
-          active: stateBusiness === item.id
+          active: stateBusiness === item.objectId
         }"
-        @click="changeStateBusiness(item.id)"
+        @click="changeStateBusiness(item.objectId)"
         class="clist_sidebar_it">
-        <span class="clist_sidebar_it_name">{{ item.attributes.name }}</span>
-        <span class="clist_sidebar_it_count">{{ item.count || 0 }}</span>
+        <span class="clist_sidebar_it_name">{{item.name}}</span>
+        <!-- <span class="clist_sidebar_it_count">{{item.count || 0}}</span> -->
       </li>
     </ul>
   </div>
@@ -33,8 +33,9 @@
 <script>
 export default {
   props: {
-    blist: {
-      type: Array
+    businessList: {
+      type: Array,
+      default: []
     },
     allWidgetCount: {
       type: Number
@@ -44,7 +45,7 @@ export default {
     },
     changeStateBusiness: {
       type: Function,
-      require: true
+      required: true
     }
   }
 }
