@@ -4,8 +4,8 @@
   "description": "athena新组件平台，提供组件上传、预览、拉取",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node server.js",
-    "dev": "cross-env NODE_ENV=development babel-node server.js",
+    "start": "babel-node src/server.js",
+    "dev": "cross-env NODE_ENV=development babel-node src/server.js",
     "postinstall": "node install.js"
   },
   "repository": {
@@ -20,30 +20,24 @@
   "homepage": "https://github.com/o2team/athena-component#readme",
   "dependencies": {
     "archiver": "file:plugins/archiver-1.0.1.tgz",
+    "babel-register": "^6.24.1",
+    "decompress": "^4.2.0",
+    "decompress-targz": "^4.1.0",
     "fs-extra": "^0.30.0",
     "fstream": "^1.0.10",
     "koa": "^2.0.0",
-    "koa-convert": "^1.2.0",
     "koa-multer": "^1.0.0",
     "koa-router": "^7.0.1",
-    "koa-static-server": "^0.1.8",
-    "leancloud-storage": "^1.3.2",
+    "koa-static": "^4.0.0",
     "lodash": "^3.10.0",
-    "mongoose": "^4.4.17",
     "node-uuid": "^1.4.7",
+    "parse": "^1.9.2",
     "phantom": "^2.1.21",
-    "unzip": "AnkurMali/node-unzip"
+    "request": "^2.81.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.8.0",
-    "babel-preset-stage-0": "^6.5.0",
-    "babel-preset-stage-2": "^6.11.0",
-    "babel-preset-stage-3": "^6.11.0",
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.5.2",
     "cross-env": "^4.0.0"
-  },
-  "babel": {
-    "presets": [
-      "stage-0"
-    ]
   }
 }

@@ -22,6 +22,7 @@ module.exports = function fmtDateNormal (text) {
   } else if (septime > 60000) {
     return Math.floor(septime / 60000) + '分钟前'
   } else {
+    console.log(septime)
     return Math.floor(septime / 1000) + '秒前'
   }
 }

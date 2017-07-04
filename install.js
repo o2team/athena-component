@@ -1,12 +1,9 @@
 var fs = require('fs'),
 	path = require('path')
-	conf = require('./config/config.js');
+	conf = require('./src/config/config.js');
 
 var fdList = [
 	conf.warehouse,
-	path.join(conf.warehouse, '_build'),
-	path.join(conf.warehouse, '_temp'),
-	conf.dbdir,
 	conf.logsDir
 ];
 

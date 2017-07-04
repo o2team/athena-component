@@ -17,21 +17,21 @@ const mutations = {
 
 const actions = {
   getCurrentUser ({commit}) {
-    let sessionUser = AV.User.current()
+    let sessionUser = Parse.User.current()
     commit(SESSION_CHANGE, {
-      sessionUser: sessionUser && sessionUser.attributes || null
+      sessionUser: sessionUser || null
     })
   },
   signIn ({commit}, {username, password}) {
     commit(SESSION_SIGNIN_STATE, {
       status: -1
     })
-    AV.User.logIn(username, password).then((loginedUser) => {
+    Parse.User.logIn(username, password).then((loginedUser) => {
       commit(SESSION_SIGNIN_STATE, {
         status: 0
       })
       commit(SESSION_CHANGE, {
-        sessionUser: loginedUser && loginedUser.attributes || null
+        sessionUser: loginedUser || null
       })
     }, function (error) {
       commit(SESSION_SIGNIN_STATE, {
@@ -40,7 +40,7 @@ const actions = {
     })
   },
   signOut ({commit}) {
-    AV.User.logOut()
+    Parse.User.logOut()
     commit(SESSION_CHANGE, {
       sessionUser: null
     })

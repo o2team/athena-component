@@ -1,60 +1,67 @@
 <template>
 <div class="pdetail">
 	<div class="pdetail_info">
-		<div class="pdetail_info_name">{{ widget.name }}</div>
+		<div class="pdetail_info_name">{{widget.name}}</div>
 	</div>
 	<div class="pdetail_tags">
 		<ul>
-			<li class="pdetail_tags_item" v-for="item in widget.tags"><a href="javascript:;">{{ item }}</a></li>
+			<li class="pdetail_tags_item" v-for="item in widget.tags"><a href="javascript:;">{{item}}</a></li>
 		</ul>
 	</div>
 
-	<div v-if="widget.platform==='pc' && contHtml" class="detail_pc">
+	<div v-if="widget.platform === 1 && widgetDetail.contHtml" class="detail_pc">
 		<iframe :src="previewurl" frameborder="0" width="375px" height="667px"></iframe>
 	</div>
 
 	<div class="detail ly_box">
 
-		<div v-if="widget.platform==='h5' && contHtml" class="detail_mobile">
+		<div v-if="widget.platform === 0 && widgetDetail.contHtml" class="detail_mobile">
 			<div class="detail_mobile_screen">
 				<iframe :src="previewurl" frameborder="0" width="375px" height="667px"></iframe>
 			</div>
 		</div>
 
 		<div class="detail_code">
-			<div v-show="contHtml" class="conthtml">
-				<h2 class="detail_code_tit"><div class="detail_code_tit_tab">HTML</div><div class="detail_code_tit_tab">HTML源码</div></h2>
-				<div class="conthtml_built"><pre class="brush: xml;">{{ contBuiltHtml }}</pre></div>
-				<div class="conthtml_raw"><pre class="brush: xml;">{{ contHtml }}</pre></div>
+			<div v-if="widgetDetail.contHtml" class="conthtml">
+				<h2 class="detail_code_tit">
+          <div @click="activeTabOfHtml = 0" :class="{active: activeTabOfHtml === 0}" class="detail_code_tit_tab">HTML</div>
+          <div @click="activeTabOfHtml = 1" :class="{active: activeTabOfHtml === 1}" class="detail_code_tit_tab">HTML源码</div>
+        </h2>
+				<div v-show="activeTabOfHtml === 0" class="conthtml_built"><pre class="brush: xml;">{{widgetDetail.contBuiltHtml}}</pre></div>
+				<div v-show="activeTabOfHtml === 1" class="conthtml_raw"><pre class="brush: xml;">{{widgetDetail.contHtml}}</pre></div>
 			</div>
-			<div v-show="contScss" class="contscss">
-				<h2 class="detail_code_tit"><div class="detail_code_tit_tab">编译样式</div><div class="detail_code_tit_tab">SASS源码</div></h2>
-				<div class="contscss_built"><pre class="brush: scss;">{{ contBuiltCss }}</pre></div>
-				<div class="contscss_raw"><pre class="brush: scss;">{{ contScss }}</pre></div>
+			<div v-if="widgetDetail.contScss" class="contscss">
+				<h2 class="detail_code_tit">
+          <div @click="activeTabOfCss = 0" :class="{active: activeTabOfCss === 0}" class="detail_code_tit_tab">编译样式</div>
+          <div @click="activeTabOfCss = 1" :class="{active: activeTabOfCss === 1}" class="detail_code_tit_tab">SASS源码</div>
+        </h2>
+				<div v-show="activeTabOfCss === 0" class="contscss_built"><pre class="brush: scss;">{{widgetDetail.contBuiltCss}}</pre></div>
+				<div v-show="activeTabOfCss === 1" class="contscss_raw"><pre class="brush: scss;">{{widgetDetail.contScss}}</pre></div>
 			</div>
-			<div v-show="contCss">
+			<div v-if="!widgetDetail.contScss && widgetDetail.contCss">
 				<h2 class="detail_code_tit">CSS样式</h2>
-				<pre class="brush: css;">{{ contCss }}</pre>
+				<pre class="brush: css;">{{widgetDetail.contCss}}</pre>
 			</div>
-			<div v-show="contJs">
+			<div v-if="widgetDetail.contJs">
 				<h2 class="detail_code_tit">脚本</h2>
-				<pre class="brush: js;">{{ contJs }}</pre>
+				<pre class="brush: js;">{{widgetDetail.contJs}}</pre>
 			</div>
-			<div v-show="contJson">
+			<div v-if="widgetDetail.contJson">
 				<h2 class="detail_code_tit">组件配置</h2>
-				<pre class="brush: js;">{{ contJson }}</pre>
+				<pre class="brush: js;">{{widgetDetail.contJson}}</pre>
 			</div>
 		</div>
 	</div>
 
 	<div class="pdetail_download">
 		<input class="pdetail_download_rename" placeholder="重命名" v-model="rename">
-		<a class="pdetail_download_btn" :href="'api/down/' + widget.objectId + '/' + rename">一键下载组件</a>
+		<a class="pdetail_download_btn" :href="'api/down/' + widgetId + '/' + rename">一键下载组件</a>
 	</div>
 </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import SyntaxHighlighter, {registerBrush} from 'syntaxhighlighter'
 import brushCss from 'brush-css'
 import brushSass from 'brush-sass'
@@ -69,95 +76,40 @@ registerBrush(brushXml)
 export default {
 	data () {
 		return {
-			contHtml: undefined,
-			contBuiltHtml: undefined,
-			contScss: undefined,
-			contBuiltCss: undefined,
-			contCss: undefined,
-			contJs: undefined,
-			contJson: undefined,
-			previewurl: '',
-			widget: {},
+      widgetId: '',
+      activeTabOfHtml: 0,
+      activeTabOfCss: 0,
 			rename: ''
 		}
 	},
-	mounted () {
-		let domContHtmlDetailCodeTitTabs = $('.conthtml .detail_code_tit_tab')
-		let domContHtmlBuilt = $('.conthtml_built')
-		let domContHtmlRaw = $('.conthtml_raw')
-		let domContScssDetailCodeTitTabs = $('.contscss .detail_code_tit_tab')
-		let domContScssBuilt = $('.contscss_built')
-		let domContScssRaw = $('.contscss_raw')
-  	this.$http.get('api/detail?id='+this.$route.params.id).then((res) => {
-  		let data = res.data
-			if (data.contHtml) {
-				this.previewurl = `warehouse/_build/${ data.widget.objectId }/index.html`
-				this.contHtml = data.contHtml
-				this.contBuiltHtml = data.contBuiltHtml
-
-				// 初始化 HTML Tab
-				domContHtmlBuilt.show()
-				domContHtmlRaw.hide()
-				domContHtmlDetailCodeTitTabs.eq(0).addClass('active')
-				domContHtmlDetailCodeTitTabs.click(function() {
-					let index = $(this).index()
-					if(index===0) {
-						domContHtmlBuilt.show()
-						domContHtmlRaw.hide()
-						domContHtmlDetailCodeTitTabs.removeClass('active')
-						domContHtmlDetailCodeTitTabs.eq(0).addClass('active')
-					} else if(index===1) {
-						domContHtmlBuilt.hide()
-						domContHtmlRaw.show()
-						domContHtmlDetailCodeTitTabs.removeClass('active')
-						domContHtmlDetailCodeTitTabs.eq(1).addClass('active')
-					}
-				})
-			}
-			if(data.contScss) {
-				this.contScss = data.contScss
-				this.contBuiltCss = data.contBuiltCss
-
-				// 初始化 SCSS Tab
-				domContScssBuilt.show()
-				domContScssRaw.hide()
-				domContScssDetailCodeTitTabs.eq(0).addClass('active')
-				domContScssDetailCodeTitTabs.click(function() {
-					let index = $(this).index()
-					if(index===0) {
-						domContScssBuilt.show()
-						domContScssRaw.hide()
-						domContScssDetailCodeTitTabs.removeClass('active')
-						domContScssDetailCodeTitTabs.eq(0).addClass('active')
-					} else if(index===1) {
-						domContScssBuilt.hide()
-						domContScssRaw.show()
-						domContScssDetailCodeTitTabs.removeClass('active')
-						domContScssDetailCodeTitTabs.eq(1).addClass('active')
-					}
-				})
-			}
-			if(!data.contScss && data.contCss) {
-				this.contCss = data.contCss
-			}
-			if(data.contJs) {
-				this.contJs = data.contJs
-			}
-			if(data.contJson) {
-				this.contJson = data.contJson
-			}
-
-			// 等待页面更新
-			this.$nextTick(() => {
-				SyntaxHighlighter.highlight()
-        // SyntaxHighlighter.highlight({gutter: false})
-			})
-
-			this.widget = data.widget
-		}, (data, status, request) => {
-      console.log('fail' + status + "," + request)
+  computed: {
+    previewurl () {
+      return `warehouse/${this.widgetId}/_preview_index.html`
+    },
+    widget () {
+      return this.widgetDetail && this.widgetDetail.widget || {}
+    },
+    ...mapGetters({
+      widgetDetail: 'widgetDetail'
     })
-	}
+  },
+  methods: {
+    ...mapActions([
+      'getWidgetDetail'
+    ])
+  },
+	mounted () {
+    this.widgetId = this.$route.params.id
+
+    this.getWidgetDetail({id: this.widgetId})
+	},
+  watch: {
+    widgetDetail () {
+      this.$nextTick(() => {
+        SyntaxHighlighter.highlight()
+      })
+    }
+  }
 }
 </script>
 

@@ -1,22 +1,22 @@
 <template>
 <li
-  :data-id="item.id"
+  :data-id="item.objectId"
   class="clist_item">
   <div class="clist_item_wrap">
     <router-link
-      :to="{name: 'detail', params: {id:item.id}}"
+      :to="{name: 'detail', params: {id:item.objectId}}"
       class="clist_item_show">
-      <img v-lazy="'/warehouse/_build/' + item.id + '/capture.png'">
+      <img v-lazy="'/warehouse/' + item.objectId + '/capture.png'">
     </router-link>
     <div class="clist_item_info">
-      <div class="clist_item_name">{{item.attributes.name}}</div>
+      <div class="clist_item_name">{{item.name}}</div>
       <div class="clist_item_meta">
-        <div class="clist_item_meta_id">{{item.id}}</div>
-        <div class="clist_item_meta_pulltimes" title="拉取次数">{{item.attributes.pullTimes}}</div>
+        <div class="clist_item_meta_id">{{item.objectId}}</div>
+        <div class="clist_item_meta_pulltimes" title="拉取次数">{{item.pullTimes}}</div>
       </div>
     </div>
   </div>
-  <div class="clist_item_del" v-show="isManageMode" @click="delWidget(item.id, index)"><div class="clist_item_del_btn">删除</div></div>
+  <div class="clist_item_del" v-show="isManageMode" @click="confirmDel(item.objectId, index)"><div class="clist_item_del_btn">删除</div></div>
 </li>
 </template>
 
@@ -33,7 +33,15 @@ export default {
       type: Boolean
     },
     delWidget: {
-      type: Function
+      type: Function,
+      required: true
+    }
+  },
+  methods: {
+    confirmDel (id, index) {
+      if (window.confirm('确定要删除该组件吗')) {
+        this.delWidget({id, index})
+      }
     }
   }
 }

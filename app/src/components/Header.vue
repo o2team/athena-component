@@ -56,7 +56,6 @@ import {mapGetters, mapActions} from 'vuex'
 export default {
   data () {
     return {
-      wlist: [],
       addAccountName: '',
       isShowLoginPop: false,
       loginUsername: '',
@@ -66,14 +65,6 @@ export default {
   computed: mapGetters({
     sessionSignInState: 'sessionSignInState'
   }),
-	mounted () {
-		// 请求白名单列表
-		let query = new AV.Query('Account')
-		query.find().then((results) => {
-			this.wlist = results
-		}, function (error) {
-		})
-	},
 	methods: {
     showSignInPop () {
       this.isShowLoginPop = true
