@@ -1,4 +1,4 @@
 apps:
   - name: acp
-    script: server.js
+    script: ./src/server.js
     exec_interpreter: babel-node
