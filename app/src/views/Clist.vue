@@ -46,8 +46,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Utils from '@/utils'
-import Sidebar from '../components/clist/Sidebar.vue'
-import Item from '../components/clist/Item.vue'
+import Sidebar from '@/components/clist/Sidebar.vue'
+import Item from '@/components/clist/Item.vue'
 
 export default {
   components: {
