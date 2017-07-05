@@ -33,6 +33,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Utils from '@/utils'
 
 export default {
   data () {
@@ -56,7 +57,7 @@ export default {
     ]),
     addingAccount (addAccountName) {
       if (!addAccountName) {
-        _POP_.toast('用户名为空')
+        Utils._POP_.toast('用户名为空')
         return
       }
       this.addAccount({name: addAccountName})
@@ -71,17 +72,17 @@ export default {
   watch: {
     accountAddStatus (val) {
       if (val === 0) {
-        _POP_.toast('添加成功')
+        Utils._POP_.toast('添加成功')
       } else if (val === 1) {
-        _POP_.toast('添加失败')
+        Utils._POP_.toast('添加失败')
       }
       this.addAccountName = ''
     },
     accountDelStatus (val) {
       if (val === 0) {
-        _POP_.toast('删除成功')
+        Utils._POP_.toast('删除成功')
       } else if (val === 1) {
-        _POP_.toast('删除失败')
+        Utils._POP_.toast('删除失败')
       }
     }
   }

@@ -45,6 +45,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Utils from '@/utils'
 import Sidebar from '../components/clist/Sidebar.vue'
 import Item from '../components/clist/Item.vue'
 
@@ -213,9 +214,9 @@ export default {
   watch: {
     widgetDelStatus (val) {
       if (val === 0) {
-        _POP_.toast('删除成功')
+        Utils._POP_.toast('删除成功')
       } else if (val === 1) {
-        _POP_.toast('删除失败')
+        Utils._POP_.toast('删除失败')
       }
     },
     state: {
