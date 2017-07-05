@@ -14,9 +14,9 @@
 
 ## 技术组成
 
-- 前端 vue2+webpack2
-- 后端 koa2+phantomJS
-- 数据存储 Leancloud
+- 前端 vue + vuex
+- 后端 koa2 + phantomJS
+- 数据存储 ~~Leancloud~~ Quark (凹凸实验室出品的 BaaS 产品)
 
 ## 特色功能
 
@@ -31,7 +31,7 @@
 
 - 安装 NodeJS 6.x
 - 安装 phantomJS（>=2.1.1）
-- 注册 Leancloud 并配置，[Leancloud 初始化指引](#Leancloud 初始化指引)
+- [数据初始化指引](#数据初始化指引)
 
 截图可能会出现截图里文字不见了的情况，因为——系统没有页面用到的字体，解决：
 
@@ -66,7 +66,7 @@ npm start
 - 后端开发：`npm run dev`
 - 后端部署：`npm start`
 - 工具
-  - 清空組件緩存：`babel-node cleanup`
+  - none
 
 ### 凹凸手册
 
@@ -77,96 +77,21 @@ npm start
 
 ## API
 
-总览：
-
-- HTTP POST /api/push
-- HTTP GET  /api/pull/:id/:rename?
-- HTTP GET  /api/detail?id=xxx
-- HTTP GET /api/detail-info?id=xxx
-- HTTP GET /api/business/list
-- HTTP GET /api/classify/list
-
-``` javascript
-/**
- * HTTP POST /api/push
- * @description 上传组件
- *
- * @param {String} <appId> 应用ID
- * @param {String} <moduleId> 模块ID
- * @param {String} <platform> 平台 pc | h5
- * @param {String} <widget> zip组件打包文件
- * @param {String} <author> 作者，白名单校验
- * @param {String} [description] 描述，默认从组件配置文件中读取
- * @param {String} [business] 所属业务ID
- * @param {String} [classify] 所属分类ID
- * 
- * @response 200 { no:0, data: { id: widgetId } }
- */
+``` js
+router.post('/api/push', upload.single('widget'), api.push)
+router.get('/api/pull/:id/:rename?', api.pull)
+router.get('/api/down/:id/:rename?', api.down)
+router.get('/api/business/list', api.business.list)
+router.get('/api/classify/list', api.classify.list)
+router.get('/api/widget/query', api.widget.query)
+router.get('/api/widget/count', api.widget.count)
+router.get('/api/widget/detail/:id', api.widget.detail)
+router.get('/api/widget/info/:id', api.widget.info)
+router.get('/api/account/list', api.account.list)
+router.get('/api/account/add', api.account.add)
 ```
 
-``` javascript
-/**
- * HTTP GET /api/pull/:id/:rename?
- * @description 拉取组件。更直接地 —— /warehouse/id 可直接获取到组件
- * 
- * @param {String} <id> 组件ID
- * @param {String} [rename] 重命名名称
- */
-```
-
-``` javascript
-/**
- * HTTP GET /api/detail?id=xxx
- * @description 组件详情，返回代码及组件信息
- * 
- * @param {String} <id> 组件ID
- *
- * @response { contHtml, contCss, contJs, widget }
- */
-```
-
-``` javascript
-/**
- * HTTP GET /api/detail-info?id=xxx
- * @description 组件详情，返回组件信息，不包含代码
- * 
- * @param {String} <id> 组件ID
- *
- * @response widget
- */
-```
-
-``` javascript
-/**
- * HTTP GET /api/business/list
- * @description 业务列表
- * 
- * @response businesses
- */
-```
-
-``` javascript
-/**
- * HTTP GET /api/classify/list
- * @description 类别列表
- * 
- * @response classify
- */
-```
-
-**Leancloud已提供相关接口，以下API不在后台提供：**
-
-- 组件列表查询
-- 白名单列表查询
-- 白名单 增/删
-- 组件标签 增/删
-- 用户登录/登出
-
-为什么有些接口不直接用Leancloud提供的？保证Athena不用另外再配置Leancloud，也方便以后数据迁移。
-
-## Leancloud 初始化指引
-
-*为什么建议手动初始化？`Leancloud` 并不像 `Mongodb` 拥有“版本”的记录，数据在第一次插入时就固定了它的类型，类型是不能被更改的*
+## 数据初始化指引
 
 字段如无指定，默认类型为 `String`
 
@@ -179,19 +104,18 @@ npm start
 - Classify，创建（限制写入），固定数据 = 标题+标签+选项卡+坑位+商品列表+挂件+优惠券+时间轴+其他
   - !name
 - Widget，创建（无限制），限制 _Role admin: delete
-  - stamp ms 组件更新时间戳，不等同updatedAt
+  - oid 原Leancloud的id
+  - stamp ms 组件更新时间戳，不等同updatedAt，用于覆盖上传组件时比对更新时间戳
   - package
   - !name
   - !author
-  - appId
-  - moduleId
-  - !platform (0 = h5 | 1 = pc)
-  - !pullTimes (Number default 0)
-  - // desc
-  - // tags (Array)
   - business (Pointer -> Business)
   - classify (Pointer -> Classify)
-  - state (Number default 1) 状态，0=已删除 -> 改为相反
+  - !platform (0 = h5 | 1 = pc)
+  - !pullTimes (Number default 0)
+  - state (Number default 0) 状态，0=正常 1=已删除
+  - appId
+  - moduleId
 - Account，创建（限制写入），赋予 _Role admin: create, delete, update
   - !name
 
@@ -214,7 +138,7 @@ npm start
 
 ## Athena 平台迭代
 
-饿~饿~饿！
+饿~饿~饿
 
 - 组件上传选择 `业务` 和 `分类`
 - 组件上传分析SASS依赖，编译SASS
@@ -223,7 +147,7 @@ npm start
 - autoprefix
 
 
-## 其他额
+## 其他
 
 SyntaxHighlighter 自定义编译
  

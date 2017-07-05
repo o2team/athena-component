@@ -52,6 +52,7 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
+import Utils from '@/utils'
 
 export default {
   data () {
@@ -74,18 +75,18 @@ export default {
     },
 		login (username, password) {
 			if(!username) {
-        _POP_.toast('用户名为空')
+        Utils._POP_.toast('用户名为空')
         return
       }
 			if(!password) {
-        _POP_.toast('密码为空')
+        Utils._POP_.toast('密码为空')
         return
       }
       this.signIn({username, password})
 		},
 		logout () {
 			this.signOut()
-			_POP_.toast('用户登出')
+			Utils._POP_.toast('用户登出')
 		},
     ...mapActions([
       'signIn',
@@ -95,10 +96,10 @@ export default {
   watch: {
     sessionSignInState (val) {
       if (val === 0) {
-        _POP_.toast('登录成功')
+        Utils._POP_.toast('登录成功')
         this.isShowLoginPop = false
       } else if (val === 1) {
-        _POP_.toast('登录失败')
+        Utils._POP_.toast('登录失败')
       }
     }
   }
