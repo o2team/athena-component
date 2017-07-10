@@ -13,11 +13,11 @@ module.exports = {
   logsDir: path.join(process.cwd(), 'logs'),
 
   tpl: {
-    cssh5: `
+    css0: `
 html {font-size: 20px;}
 blockquote,body,button,dd,dl,dt,fieldset,form,h1,h2,h3,h4,h5,h6,hr,input,legend,li,ol,p,pre,td,textarea,th,ul{margin:0;padding:0;vertical-align:baseline;-webkit-tap-highlight-color:transparent;outline:0}img{border:0;vertical-align:top}em,i{font-style:normal}ol,ul{list-style:none}button,h1,h2,h3,h4,h5,h6,input,select{font-size:100%;font-family:inherit}table{border-collapse:collapse;border-spacing:0}a{text-decoration:none}a,body{color:#666}body{margin:0 auto;height:100%;font-size:14px;font-family:-apple-system,Helvetica,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important;-webkit-user-select:none;-webkit-touch-callout:none}input[type=text],textarea{-webkit-appearance:none;-moz-appearance:none;appearance:none}
 body{font-family:STHeiti,Helvetica,sans-serif;}`,
-    csspc: `
+    css1: `
 html, body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, ul, li, fieldset, form, label, input, legend, table, caption, tbody, tfoot, thead, tr, th, td, textarea, article, aside, audio, canvas, figure, footer, header, mark, menu, nav, section, time, video { margin: 0; padding: 0; }
 h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal }
 article, aside, dialog, figure, footer, header, hgroup, nav, section, blockquote { display: block; }

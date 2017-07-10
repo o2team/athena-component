@@ -66,7 +66,7 @@ router.get('/api/widget/info/:id', api.widget.info)
 // router.get('/api/widget/del/:id', api.widget.del)
 
 router.get('/api/account/list', api.account.list)
-router.get('/api/account/add', api.account.add)
+// router.get('/api/account/add', api.account.add)
 // router.get('/api/account/del/:id', api.account.del)
 
 router.get('/api/test', async (ctx, next) => {
