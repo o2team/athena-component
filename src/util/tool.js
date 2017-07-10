@@ -219,8 +219,15 @@ ${contBuiltHtml}
         let instance = await phantom.create(['--ignore-ssl-errors=true', '--local-to-remote-url-access=true'])
         let page = await instance.createPage()
         await page.property('viewportSize', {width: 375, height: 375})
-        await page.open('file:///' + path.resolve(`${conf.warehouse}/${id}/_preview_index.html`))
-        await page.render(contCapturePath)
+        // await page.open('file:///' + path.resolve(`${conf.warehouse}/${id}/_preview_index.html`))
+        await page.open('http://acp.aotu.io/warehouse/' + id + '/_preview_index.html')
+        // await page.render(contCapturePath)
+        await new Promise((resolve, reject) => {
+          setTimeout(async () => {
+            await page.render(contCapturePath)
+            resolve()
+          }, 1000)
+        })
         instance.exit()
       }
     })
